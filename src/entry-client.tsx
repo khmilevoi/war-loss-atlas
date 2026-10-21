@@ -10,12 +10,15 @@ const container = document.getElementById('root');
 if (!initialElement?.textContent || !container) throw new Error('Missing atlas SSR document');
 const initial = JSON.parse(initialElement.textContent) as { url: string; data: AtlasData };
 
-await context.start(async () => {
+// Browser route HMR evaluates outlets before this module's body, using the
+// existing browser frame. Hydrate in that same frame so urlAtom owns one set
+// of native link/popstate listeners. Server requests still use context.start.
+const frame = context();
+await frame.run(async () => {
   atlasData.set(initial.data);
   // Reading first installs Reatom's native link/popstate listeners in this frame.
   urlAtom();
   urlAtom.set(new URL(initial.url, window.location.origin), true);
-  const frame = context();
   await wrap(preloadRoutes());
   hydrateRoot(container, <reatomContext.Provider value={frame}><App /></reatomContext.Provider>);
 });
