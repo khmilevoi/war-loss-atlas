@@ -7,6 +7,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "dev": "tsx server/index.ts --dev",
+    "build": "vite build --outDir dist/client && vite build --ssr server/index.ts --outDir dist/server",
+    "start": "node dist/server/index.js",
+    "test:server": "node scripts/check-server.mjs",
+    "test:dev": "tsx scripts/check-dev.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "data:import": "tsx scripts/import-data.ts",
