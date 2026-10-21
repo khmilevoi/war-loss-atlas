@@ -4,9 +4,10 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'csv-parse/sync';
 import { NATIVE_FIELDS, type AtlasData, type NativeRow, type CountryAnchor, type PlacementRegistryEntry,
-  type Placement, type HistoricalHighlight, type SourceRecord } from '../src/data/types';
+  type HistoricalHighlight, type SourceRecord } from '../src/data/types';
 import { aggregateConflicts } from '../src/data/aggregate';
 import { validatePublicData } from '../src/data/validate';
+import { buildPlacements } from '../src/data/placement-adapter';
 
 export const SOURCE_SHA = 'b34ecb57f1fc0e73d4bfd7b080212da429af3135a8d360b1c902e45506f81147';
 const GEO_COMMIT = 'ca96624a56bd078437bca8184e78163e5039ad19';
@@ -105,12 +106,7 @@ export function importData(sourcePath?: string): AtlasData {
       location_labels_raw: [choice.alias], selected_country_or_theater: choice.label,
       source_url: anchor.source_url, reviewed_on: '2026-10-22', note_ru: choice.note });
   }
-  const placements: Placement[] = placementRegistry.map(p => ({
-    ...('conflict_id' in p ? { conflict_id: p.conflict_id } : { highlight_id: p.highlight_id }),
-    placement_id: 'conflict_id' in p ? `ucdp:${p.conflict_id}` : `history:${p.highlight_id}`,
-    latitude: p.latitude, longitude: p.longitude, label_ru: p.selected_country_or_theater ?? 'Без условной метки',
-    precision: p.status === 'unplaced' ? 'unknown' : 'illustrative_region', basis: p.basis, source_url: p.source_url,
-    review_status: p.status === 'unplaced' ? 'unplaced' : 'reviewed_source_anchor' }));
+  const placements = buildPlacements(placementRegistry);
   const sums = { best: 0, low: 0, high: 0 };
   const missingCounts = { best: 0, low: 0, high: 0 };
   for (const c of conflicts) for (const k of ['best', 'low', 'high'] as const) {

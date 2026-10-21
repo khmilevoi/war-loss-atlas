@@ -1,5 +1,18 @@
 import { NATIVE_FIELDS, type AtlasData } from './types';
 import { aggregateConflicts } from './aggregate';
+import { buildPlacements } from './placement-adapter';
+
+function validDate(value: string): boolean {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
+function sameFlatRecord(actual: object, expected: object): boolean {
+  const values = actual as Record<string, unknown>;
+  return Object.keys(actual).length === Object.keys(expected).length &&
+    Object.entries(expected).every(([key, value]) => Object.hasOwn(values, key) && values[key] === value);
+}
 
 export function validatePublicData(data: AtlasData): string[] {
   const errors: string[] = [];
@@ -29,6 +42,7 @@ export function validatePublicData(data: AtlasData): string[] {
   for (const p of data.placementRegistry) {
     const id = 'conflict_id' in p ? `ucdp:${p.conflict_id}` : `history:${p.highlight_id}`;
     if (registryIds.has(id)) errors.push(`Duplicate registry ${id}`);
+    if (('conflict_id' in p) === ('highlight_id' in p) || !['country_anchor', 'theater_anchor', 'unplaced'].includes(p.status)) errors.push(`Registry schema ${id}`);
     registryIds.add(id);
     const noCoords = p.latitude === null && p.longitude === null;
     if (p.status === 'unplaced' ? !noCoords : noCoords || p.latitude === null || p.longitude === null ||
@@ -37,10 +51,36 @@ export function validatePublicData(data: AtlasData): string[] {
   }
   for (const r of data.nativeRows) if (!registryIds.has(`ucdp:${r.conflict_id}`)) errors.push(`Missing placement ${r.conflict_id}`);
   if (data.placementRegistry.length !== 206) errors.push('Registry cardinality');
+  const expectedPlacements = new Map(buildPlacements(data.placementRegistry).map(p => [p.placement_id, p]));
+  const adapterIds = new Set<string>();
+  for (const placement of data.placements) {
+    const id = placement.placement_id;
+    if (adapterIds.has(id)) errors.push(`Duplicate rendering placement ${id}`);
+    adapterIds.add(id);
+    const expected = expectedPlacements.get(id);
+    // Compare every public adapter field, including entity ownership and source provenance.
+    // Ignore key ordering, but keep null distinct from undefined and reject extra/missing fields.
+    if (!expected || !sameFlatRecord(placement, expected)) errors.push(`Rendering placement mismatch ${id}`);
+  }
+  for (const id of expectedPlacements.keys()) if (!adapterIds.has(id)) errors.push(`Missing rendering placement ${id}`);
   if (data.historicalHighlights.length !== 4) errors.push('Historical cardinality');
+  const historicalIds = new Set<string>();
   for (const h of data.historicalHighlights) {
+    if (historicalIds.has(h.highlight_id)) errors.push(`Duplicate historical id ${h.highlight_id}`);
+    historicalIds.add(h.highlight_id);
+    if (!['ww1', 'ww2', 'us-civil', 'korea'].includes(h.highlight_id) ||
+      !['total_war_deaths', 'war_deaths_source_definition', 'civilian_war_deaths'].includes(h.metric) ||
+      !['approximate', 'lower_statement'].includes(h.estimate_kind) || typeof h.lower_exclusive !== 'boolean' ||
+      !Number.isInteger(h.start_year) || !Number.isInteger(h.end_year) || h.start_year < 1 || h.start_year > h.end_year ||
+      !validDate(h.accessed_on) || [h.name_ru, h.display_ru, h.scope_ru, h.uncertainty_ru, h.source_title, h.source_locator]
+        .some(v => typeof v !== 'string' || v.trim().length === 0)) errors.push(`Historical schema ${h.highlight_id}`);
+    const owned = buildPlacements(data.placementRegistry.filter(p => 'highlight_id' in p && p.highlight_id === h.highlight_id));
+    if (!Array.isArray(h.placement_ids) || h.placement_ids.length !== owned.length ||
+      new Set(h.placement_ids).size !== h.placement_ids.length ||
+      owned.some(p => !h.placement_ids.includes(p.placement_id)) ||
+      h.placement_ids.some(id => !adapterIds.has(id))) errors.push(`Historical placement references ${h.highlight_id}`);
     if (!registryIds.has(`history:${h.highlight_id}`)) errors.push(`Missing history placement ${h.highlight_id}`);
-    if (h.estimate_kind === 'approximate' ? h.value === null || h.low !== null || h.high !== null :
+    if (h.estimate_kind === 'approximate' ? h.value === null || h.low !== null || h.high !== null || h.lower_exclusive !== false :
       h.value !== null || h.low === null || h.high !== null) errors.push(`Historical semantics ${h.highlight_id}`);
     if ([h.value, h.low, h.high].some(v => v !== null && (!Number.isFinite(v) || v < 0))) errors.push(`Historical quantity ${h.highlight_id}`);
     if (!/^https:\/\//.test(h.source_url) || !h.source_title || !h.source_locator || !h.accessed_on ||
