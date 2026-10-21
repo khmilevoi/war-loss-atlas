@@ -10,20 +10,27 @@ const parseYear = (value: string | undefined, fallback: number): number => value
 /** Create inside the caller's frame. SSR callers own context.start and must neutralize urlAtom.sync before setting URL. */
 export function createAtlasModel(data: AtlasData, options: AtlasModelOptions = {}) {
   const defaultLayer = options.defaultLayer ?? 'ucdp';
+  // Filters/selection replace the current page's shareable view state.
+  // Route navigation still pushes; Back returns to the previous page, not each edit.
   const layer = atom<Layer>(defaultLayer, 'atlas.layer').extend(withSearchParams('layer', {
+    replace: true,
     parse: value => value === 'history' || value === 'ucdp' ? value : defaultLayer,
   }));
   const from = atom(() => defaultPeriod(layer())[0], 'atlas.from').extend(withSearchParams('from', {
+    replace: true,
     parse: value => parseYear(value, defaultPeriod(layer())[0]),
   }));
   const to = atom(() => defaultPeriod(layer())[1], 'atlas.to').extend(withSearchParams('to', {
+    replace: true,
     parse: value => parseYear(value, defaultPeriod(layer())[1]),
   }));
-  const query = atom('', 'atlas.query').extend(withSearchParams('q'));
+  const query = atom('', 'atlas.query').extend(withSearchParams('q', { replace: true }));
   const sort = atom('year:asc', 'atlas.sort').extend(withSearchParams('sort', {
+    replace: true,
     parse: value => normalizeSort(value ?? 'year:asc', layer()),
   }), withComputed(value => normalizeSort(value, layer())));
   const completeness = atom<Completeness>('all', 'atlas.completeness').extend(withSearchParams('completeness', {
+    replace: true,
     parse: value => value === 'complete' || value === 'partial' || value === 'missing' ? value : 'all',
   }), withComputed(value => layer() === 'history' ? 'all' : value));
 
@@ -33,7 +40,7 @@ export function createAtlasModel(data: AtlasData, options: AtlasModelOptions = {
       : data.historicalHighlights.some(highlight => highlight.highlight_id === id)) ? id : null;
   };
   const selectedId = atom<string | null>(() => validSelection(options.defaultSelectedId), 'atlas.selectedId').extend(
-    withSearchParams('selected', { parse: value => validSelection(value), serialize: value => value ?? undefined }),
+    withSearchParams('selected', { replace: true, parse: value => validSelection(value), serialize: value => value ?? undefined }),
     withComputed(value => validSelection(value)),
   );
   const filters = computed(() => normalizeFilters({ layer: layer(), from: from(), to: to(), query: query(),

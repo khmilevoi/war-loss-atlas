@@ -274,4 +274,66 @@ describe('request-local URL-backed model', () => {
     urlAtom.set(new URL('https://atlas.example/data'));
     expect(model.filteredRows()).toHaveLength(1650);
   }));
+
+  it.each(['switchLayer', 'resetFilters'] as const)('%s replaces in-page state without intermediate Back destinations, while route navigation pushes', async transition => {
+    const previousPage = 'https://atlas.example/?layer=history&from=1861&to=2025&selected=ww2';
+    const initialPage = `https://atlas.example/data?layer=ucdp&from=2000&to=2025&q=old&sort=bd_best:desc&completeness=missing&selected=${source.conflicts[0].id}`;
+    // This adapter records the production sync boundary and applies actual push/replace semantics.
+    const entries = [previousPage, initialPage];
+    let index = 1;
+    const operations: { href: string; replace: boolean }[] = [];
+    const handlers = context.start(() => {
+      urlAtom.sync.set(() => () => {});
+      urlAtom.set(new URL(initialPage));
+      const model = createAtlasModel(source);
+      const stopFilters = model.filters.subscribe();
+      const stopSelected = model.selectedId.subscribe();
+      urlAtom.sync.set(() => (url: URL, replace = false) => {
+        operations.push({ href: url.href, replace });
+        if (replace) entries[index] = url.href;
+        else {
+          entries.splice(index + 1);
+          entries.push(url.href);
+          index++;
+        }
+      });
+      return {
+        transition: wrap(() => transition === 'switchLayer' ? model.switchLayer('history') : model.resetFilters()),
+        read: wrap(() => ({ filters: model.filters(), selectedId: model.selectedId(), href: urlAtom().href })),
+        back: wrap(() => urlAtom.syncFromSource(new URL(entries[--index]), true)),
+        navigate: wrap(() => urlAtom.go('/data?layer=ucdp&from=1989&to=1989')),
+        stop: () => { stopFilters(); stopSelected(); },
+      };
+    });
+    try {
+      await Promise.resolve();
+      operations.length = 0;
+      handlers.transition();
+      await Promise.resolve();
+      expect(operations.length).toBeGreaterThan(0);
+      expect(operations.every(operation => operation.replace)).toBe(true);
+      expect(entries).toHaveLength(2);
+      expect(entries[0]).toBe(previousPage);
+      const final = handlers.read();
+      expect(final.filters).toEqual({ ...defaults, layer: transition === 'switchLayer' ? 'history' : 'ucdp',
+        from: transition === 'switchLayer' ? 1861 : 1989 });
+      expect(final.selectedId).toBeNull();
+      expect(entries[1]).toBe(final.href);
+      inUrl(new URL(final.href).search, () => {
+        expect(createAtlasModel(source).filters()).toEqual(final.filters);
+      });
+      handlers.back();
+      await Promise.resolve();
+      expect(handlers.read()).toEqual({ href: previousPage,
+        filters: { ...defaults, layer: 'history', from: 1861 }, selectedId: 'ww2' });
+      const beforeRouteNavigation = operations.length;
+      handlers.navigate();
+      await Promise.resolve();
+      expect(operations.slice(beforeRouteNavigation)).toEqual([{ href: 'https://atlas.example/data?layer=ucdp&from=1989&to=1989', replace: false }]);
+      expect(index).toBe(1);
+      handlers.back();
+      await Promise.resolve();
+      expect(handlers.read().href).toBe(previousPage);
+    } finally { handlers.stop(); }
+  });
 });
