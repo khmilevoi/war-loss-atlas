@@ -1,0 +1,3236 @@
+[
+  {
+    "conflict_id": "205",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iran",
+      "Iran, Iraq"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "209",
+    "anchor_id": "PHL",
+    "latitude": 11,
+    "longitude": 122.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Philippines"
+    ],
+    "selected_country_or_theater": "Philippines",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "218",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "India",
+      "India, Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "220",
+    "anchor_id": "PRY",
+    "latitude": -21.5,
+    "longitude": -60,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Paraguay"
+    ],
+    "selected_country_or_theater": "Paraguay",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "221",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Myanmar (Burma)",
+      "Myanmar (Burma), Thailand"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "222",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "India, Myanmar (Burma)",
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "223",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Bangladesh, Myanmar (Burma)",
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "224",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "227",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "230",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Saudi Arabia, Yemen (North Yemen)",
+      "United Arab Emirates, Yemen (North Yemen)",
+      "Yemen (North Yemen)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "231",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "China, Myanmar (Burma)",
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "233",
+    "anchor_id": "GTM",
+    "latitude": 15,
+    "longitude": -90.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Guatemala"
+    ],
+    "selected_country_or_theater": "Guatemala",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "234",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "France, Israel, Lebanon",
+      "Iran, Israel, Lebanon, Syria, Yemen (North Yemen)",
+      "Israel",
+      "Israel, Lebanon",
+      "Israel, Lebanon, Qatar",
+      "Israel, Malta",
+      "Israel, Syria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "251",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "253",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Myanmar (Burma)",
+      "Myanmar (Burma), Thailand"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "259",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan, France, Iraq, Pakistan, Syria",
+      "Afghanistan, Iraq",
+      "Australia, Belgium, France, Iraq, Syria",
+      "Belgium, Iraq, Libya, Syria",
+      "France, Iraq, Libya, Syria",
+      "Iraq",
+      "Iraq, Syria",
+      "Iraq, Syria, United Kingdom"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "260",
+    "anchor_id": "LBN",
+    "latitude": 34,
+    "longitude": 36,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Lebanon"
+    ],
+    "selected_country_or_theater": "Lebanon",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "262",
+    "anchor_id": "LAO",
+    "latitude": 19.5,
+    "longitude": 102.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Laos"
+    ],
+    "selected_country_or_theater": "Laos",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "264",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Myanmar (Burma)",
+      "Myanmar (Burma), Thailand"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "265",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "DR Congo (Zaire)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "267",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Eritrea, Ethiopia, Sudan",
+      "Ethiopia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "269",
+    "anchor_id": "NPL",
+    "latitude": 28.5,
+    "longitude": 83.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Nepal"
+    ],
+    "selected_country_or_theater": "Nepal",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "271",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iran, Iraq",
+      "Iraq"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "274",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "275",
+    "anchor_id": "ETH",
+    "latitude": 8,
+    "longitude": 39,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Ethiopia"
+    ],
+    "selected_country_or_theater": "Ethiopia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "277",
+    "anchor_id": "VEN",
+    "latitude": 7,
+    "longitude": -64.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Venezuela"
+    ],
+    "selected_country_or_theater": "Venezuela",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "283",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "DR Congo (Zaire)",
+      "DR Congo (Zaire), Rwanda",
+      "DR Congo (Zaire), Uganda"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "287",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Burundi",
+      "Burundi, DR Congo (Zaire)",
+      "DR Congo (Zaire)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "288",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Chad",
+      "Chad, Sudan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "289",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Colombia",
+      "Colombia, Ecuador",
+      "Colombia, Peru",
+      "Colombia, Venezuela"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "291",
+    "anchor_id": "IDN",
+    "latitude": -1,
+    "longitude": 102,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Indonesia"
+    ],
+    "selected_country_or_theater": "Indonesia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "292",
+    "anchor_id": "PER",
+    "latitude": -13,
+    "longitude": -73,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Peru"
+    ],
+    "selected_country_or_theater": "Peru",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "294",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Cambodia (Kampuchea), Thailand"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "297",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Cameroon, Nigeria",
+      "Chad, Niger, Nigeria",
+      "Niger, Nigeria",
+      "Nigeria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "298",
+    "anchor_id": "ZAF",
+    "latitude": -29.5,
+    "longitude": 23.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "South Africa"
+    ],
+    "selected_country_or_theater": "South Africa",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "299",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iraq, Lebanon, Syria",
+      "Jordan, Syria",
+      "Lebanon, Syria",
+      "Russia (Soviet Union), Syria",
+      "Syria",
+      "Syria, Turkey"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "300",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Cambodia (Kampuchea)",
+      "Cambodia (Kampuchea), Thailand"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "302",
+    "anchor_id": "SYR",
+    "latitude": 35,
+    "longitude": 38.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Syria"
+    ],
+    "selected_country_or_theater": "Syria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "303",
+    "anchor_id": "NGA",
+    "latitude": 9.5,
+    "longitude": 7.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Nigeria"
+    ],
+    "selected_country_or_theater": "Nigeria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "307",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Guinea",
+      "Guinea, Liberia, Sierra Leone"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "308",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Malaysia, Philippines",
+      "Philippines"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "309",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Chad, Sudan",
+      "Ethiopia, Sudan",
+      "Libya, South Sudan, Sudan",
+      "South Sudan, Sudan",
+      "Sudan",
+      "Sudan, Uganda"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "313",
+    "anchor_id": "LKA",
+    "latitude": 7.5,
+    "longitude": 80.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Sri Lanka"
+    ],
+    "selected_country_or_theater": "Sri Lanka",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "314",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Central African Republic, DR Congo (Zaire)",
+      "Central African Republic, DR Congo (Zaire), South Sudan, Sudan",
+      "Central African Republic, DR Congo (Zaire), Sudan",
+      "DR Congo (Zaire)",
+      "DR Congo (Zaire), Sudan",
+      "DR Congo (Zaire), Sudan, Uganda",
+      "DR Congo (Zaire), Uganda",
+      "DR Congo (Zaire), Uganda, Sudan",
+      "Sudan, Uganda",
+      "Uganda"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "315",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Germany, Netherlands, United Kingdom",
+      "Germany, United Kingdom",
+      "United Kingdom"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "316",
+    "anchor_id": "SLV",
+    "latitude": 13.5,
+    "longitude": -89,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "El Salvador"
+    ],
+    "selected_country_or_theater": "El Salvador",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "322",
+    "anchor_id": "BGD",
+    "latitude": 24,
+    "longitude": 89.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Bangladesh"
+    ],
+    "selected_country_or_theater": "Bangladesh",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "325",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iran, Pakistan",
+      "Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "326",
+    "anchor_id": "ERI",
+    "latitude": 16,
+    "longitude": 38.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Eritrea"
+    ],
+    "selected_country_or_theater": "Eritrea",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "327",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Angola",
+      "Angola, DR Congo (Zaire)",
+      "Angola, Namibia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "329",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ethiopia",
+      "Ethiopia, Kenya",
+      "Ethiopia, Somalia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "330",
+    "anchor_id": "IDN",
+    "latitude": -1,
+    "longitude": 102,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Indonesia"
+    ],
+    "selected_country_or_theater": "Indonesia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "331",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Morocco"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "332",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Mozambique",
+      "Mozambique, Zimbabwe (Rhodesia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "333",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan",
+      "Afghanistan, Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "335",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "336",
+    "anchor_id": "NIC",
+    "latitude": 12.5,
+    "longitude": -85,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Nicaragua"
+    ],
+    "selected_country_or_theater": "Nicaragua",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "337",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Djibouti, Somalia",
+      "Ethiopia, Kenya, Somalia",
+      "Ethiopia, Somalia",
+      "Kenya, Somalia",
+      "Somalia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "338",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iran",
+      "Iran, Iraq",
+      "Iran, Iraq, Italy, Pakistan",
+      "Iran, Iraq, Pakistan",
+      "Iran, Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "341",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ivory Coast, Liberia",
+      "Liberia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "342",
+    "anchor_id": "ESP",
+    "latitude": 40,
+    "longitude": -3.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Spain"
+    ],
+    "selected_country_or_theater": "Spain",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "343",
+    "anchor_id": "TUN",
+    "latitude": 33.5,
+    "longitude": 9,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Tunisia"
+    ],
+    "selected_country_or_theater": "Tunisia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "347",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "351",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "352",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "France, Sri Lanka",
+      "Sri Lanka"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "353",
+    "anchor_id": "CMR",
+    "latitude": 4.5,
+    "longitude": 12.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Cameroon"
+    ],
+    "selected_country_or_theater": "Cameroon",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "354",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iran, Iraq, Syria, Turkey",
+      "Iran, Iraq, Turkey",
+      "Iraq, Syria, Turkey",
+      "Iraq, Turkey",
+      "Turkey"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "358",
+    "anchor_id": "TGO",
+    "latitude": 9,
+    "longitude": 1,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Togo"
+    ],
+    "selected_country_or_theater": "Togo",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "360",
+    "anchor_id": "BFA",
+    "latitude": 12.5,
+    "longitude": -1.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Burkina Faso"
+    ],
+    "selected_country_or_theater": "Burkina Faso",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "362",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Comoros"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "363",
+    "anchor_id": "ETH",
+    "latitude": 8,
+    "longitude": 39,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Ethiopia"
+    ],
+    "selected_country_or_theater": "Ethiopia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "364",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan, India",
+      "India",
+      "India, Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "365",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "366",
+    "anchor_id": "IDN",
+    "latitude": -1,
+    "longitude": 102,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Indonesia"
+    ],
+    "selected_country_or_theater": "Indonesia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "367",
+    "anchor_id": "PAN",
+    "latitude": 8.5,
+    "longitude": -80.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Panama"
+    ],
+    "selected_country_or_theater": "Panama",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "368",
+    "anchor_id": "PAN",
+    "latitude": 8.5,
+    "longitude": -80.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Panama"
+    ],
+    "selected_country_or_theater": "Panama",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "369",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Papua New Guinea",
+      "Papua New Guinea, Solomon Islands"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "370",
+    "anchor_id": "ROU",
+    "latitude": 45.5,
+    "longitude": 25,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Romania"
+    ],
+    "selected_country_or_theater": "Romania",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "371",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iraq, Kuwait, Philippines, Saudi Arabia",
+      "Kuwait"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "372",
+    "anchor_id": "MLI",
+    "latitude": 18.5,
+    "longitude": -2,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Mali"
+    ],
+    "selected_country_or_theater": "Mali",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "373",
+    "anchor_id": "NER",
+    "latitude": 17.5,
+    "longitude": 9.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Niger"
+    ],
+    "selected_country_or_theater": "Niger",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "374",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Burundi, DR Congo (Zaire)",
+      "DR Congo (Zaire)",
+      "DR Congo (Zaire), Rwanda",
+      "Rwanda"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "375",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Guinea-Bissau, Senegal",
+      "Senegal"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "376",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "377",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "378",
+    "anchor_id": "TTO",
+    "latitude": 11,
+    "longitude": -61,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Trinidad and Tobago"
+    ],
+    "selected_country_or_theater": "Trinidad and Tobago",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "379",
+    "anchor_id": "DJI",
+    "latitude": 12,
+    "longitude": 42.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Djibouti"
+    ],
+    "selected_country_or_theater": "Djibouti",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "380",
+    "anchor_id": "GEO",
+    "latitude": 42,
+    "longitude": 43.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Georgia"
+    ],
+    "selected_country_or_theater": "Georgia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "381",
+    "anchor_id": "HTI",
+    "latitude": 19.5,
+    "longitude": -72,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Haiti"
+    ],
+    "selected_country_or_theater": "Haiti",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "382",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Liberia, Sierra Leone",
+      "Sierra Leone"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "383",
+    "anchor_id": "TUR",
+    "latitude": 39.5,
+    "longitude": 34.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Turkey"
+    ],
+    "selected_country_or_theater": "Turkey",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "384",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Serbia (Yugoslavia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "385",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Serbia (Yugoslavia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "386",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Algeria",
+      "Algeria, Chad, Niger",
+      "Algeria, Mali"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "387",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Angola",
+      "Angola, Congo, DR Congo (Zaire)",
+      "Angola, DR Congo (Zaire)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "388",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Armenia, Azerbaijan",
+      "Azerbaijan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "389",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Bosnia-Herzegovina",
+      "Bosnia-Herzegovina, Croatia, Serbia (Yugoslavia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "390",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Bosnia-Herzegovina",
+      "Bosnia-Herzegovina, Croatia",
+      "Bosnia-Herzegovina, Croatia, Serbia (Yugoslavia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "391",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Egypt",
+      "Egypt, Ethiopia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "392",
+    "anchor_id": "GEO",
+    "latitude": 42,
+    "longitude": 43.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Georgia"
+    ],
+    "selected_country_or_theater": "Georgia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "393",
+    "anchor_id": "GEO",
+    "latitude": 42,
+    "longitude": 43.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Georgia"
+    ],
+    "selected_country_or_theater": "Georgia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "394",
+    "anchor_id": "MDA",
+    "latitude": 47.5,
+    "longitude": 28.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Moldova"
+    ],
+    "selected_country_or_theater": "Moldova",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "395",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan, Tajikistan",
+      "Tajikistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "396",
+    "anchor_id": "AZE",
+    "latitude": 40.5,
+    "longitude": 47,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Azerbaijan"
+    ],
+    "selected_country_or_theater": "Azerbaijan",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "397",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Bosnia-Herzegovina",
+      "Bosnia-Herzegovina, Croatia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "398",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Bosnia-Herzegovina"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "399",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "400",
+    "anchor_id": "MEX",
+    "latitude": 24,
+    "longitude": -102.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Mexico"
+    ],
+    "selected_country_or_theater": "Mexico",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "401",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Georgia, Russia (Soviet Union)",
+      "Qatar, Russia (Soviet Union)",
+      "Russia (Soviet Union)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "402",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Yemen (North Yemen)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "403",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ecuador, Peru"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "404",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan, Pakistan",
+      "Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "405",
+    "anchor_id": "CMR",
+    "latitude": 4.5,
+    "longitude": 12.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Cameroon"
+    ],
+    "selected_country_or_theater": "Cameroon",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "406",
+    "anchor_id": "NER",
+    "latitude": 17.5,
+    "longitude": 9.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Niger"
+    ],
+    "selected_country_or_theater": "Niger",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "407",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Comoros"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "408",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Congo",
+      "Congo, DR Congo (Zaire)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "409",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Eritrea",
+      "Eritrea, Ethiopia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "410",
+    "anchor_id": "GNB",
+    "latitude": 12,
+    "longitude": -14.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Guinea-Bissau"
+    ],
+    "selected_country_or_theater": "Guinea-Bissau",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "411",
+    "anchor_id": "LSO",
+    "latitude": -29.5,
+    "longitude": 28,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Lesotho"
+    ],
+    "selected_country_or_theater": "Lesotho",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "412",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Albania, Serbia (Yugoslavia)",
+      "Serbia (Yugoslavia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "413",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ethiopia",
+      "Ethiopia, Kenya"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "414",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "415",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Kyrgyzstan, Tajikistan, Uzbekistan",
+      "Kyrgyzstan, Uzbekistan",
+      "Uzbekistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "416",
+    "anchor_id": "CAF",
+    "latitude": 7,
+    "longitude": 21,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Central African Republic"
+    ],
+    "selected_country_or_theater": "Central African Republic",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "417",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "North Macedonia, Serbia (Yugoslavia)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "418",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan",
+      "Afghanistan, Pakistan",
+      "Afghanistan, Pakistan, Saudi Arabia",
+      "Afghanistan, Pakistan, Saudi Arabia, Somalia",
+      "Afghanistan, Pakistan, Somalia",
+      "Afghanistan, Pakistan, Somalia, Yemen (North Yemen)",
+      "Afghanistan, Pakistan, Syria",
+      "Afghanistan, Pakistan, Turkey",
+      "Afghanistan, Pakistan, United States of America",
+      "Afghanistan, Pakistan, Yemen (North Yemen)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "419",
+    "anchor_id": "CIV",
+    "latitude": 7.5,
+    "longitude": -5.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Ivory Coast"
+    ],
+    "selected_country_or_theater": "Ivory Coast",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "420",
+    "anchor_id": "IRQ",
+    "latitude": 33,
+    "longitude": 43.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Iraq"
+    ],
+    "selected_country_or_theater": "Iraq",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "421",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Bhutan, India",
+      "India"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "422",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "423",
+    "anchor_id": "THA",
+    "latitude": 15.5,
+    "longitude": 101,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Thailand"
+    ],
+    "selected_country_or_theater": "Thailand",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "424",
+    "anchor_id": "NGA",
+    "latitude": 9.5,
+    "longitude": 7.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Nigeria"
+    ],
+    "selected_country_or_theater": "Nigeria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "425",
+    "anchor_id": "NGA",
+    "latitude": 9.5,
+    "longitude": 7.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Nigeria"
+    ],
+    "selected_country_or_theater": "Nigeria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "426",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Argentina, Israel, Lebanon",
+      "Israel, Lebanon",
+      "Israel, Lebanon, Syria",
+      "Lebanon"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "429",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "DR Congo (Zaire)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "430",
+    "anchor_id": "NER",
+    "latitude": 17.5,
+    "longitude": 9.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Niger"
+    ],
+    "selected_country_or_theater": "Niger",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "432",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union)",
+      "Russia (Soviet Union), Syria",
+      "Russia (Soviet Union), Turkey"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "434",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "435",
+    "anchor_id": "DJI",
+    "latitude": 12,
+    "longitude": 42.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Djibouti"
+    ],
+    "selected_country_or_theater": "Djibouti",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "439",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "China, Myanmar (Burma)",
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "442",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Mali, Mauritania"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11342",
+    "anchor_id": "IND",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "India"
+    ],
+    "selected_country_or_theater": "India",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "11344",
+    "anchor_id": "SDN",
+    "latitude": 16.5,
+    "longitude": 29.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Sudan"
+    ],
+    "selected_country_or_theater": "Sudan",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "11345",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "South Sudan",
+      "South Sudan, Uganda"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11346",
+    "anchor_id": "LBY",
+    "latitude": 26.5,
+    "longitude": 18,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Libya"
+    ],
+    "selected_country_or_theater": "Libya",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "11347",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Mali",
+      "Mali, Mauritania",
+      "Mali, Niger"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11348",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "South Sudan, Sudan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11349",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "China"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11350",
+    "anchor_id": "BGD",
+    "latitude": 24,
+    "longitude": 89.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Bangladesh"
+    ],
+    "selected_country_or_theater": "Bangladesh",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "11447",
+    "anchor_id": "ETH",
+    "latitude": 8,
+    "longitude": 39,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Ethiopia"
+    ],
+    "selected_country_or_theater": "Ethiopia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "11475",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "India, Myanmar (Burma)",
+      "Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11487",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Malaysia, Philippines"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "11639",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan, Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13042",
+    "anchor_id": "SYR",
+    "latitude": 35,
+    "longitude": 38.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Syria"
+    ],
+    "selected_country_or_theater": "Syria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13219",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ukraine"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13243",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Poland, Russia (Soviet Union), Ukraine",
+      "Russia (Soviet Union), Ukraine"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13246",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ukraine"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13247",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union), Ukraine"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13306",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Ukraine"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13324",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Kyrgyzstan, Tajikistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13588",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Russia (Soviet Union)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13604",
+    "anchor_id": "SYR",
+    "latitude": 35,
+    "longitude": 38.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Syria"
+    ],
+    "selected_country_or_theater": "Syria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13611",
+    "anchor_id": "MLI",
+    "latitude": 18.5,
+    "longitude": -2,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Mali"
+    ],
+    "selected_country_or_theater": "Mali",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13637",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan",
+      "Afghanistan, Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13638",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Cameroon",
+      "Cameroon, Nigeria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13639",
+    "anchor_id": "NER",
+    "latitude": 17.5,
+    "longitude": 9.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Niger"
+    ],
+    "selected_country_or_theater": "Niger",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13640",
+    "anchor_id": "TCD",
+    "latitude": 15,
+    "longitude": 18.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Chad"
+    ],
+    "selected_country_or_theater": "Chad",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13641",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Niger, Nigeria",
+      "Nigeria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13645",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Yemen (North Yemen)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13646",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Kenya",
+      "Kenya, Somalia"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13648",
+    "anchor_id": "EGY",
+    "latitude": 26,
+    "longitude": 29.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Egypt"
+    ],
+    "selected_country_or_theater": "Egypt",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13653",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "India",
+      "India, Myanmar (Burma)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13674",
+    "anchor_id": "BGD",
+    "latitude": 24,
+    "longitude": 89.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Bangladesh"
+    ],
+    "selected_country_or_theater": "Bangladesh",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13675",
+    "anchor_id": "LBN",
+    "latitude": 34,
+    "longitude": 36,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Lebanon"
+    ],
+    "selected_country_or_theater": "Lebanon",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13692",
+    "anchor_id": "AFG",
+    "latitude": 34,
+    "longitude": 66.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Afghanistan"
+    ],
+    "selected_country_or_theater": "Afghanistan",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13694",
+    "anchor_id": "LBY",
+    "latitude": 26.5,
+    "longitude": 18,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Libya"
+    ],
+    "selected_country_or_theater": "Libya",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13721",
+    "anchor_id": "DZA",
+    "latitude": 27.5,
+    "longitude": 3,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Algeria"
+    ],
+    "selected_country_or_theater": "Algeria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13809",
+    "anchor_id": "SYR",
+    "latitude": 35,
+    "longitude": 38.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Syria"
+    ],
+    "selected_country_or_theater": "Syria",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13840",
+    "anchor_id": "BFA",
+    "latitude": 12.5,
+    "longitude": -1.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Burkina Faso"
+    ],
+    "selected_country_or_theater": "Burkina Faso",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "13886",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Jordan, Syria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13902",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iraq, Syria, Turkey",
+      "Syria, Turkey"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "13936",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Afghanistan, Pakistan",
+      "Pakistan"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "14074",
+    "anchor_id": "SOM",
+    "latitude": 3.5,
+    "longitude": 45,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Somalia"
+    ],
+    "selected_country_or_theater": "Somalia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14113",
+    "anchor_id": "MLI",
+    "latitude": 18.5,
+    "longitude": -2,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Mali"
+    ],
+    "selected_country_or_theater": "Mali",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14129",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Cameroon",
+      "Cameroon, Nigeria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "14197",
+    "anchor_id": "SOM",
+    "latitude": 3.5,
+    "longitude": 45,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Somalia"
+    ],
+    "selected_country_or_theater": "Somalia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14268",
+    "anchor_id": "IRN",
+    "latitude": 32,
+    "longitude": 55,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Iran"
+    ],
+    "selected_country_or_theater": "Iran",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14275",
+    "anchor_id": "PHL",
+    "latitude": 11,
+    "longitude": 122.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Philippines"
+    ],
+    "selected_country_or_theater": "Philippines",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14333",
+    "anchor_id": "TUN",
+    "latitude": 33.5,
+    "longitude": 9,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Tunisia"
+    ],
+    "selected_country_or_theater": "Tunisia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14609",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iran, Iraq, Israel, Jordan, Syria",
+      "Iran, Iraq, Syria, Yemen (North Yemen)",
+      "Iran, Israel, Lebanon",
+      "Iraq, Syria, Yemen (North Yemen)",
+      "Syria"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "14692",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "DR Congo (Zaire)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "14845",
+    "anchor_id": "MOZ",
+    "latitude": -14,
+    "longitude": 38,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Mozambique"
+    ],
+    "selected_country_or_theater": "Mozambique",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "14935",
+    "anchor_id": "ETH",
+    "latitude": 8,
+    "longitude": 39,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Ethiopia"
+    ],
+    "selected_country_or_theater": "Ethiopia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "15183",
+    "anchor_id": "TZA",
+    "latitude": -6,
+    "longitude": 35,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Tanzania"
+    ],
+    "selected_country_or_theater": "Tanzania",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "15256",
+    "anchor_id": "BEN",
+    "latitude": 10.5,
+    "longitude": 2.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Benin"
+    ],
+    "selected_country_or_theater": "Benin",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "15283",
+    "anchor_id": "CAF",
+    "latitude": 7,
+    "longitude": 21,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Central African Republic"
+    ],
+    "selected_country_or_theater": "Central African Republic",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "15438",
+    "anchor_id": "UGA",
+    "latitude": 2,
+    "longitude": 33,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Uganda"
+    ],
+    "selected_country_or_theater": "Uganda",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "16038",
+    "anchor_id": "MLI",
+    "latitude": 18.5,
+    "longitude": -2,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Mali"
+    ],
+    "selected_country_or_theater": "Mali",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "16069",
+    "anchor_id": "ETH",
+    "latitude": 8,
+    "longitude": 39,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Ethiopia"
+    ],
+    "selected_country_or_theater": "Ethiopia",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "16099",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Iraq, Yemen (North Yemen)",
+      "Yemen (North Yemen)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "conflict_id": "16292",
+    "anchor_id": "TJK",
+    "latitude": 38,
+    "longitude": 72.5,
+    "status": "country_anchor",
+    "basis": "Single exact battle_location label matched frozen Natural Earth alias; no frequency, actor, dyad or casualty weighting",
+    "location_labels_raw": [
+      "Tajikistan"
+    ],
+    "selected_country_or_theater": "Tajikistan",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная метка для навигации; число относится к конфликту целиком, не к стране и не к точке."
+  },
+  {
+    "conflict_id": "16470",
+    "anchor_id": null,
+    "latitude": null,
+    "longitude": null,
+    "status": "unplaced",
+    "basis": "Multiple, historical, disputed or unmatched labels: no reviewed theater anchor; no automatic first-country choice",
+    "location_labels_raw": [
+      "Yemen (North Yemen)"
+    ],
+    "selected_country_or_theater": null,
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Без условной метки: требуется отдельная проверка театра. Исходные названия сохранены; неизвестное не заменено координатой (0,0)."
+  },
+  {
+    "highlight_id": "ww1",
+    "anchor_id": "FRA",
+    "latitude": 46.5,
+    "longitude": 2.5,
+    "status": "theater_anchor",
+    "basis": "Author-reviewed symbolic navigation proxy: France; frozen Natural Earth representative label point rounded0.5deg; geography reference https://www.nam.ac.uk/schools/learning-resources/commonwealth-soldiers-western-front; no spatial mortality analysis",
+    "location_labels_raw": [
+      "France"
+    ],
+    "selected_country_or_theater": "Западная Европа — условная метка мировой войны",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Авторский выбор страновой точки подписи Франции как символического ориентира западноевропейского театра, не координаты Западного фронта. Война охватывала и другие театры; общая оценка не относится к Франции или этой точке."
+  },
+  {
+    "highlight_id": "ww2",
+    "anchor_id": "DEU",
+    "latitude": 51,
+    "longitude": 9.5,
+    "status": "theater_anchor",
+    "basis": "Author-reviewed symbolic navigation proxy: Germany; frozen Natural Earth representative label point rounded0.5deg; geography reference https://www.nam.ac.uk/explore/second-world-war; no spatial mortality analysis",
+    "location_labels_raw": [
+      "Germany"
+    ],
+    "selected_country_or_theater": "Центральная Европа — условная метка мировой войны",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Авторский выбор Германии как навигационного ориентира европейского театра. Война мировая, включая Азию, Тихий океан и другие театры; общая оценка не относится к Европе или этой точке."
+  },
+  {
+    "highlight_id": "us-civil",
+    "anchor_id": "USA",
+    "latitude": 39.5,
+    "longitude": -97.5,
+    "status": "theater_anchor",
+    "basis": "Author-reviewed symbolic navigation proxy: United States of America; frozen Natural Earth representative label point rounded0.5deg; geography reference https://www.nps.gov/civilwar/overview.htm; no spatial mortality analysis",
+    "location_labels_raw": [
+      "United States of America"
+    ],
+    "selected_country_or_theater": "США — условная страновая метка",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Условная репрезентативная точка США из Natural Earth, не центр театра боёв и не место гибели людей; источниковое число относится ко всей войне."
+  },
+  {
+    "highlight_id": "korea",
+    "anchor_id": "KOR",
+    "latitude": 36.5,
+    "longitude": 128,
+    "status": "theater_anchor",
+    "basis": "Author-reviewed symbolic navigation proxy: South Korea; frozen Natural Earth representative label point rounded0.5deg; geography reference https://www.nam.ac.uk/explore/korean-war; no spatial mortality analysis",
+    "location_labels_raw": [
+      "South Korea"
+    ],
+    "selected_country_or_theater": "Корейский полуостров — условная метка",
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "reviewed_on": "2026-10-22",
+    "note_ru": "Авторский выбор страновой точки подписи Южной Кореи как символического ориентира, не центра полуострова. Число относится к гражданским обеих Корей, а не к Южной Корее или этой точке."
+  }
+]

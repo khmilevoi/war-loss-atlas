@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "path": "data/ucdp-conflict-year.csv",
+    "sha256": "b34ecb57f1fc0e73d4bfd7b080212da429af3135a8d360b1c902e45506f81147",
+    "source_url": "https://ucdp.uu.se/downloads/brd/ucdp-brd-conf-261-csv.zip",
+    "version": "26.1"
+  },
+  "nativeRowCount": 1650,
+  "conflictCount": 202,
+  "historicalHighlightCount": 4,
+  "years": [
+    1989,
+    2025
+  ],
+  "sums": {
+    "best": 2566047,
+    "low": 2410880,
+    "high": 3330850
+  },
+  "missingCounts": {
+    "best": 0,
+    "low": 0,
+    "high": 0
+  },
+  "geography": {
+    "matched": 94,
+    "unplaced": 108,
+    "historicalMatched": 4,
+    "historicalUnplaced": 0
+  },
+  "files": {
+    "data/ucdp-conflict-year.csv": "b34ecb57f1fc0e73d4bfd7b080212da429af3135a8d360b1c902e45506f81147",
+    "data/geography/ne_110m_admin_0_countries.geojson": "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f",
+    "public/geo/ne_110m_land.geojson": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
+    "src/data/historical.json": "c1f4d3d4260db6bb84d53e9cb82a55fb0cc64f83701048a231b59153bf3e8d77",
+    "src/data/sources.json": "c146a0c5f7bbdcaf11e7b607b06a8166bdba4374525880f0f92f985fa1d8d67c",
+    "src/data/country-anchors.json": "8940fcbeaf41c447b8015c5a25080943a0e9871eea1b883fdb3e92f03b8e265d",
+    "src/data/placements.json": "550ed783366f8213d7bceaf374387a113e431ed6c415973024c6d2789bae39f6"
+  }
+}

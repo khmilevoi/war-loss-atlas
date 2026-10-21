@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# Frozen source bytes must survive Windows Git checkouts unchanged.
+data/ucdp-conflict-year.csv -text -diff
+data/geography/*.geojson -text
+public/geo/*.geojson -text

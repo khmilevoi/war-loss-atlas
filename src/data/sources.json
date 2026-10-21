@@ -1,0 +1,18 @@
+[
+  {
+    "source_id": "ucdp-brd-26.1-conflict", "title": "UCDP Battle-Related Deaths Dataset, conflict-year", "version": "26.1",
+    "source_url": "https://ucdp.uu.se/downloads/", "license": "CC BY 4.0", "license_url": "https://creativecommons.org/licenses/by/4.0/", "accessed_on": "2026-10-22",
+    "changes_ru": "Исходный CSV сохранён побайтно. Пустые значения преобразованы в null, year и оценки в числа, идентификаторы сохранены строками. Суммирование по уникальному conflict_id:year; авторские названия и условные метки отделены от native полей.",
+    "citations": ["Davies, Shawn; Pettersson, Therése; Öberg, Magnus (2026). Organized violence 1989–2025, and violent political protests. Journal of Peace Research. https://doi.org/10.1093/jopres/xjag046", "UCDP is part of and funded by DEMSCORE, national research infrastructure grant 2021-00162 from the Swedish Research Council."]
+  },
+  {
+    "source_id": "historical-facts", "title": "Авторские исторические карточки с построчным происхождением", "version": "2026-10-22",
+    "source_url": "https://www.archives.gov/press/press-releases/2009/nr09-77", "license": "Авторские краткие парафразы фактов; не лицензия исходных страниц", "license_url": "https://www.archives.gov/global-pages/privacy.html#copyright", "accessed_on": "2026-10-22",
+    "changes_ru": "Короткие факты извлечены самостоятельно, написаны по-русски; тексты, таблицы, изображения страниц не распространяются. NARA: собственная государственная публикация (CC0/public domain). Остальные страницы не объявляются CC BY. Определения, источники, локаторы и оговорки находятся в каждой карточке.", "citations": []
+  },
+  {
+    "source_id": "natural-earth-navigation", "title": "Natural Earth — illustrative label anchors and 1:110m Land", "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+    "source_url": "https://github.com/nvkelso/natural-earth-vector/tree/ca96624a56bd078437bca8184e78163e5039ad19", "license": "Public domain", "license_url": "https://www.naturalearthdata.com/about/terms-of-use/", "accessed_on": "2026-10-22",
+    "changes_ru": "Made with Natural Earth. LABEL_X/LABEL_Y округлены до 0,5° только для навигации. Суша сохранена без изменений для декоративного фона; это не события, люди, плотность смертей или юридическая карта границ.", "citations": []
+  }
+]

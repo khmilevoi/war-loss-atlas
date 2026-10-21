@@ -1,0 +1,1154 @@
+[
+  {
+    "key": "AFG",
+    "aliases": [
+      "Afghanistan"
+    ],
+    "display_name": "Афганистан",
+    "latitude": 34,
+    "longitude": 66.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "AGO",
+    "aliases": [
+      "Angola"
+    ],
+    "display_name": "Ангола",
+    "latitude": -12,
+    "longitude": 18,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ALB",
+    "aliases": [
+      "Albania"
+    ],
+    "display_name": "Албания",
+    "latitude": 40.5,
+    "longitude": 20,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ARE",
+    "aliases": [
+      "United Arab Emirates"
+    ],
+    "display_name": "Объединённые Арабские Эмираты",
+    "latitude": 23.5,
+    "longitude": 54.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ARG",
+    "aliases": [
+      "Argentina"
+    ],
+    "display_name": "Аргентина",
+    "latitude": -33.5,
+    "longitude": -64,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ARM",
+    "aliases": [
+      "Armenia"
+    ],
+    "display_name": "Армения",
+    "latitude": 40.5,
+    "longitude": 45,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "AUS",
+    "aliases": [
+      "Australia"
+    ],
+    "display_name": "Австралия",
+    "latitude": -24,
+    "longitude": 134,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "AZE",
+    "aliases": [
+      "Azerbaijan"
+    ],
+    "display_name": "Азербайджан",
+    "latitude": 40.5,
+    "longitude": 47,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "BDI",
+    "aliases": [
+      "Burundi"
+    ],
+    "display_name": "Бурунди",
+    "latitude": -3.5,
+    "longitude": 30,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "BEL",
+    "aliases": [
+      "Belgium"
+    ],
+    "display_name": "Бельгия",
+    "latitude": 51,
+    "longitude": 5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "BEN",
+    "aliases": [
+      "Benin"
+    ],
+    "display_name": "Бенин",
+    "latitude": 10.5,
+    "longitude": 2.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "BFA",
+    "aliases": [
+      "Burkina Faso"
+    ],
+    "display_name": "Буркина-Фасо",
+    "latitude": 12.5,
+    "longitude": -1.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "BGD",
+    "aliases": [
+      "Bangladesh"
+    ],
+    "display_name": "Бангладеш",
+    "latitude": 24,
+    "longitude": 89.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "BTN",
+    "aliases": [
+      "Bhutan"
+    ],
+    "display_name": "Бутан",
+    "latitude": 27.5,
+    "longitude": 90,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "CAF",
+    "aliases": [
+      "Central African Republic"
+    ],
+    "display_name": "Центральноафриканская Республика",
+    "latitude": 7,
+    "longitude": 21,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "CIV",
+    "aliases": [
+      "Ivory Coast"
+    ],
+    "display_name": "Кот-д’Ивуар",
+    "latitude": 7.5,
+    "longitude": -5.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "CMR",
+    "aliases": [
+      "Cameroon"
+    ],
+    "display_name": "Камерун",
+    "latitude": 4.5,
+    "longitude": 12.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "COG",
+    "aliases": [
+      "Congo"
+    ],
+    "display_name": "Республика Конго",
+    "latitude": 0,
+    "longitude": 16,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "COL",
+    "aliases": [
+      "Colombia"
+    ],
+    "display_name": "Колумбия",
+    "latitude": 3.5,
+    "longitude": -73,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "DEU",
+    "aliases": [
+      "Germany"
+    ],
+    "display_name": "Германия",
+    "latitude": 51,
+    "longitude": 9.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "DJI",
+    "aliases": [
+      "Djibouti"
+    ],
+    "display_name": "Джибути",
+    "latitude": 12,
+    "longitude": 42.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "DZA",
+    "aliases": [
+      "Algeria"
+    ],
+    "display_name": "Алжир",
+    "latitude": 27.5,
+    "longitude": 3,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ECU",
+    "aliases": [
+      "Ecuador"
+    ],
+    "display_name": "Эквадор",
+    "latitude": -1.5,
+    "longitude": -78,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "EGY",
+    "aliases": [
+      "Egypt"
+    ],
+    "display_name": "Египет",
+    "latitude": 26,
+    "longitude": 29.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ERI",
+    "aliases": [
+      "Eritrea"
+    ],
+    "display_name": "Эритрея",
+    "latitude": 16,
+    "longitude": 38.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ESP",
+    "aliases": [
+      "Spain"
+    ],
+    "display_name": "Испания",
+    "latitude": 40,
+    "longitude": -3.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ETH",
+    "aliases": [
+      "Ethiopia"
+    ],
+    "display_name": "Эфиопия",
+    "latitude": 8,
+    "longitude": 39,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "FRA",
+    "aliases": [
+      "France"
+    ],
+    "display_name": "Франция",
+    "latitude": 46.5,
+    "longitude": 2.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "GBR",
+    "aliases": [
+      "United Kingdom"
+    ],
+    "display_name": "Великобритания",
+    "latitude": 54.5,
+    "longitude": -2,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "GEO",
+    "aliases": [
+      "Georgia"
+    ],
+    "display_name": "Грузия",
+    "latitude": 42,
+    "longitude": 43.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "GIN",
+    "aliases": [
+      "Guinea"
+    ],
+    "display_name": "Гвинея",
+    "latitude": 10.5,
+    "longitude": -10,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "GNB",
+    "aliases": [
+      "Guinea-Bissau"
+    ],
+    "display_name": "Гвинея-Бисау",
+    "latitude": 12,
+    "longitude": -14.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "GTM",
+    "aliases": [
+      "Guatemala"
+    ],
+    "display_name": "Гватемала",
+    "latitude": 15,
+    "longitude": -90.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "HRV",
+    "aliases": [
+      "Croatia"
+    ],
+    "display_name": "Хорватия",
+    "latitude": 46,
+    "longitude": 16.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "HTI",
+    "aliases": [
+      "Haiti"
+    ],
+    "display_name": "Республика Гаити",
+    "latitude": 19.5,
+    "longitude": -72,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "IDN",
+    "aliases": [
+      "Indonesia"
+    ],
+    "display_name": "Индонезия",
+    "latitude": -1,
+    "longitude": 102,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "IND",
+    "aliases": [
+      "India"
+    ],
+    "display_name": "Индия",
+    "latitude": 22.5,
+    "longitude": 79.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "IRN",
+    "aliases": [
+      "Iran"
+    ],
+    "display_name": "Иран",
+    "latitude": 32,
+    "longitude": 55,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "IRQ",
+    "aliases": [
+      "Iraq"
+    ],
+    "display_name": "Ирак",
+    "latitude": 33,
+    "longitude": 43.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ITA",
+    "aliases": [
+      "Italy"
+    ],
+    "display_name": "Италия",
+    "latitude": 44.5,
+    "longitude": 11,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "JOR",
+    "aliases": [
+      "Jordan"
+    ],
+    "display_name": "Иордания",
+    "latitude": 31,
+    "longitude": 36.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "KEN",
+    "aliases": [
+      "Kenya"
+    ],
+    "display_name": "Кения",
+    "latitude": 0.5,
+    "longitude": 38,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "KGZ",
+    "aliases": [
+      "Kyrgyzstan"
+    ],
+    "display_name": "Киргизия",
+    "latitude": 41.5,
+    "longitude": 74.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "KOR",
+    "aliases": [
+      "South Korea"
+    ],
+    "display_name": "Республика Корея",
+    "latitude": 36.5,
+    "longitude": 128,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "KWT",
+    "aliases": [
+      "Kuwait"
+    ],
+    "display_name": "Кувейт",
+    "latitude": 29.5,
+    "longitude": 47.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "LAO",
+    "aliases": [
+      "Laos"
+    ],
+    "display_name": "Лаос",
+    "latitude": 19.5,
+    "longitude": 102.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "LBN",
+    "aliases": [
+      "Lebanon"
+    ],
+    "display_name": "Ливан",
+    "latitude": 34,
+    "longitude": 36,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "LBR",
+    "aliases": [
+      "Liberia"
+    ],
+    "display_name": "Либерия",
+    "latitude": 6.5,
+    "longitude": -9.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "LBY",
+    "aliases": [
+      "Libya"
+    ],
+    "display_name": "Ливия",
+    "latitude": 26.5,
+    "longitude": 18,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "LKA",
+    "aliases": [
+      "Sri Lanka"
+    ],
+    "display_name": "Шри-Ланка",
+    "latitude": 7.5,
+    "longitude": 80.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "LSO",
+    "aliases": [
+      "Lesotho"
+    ],
+    "display_name": "Лесото",
+    "latitude": -29.5,
+    "longitude": 28,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MDA",
+    "aliases": [
+      "Moldova"
+    ],
+    "display_name": "Молдавия",
+    "latitude": 47.5,
+    "longitude": 28.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MEX",
+    "aliases": [
+      "Mexico"
+    ],
+    "display_name": "Мексика",
+    "latitude": 24,
+    "longitude": -102.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MKD",
+    "aliases": [
+      "North Macedonia"
+    ],
+    "display_name": "Северная Македония",
+    "latitude": 41.5,
+    "longitude": 21.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MLI",
+    "aliases": [
+      "Mali"
+    ],
+    "display_name": "Мали",
+    "latitude": 18.5,
+    "longitude": -2,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MOZ",
+    "aliases": [
+      "Mozambique"
+    ],
+    "display_name": "Мозамбик",
+    "latitude": -14,
+    "longitude": 38,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MRT",
+    "aliases": [
+      "Mauritania"
+    ],
+    "display_name": "Мавритания",
+    "latitude": 19.5,
+    "longitude": -9.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "MYS",
+    "aliases": [
+      "Malaysia"
+    ],
+    "display_name": "Малайзия",
+    "latitude": 2.5,
+    "longitude": 114,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "NAM",
+    "aliases": [
+      "Namibia"
+    ],
+    "display_name": "Намибия",
+    "latitude": -20.5,
+    "longitude": 17,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "NER",
+    "aliases": [
+      "Niger"
+    ],
+    "display_name": "Нигер",
+    "latitude": 17.5,
+    "longitude": 9.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "NGA",
+    "aliases": [
+      "Nigeria"
+    ],
+    "display_name": "Нигерия",
+    "latitude": 9.5,
+    "longitude": 7.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "NIC",
+    "aliases": [
+      "Nicaragua"
+    ],
+    "display_name": "Никарагуа",
+    "latitude": 12.5,
+    "longitude": -85,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "NLD",
+    "aliases": [
+      "Netherlands"
+    ],
+    "display_name": "Нидерланды",
+    "latitude": 52.5,
+    "longitude": 5.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "NPL",
+    "aliases": [
+      "Nepal"
+    ],
+    "display_name": "Непал",
+    "latitude": 28.5,
+    "longitude": 83.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "PAK",
+    "aliases": [
+      "Pakistan"
+    ],
+    "display_name": "Пакистан",
+    "latitude": 29.5,
+    "longitude": 68.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "PAN",
+    "aliases": [
+      "Panama"
+    ],
+    "display_name": "Панама",
+    "latitude": 8.5,
+    "longitude": -80.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "PER",
+    "aliases": [
+      "Peru"
+    ],
+    "display_name": "Перу",
+    "latitude": -13,
+    "longitude": -73,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "PHL",
+    "aliases": [
+      "Philippines"
+    ],
+    "display_name": "Филиппины",
+    "latitude": 11,
+    "longitude": 122.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "PNG",
+    "aliases": [
+      "Papua New Guinea"
+    ],
+    "display_name": "Папуа — Новая Гвинея",
+    "latitude": -5.5,
+    "longitude": 144,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "POL",
+    "aliases": [
+      "Poland"
+    ],
+    "display_name": "Польша",
+    "latitude": 52,
+    "longitude": 19.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "PRY",
+    "aliases": [
+      "Paraguay"
+    ],
+    "display_name": "Парагвай",
+    "latitude": -21.5,
+    "longitude": -60,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "QAT",
+    "aliases": [
+      "Qatar"
+    ],
+    "display_name": "Катар",
+    "latitude": 25,
+    "longitude": 51,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ROU",
+    "aliases": [
+      "Romania"
+    ],
+    "display_name": "Румыния",
+    "latitude": 45.5,
+    "longitude": 25,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "RWA",
+    "aliases": [
+      "Rwanda"
+    ],
+    "display_name": "Руанда",
+    "latitude": -2,
+    "longitude": 30,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SAU",
+    "aliases": [
+      "Saudi Arabia"
+    ],
+    "display_name": "Саудовская Аравия",
+    "latitude": 24,
+    "longitude": 44.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SDN",
+    "aliases": [
+      "Sudan"
+    ],
+    "display_name": "Судан",
+    "latitude": 16.5,
+    "longitude": 29.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SDS",
+    "aliases": [
+      "South Sudan"
+    ],
+    "display_name": "Южный Судан",
+    "latitude": 7,
+    "longitude": 30.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SEN",
+    "aliases": [
+      "Senegal"
+    ],
+    "display_name": "Сенегал",
+    "latitude": 15,
+    "longitude": -15,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SLB",
+    "aliases": [
+      "Solomon Islands"
+    ],
+    "display_name": "Соломоновы Острова",
+    "latitude": -8,
+    "longitude": 159,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SLE",
+    "aliases": [
+      "Sierra Leone"
+    ],
+    "display_name": "Сьерра-Леоне",
+    "latitude": 8.5,
+    "longitude": -12,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SLV",
+    "aliases": [
+      "El Salvador"
+    ],
+    "display_name": "Сальвадор",
+    "latitude": 13.5,
+    "longitude": -89,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SOM",
+    "aliases": [
+      "Somalia"
+    ],
+    "display_name": "Сомали",
+    "latitude": 3.5,
+    "longitude": 45,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "SYR",
+    "aliases": [
+      "Syria"
+    ],
+    "display_name": "Сирия",
+    "latitude": 35,
+    "longitude": 38.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TCD",
+    "aliases": [
+      "Chad"
+    ],
+    "display_name": "Чад",
+    "latitude": 15,
+    "longitude": 18.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TGO",
+    "aliases": [
+      "Togo"
+    ],
+    "display_name": "Того",
+    "latitude": 9,
+    "longitude": 1,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "THA",
+    "aliases": [
+      "Thailand"
+    ],
+    "display_name": "Таиланд",
+    "latitude": 15.5,
+    "longitude": 101,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TJK",
+    "aliases": [
+      "Tajikistan"
+    ],
+    "display_name": "Таджикистан",
+    "latitude": 38,
+    "longitude": 72.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TTO",
+    "aliases": [
+      "Trinidad and Tobago"
+    ],
+    "display_name": "Тринидад и Тобаго",
+    "latitude": 11,
+    "longitude": -61,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TUN",
+    "aliases": [
+      "Tunisia"
+    ],
+    "display_name": "Тунис",
+    "latitude": 33.5,
+    "longitude": 9,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TUR",
+    "aliases": [
+      "Turkey"
+    ],
+    "display_name": "Турция",
+    "latitude": 39.5,
+    "longitude": 34.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "TZA",
+    "aliases": [
+      "Tanzania"
+    ],
+    "display_name": "Танзания",
+    "latitude": -6,
+    "longitude": 35,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "UGA",
+    "aliases": [
+      "Uganda"
+    ],
+    "display_name": "Уганда",
+    "latitude": 2,
+    "longitude": 33,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "USA",
+    "aliases": [
+      "United States of America"
+    ],
+    "display_name": "США",
+    "latitude": 39.5,
+    "longitude": -97.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "UZB",
+    "aliases": [
+      "Uzbekistan"
+    ],
+    "display_name": "Узбекистан",
+    "latitude": 41.5,
+    "longitude": 64,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "VEN",
+    "aliases": [
+      "Venezuela"
+    ],
+    "display_name": "Венесуэла",
+    "latitude": 7,
+    "longitude": -64.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  },
+  {
+    "key": "ZAF",
+    "aliases": [
+      "South Africa"
+    ],
+    "display_name": "ЮАР",
+    "latitude": -29.5,
+    "longitude": 23.5,
+    "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+    "coordinate_method": "Natural Earth LABEL_Y/LABEL_X, rounded to nearest 0.5 degree; illustrative representative label point, not casualty location",
+    "version": "ca96624a56bd078437bca8184e78163e5039ad19"
+  }
+]

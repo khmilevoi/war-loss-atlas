@@ -1,0 +1,43 @@
+[
+  {
+    "highlight_id": "ww1", "name_ru": "Первая мировая война", "start_year": 1914, "end_year": 1918,
+    "metric": "total_war_deaths", "estimate_kind": "approximate", "value": 16000000,
+    "low": null, "high": null, "lower_exclusive": false, "display_ru": "Около 16 млн — оценка NARA",
+    "source_title": "National Archives — National Archives Recalls Flu Pandemic of 1918 (30 April 2009)",
+    "source_url": "https://www.archives.gov/press/press-releases/2009/nr09-77",
+    "source_locator": "True or False? — первый абзац после ответа", "accessed_on": "2026-10-22",
+    "uncertainty_ru": "Приблизительная оценка конкретной публикации NARA; методика и состав общего числа здесь не раскрыты. Это не точный подсчёт и не боевые потери UCDP; разные публикации используют иной охват.",
+    "scope_ru": "Все умершие по широкой исторической оценке источника. Не складывается с другими карточками или UCDP.",
+    "placement_ids": ["history:ww1"]
+  },
+  {
+    "highlight_id": "ww2", "name_ru": "Вторая мировая война", "start_year": 1939, "end_year": 1945,
+    "metric": "total_war_deaths", "estimate_kind": "lower_statement", "value": null,
+    "low": 65000000, "high": null, "lower_exclusive": true, "display_ru": "Более 65 млн — оценка National Army Museum",
+    "source_title": "National Army Museum — Second World War", "source_url": "https://www.nam.ac.uk/explore/second-world-war",
+    "source_locator": "The deadliest conflict in human history", "accessed_on": "2026-10-22",
+    "uncertainty_ru": "Музей приводит нижнее утверждение, без верхней границы. USHMM даёт около 55 млн (https://encyclopedia.ushmm.org/content/en/article/world-war-ii-in-depth). Это разногласие оценок и охвата, а не интервал 55–65 млн.",
+    "scope_ru": "Все умершие по исторической оценке музея, включая гражданских, голод и геноцид; несопоставимо с боевыми потерями UCDP.",
+    "placement_ids": ["history:ww2"]
+  },
+  {
+    "highlight_id": "us-civil", "name_ru": "Гражданская война в США", "start_year": 1861, "end_year": 1865,
+    "metric": "war_deaths_source_definition", "estimate_kind": "lower_statement", "value": null,
+    "low": 750000, "high": null, "lower_exclusive": false, "display_ru": "Не менее 750 тыс., возможно больше",
+    "source_title": "National Park Service — The Civil War: An Introduction", "source_url": "https://www.nps.gov/civilwar/overview.htm",
+    "source_locator": "Примечание после абзаца о 620000 умерших", "accessed_on": "2026-10-22",
+    "uncertainty_ru": "NPS отмечает пересмотр прежней оценки 620 тыс. современными исследованиями. Нижняя граница включительна, верхняя не установлена; это не исключительно смерти на поле боя.",
+    "scope_ru": "Умершие непосредственно в результате войны по определению источника; состав демографической оценки отличается от UCDP.",
+    "placement_ids": ["history:us-civil"]
+  },
+  {
+    "highlight_id": "korea", "name_ru": "Корейская война", "start_year": 1950, "end_year": 1953,
+    "metric": "civilian_war_deaths", "estimate_kind": "approximate", "value": 2000000,
+    "low": null, "high": null, "lower_exclusive": false, "display_ru": "Около 2 млн гражданских Северной и Южной Кореи",
+    "source_title": "National Army Museum — Korean War", "source_url": "https://www.nam.ac.uk/explore/korean-war",
+    "source_locator": "The war in numbers — последнее предложение", "accessed_on": "2026-10-22",
+    "uncertainty_ru": "Приблизительная оценка только гражданских двух Корей. National Museum of Australia оценивает умерших корейцев и китайцев в 4 млн (https://www.nma.gov.au/defining-moments/resources/korean-war); это иной охват, не верхняя граница этой оценки.",
+    "scope_ru": "Только гражданские Северной и Южной Кореи, не общая смертность всех участников войны.",
+    "placement_ids": ["history:korea"]
+  }
+]
