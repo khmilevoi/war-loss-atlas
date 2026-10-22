@@ -1,7 +1,7 @@
 import { atom, reatomRoute, wrap } from '@reatom/core';
 import type { AtlasData } from '../data/types';
 import { createAtlasModel } from '../model/atlas';
-import { Landing } from '../ui/RoutePages';
+import { Landing } from '../ui/Landing';
 import { DataPage } from '../ui/DataPage';
 
 /** The immutable public source is injected into each request/client frame. */

@@ -16,6 +16,180 @@ test.beforeEach(async ({ page }) => {
 });
 test.afterEach(async ({ page }) => { expect((page as any).atlasErrors).toEqual([]); });
 
+test('landing historical focus hover click and Escape share the same detail', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'За каждой точкой — человеческие жизни.' })).toBeVisible();
+  const list = page.getByRole('region', { name: 'Список конфликтов' });
+  await expect(list.locator('[data-conflict-id]')).toHaveCount(4);
+  const detail = page.getByRole('region', { name: 'Подробности записи' });
+  await expect(detail).toContainText('Более 65 млн');
+  const first = list.locator('[data-conflict-id="ww1"]');
+  await first.hover();
+  await expect(detail).toContainText('Около 16 млн');
+  await first.click();
+  await expect(detail).toContainText('Около 16 млн');
+  const korea = list.locator('[data-conflict-id="korea"]');
+  await korea.focus();
+  await expect(detail).toContainText('гражданских');
+  await korea.press('Enter');
+  await expect(detail).toContainText('Около 2 млн');
+  await page.keyboard.press('Escape');
+  await expect(detail).toHaveCount(0);
+  await expect(korea).toBeFocused();
+});
+
+test('landing modern layer exposes all unknown and coincident anchors with whole source totals', async ({ page }) => {
+  await page.goto('/?layer=ucdp');
+  await expect(page.getByTestId('map-coverage')).toContainText('94 на глобусе · 108 без координат · 202 всего');
+  const list = page.getByRole('region', { name: 'Список конфликтов' });
+  await expect(list.locator('[data-conflict-id]')).toHaveCount(202);
+  await list.locator('[data-conflict-id="11345"]').click();
+  const detail = page.getByRole('region', { name: 'Подробности записи' });
+  await expect(detail).toContainText('весь доступный ряд');
+  await expect(detail).toContainText('без координат');
+  await expect(page.getByTestId('map-period')).toContainText('первому наблюдаемому');
+  const coincident = await page.locator('#atlas-initial').evaluate(element => {
+    const placements = JSON.parse(element.textContent!).data.placements as { conflict_id?: string; latitude: number | null; longitude: number | null }[];
+    const groups = new Map<string, string[]>();
+    for (const placement of placements) {
+      if (!placement.conflict_id || placement.latitude === null) continue;
+      const key = `${placement.latitude}:${placement.longitude}`;
+      groups.set(key, [...(groups.get(key) ?? []), placement.conflict_id]);
+    }
+    return [...groups.values()].find(group => group.length > 1)!;
+  });
+  expect(coincident.length).toBeGreaterThan(1);
+  for (const id of coincident.slice(0, 2)) {
+    await list.locator(`[data-conflict-id="${id}"]`).click();
+    await expect(detail).toContainText(`Конфликт ID ${id}:`);
+  }
+  await page.getByRole('tab', { name: 'Исторические примеры', exact: true }).click();
+  await expect(list.locator('[data-conflict-id]')).toHaveCount(4);
+  await expect(page.getByTestId('map-coverage')).toContainText('4 на глобусе');
+});
+
+test('globe unavailable keeps navigable historical records', async ({ page }) => {
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...args: any[]) {
+      return type.includes('webgl') ? null : (getContext as any).call(this, type, ...args);
+    } as any;
+  });
+  await page.goto('/');
+  await expect(page.getByTestId('globe-status')).toContainText('Список доступен');
+  await page.locator('[data-conflict-id="ww1"]').click();
+  await expect(page.getByRole('region', { name: 'Подробности записи' })).toContainText('Около 16 млн');
+});
+
+test('globe reduced motion and mobile layout retain readable controls', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Включить вращение' })).toBeVisible();
+  await expect(page.getByTestId('globe-host')).toHaveAttribute('data-rotation', 'paused');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+});
+
+test('globe import rejection preserves the list and source details', async ({ page }) => {
+  await page.route('**/src/ui/GlobeCanvas.tsx*', route => route.fulfill({ contentType: 'text/javascript',
+    body: 'throw new Error("Test-only unavailable renderer module")' }));
+  await page.goto('/');
+  await expect(page.getByTestId('globe-status')).toContainText('Список доступен');
+  await page.locator('[data-conflict-id="us-civil"]').click();
+  await expect(page.getByRole('region', { name: 'Подробности записи' })).toContainText('Не менее 750 тыс.');
+});
+
+test('globe real marker hover click and touch select the same source card', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1536, height: 1024 }, hasTouch: true, reducedMotion: 'reduce' });
+  try {
+    const page = await context.newPage();
+    // Test-only inspection of the real renderer; shipped production has no global probe.
+    await page.route('**/src/ui/GlobeCanvas.tsx*', async route => {
+      const response = await route.fetch();
+      const body = (await response.text()).replace('globe = new Globe(', 'globe = window.__testGlobe = new Globe(');
+      await route.fulfill({ response, body });
+    });
+    await page.goto('/');
+    await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
+    const point = await page.evaluate(() => {
+      const globe = (window as any).__testGlobe;
+      const coords = globe.getScreenCoords(46.5, 2.5, .012);
+      const bounds = globe.renderer().domElement.getBoundingClientRect();
+      return { x: bounds.left + coords.x, y: bounds.top + coords.y };
+    });
+    await page.mouse.move(point.x, point.y);
+    const detail = page.getByRole('region', { name: 'Подробности записи' });
+    await expect(detail).toContainText('Около 16 млн');
+    await page.mouse.click(point.x, point.y);
+    await expect(detail).toContainText('Около 16 млн');
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(detail).toContainText('Около 16 млн');
+    expect(await page.evaluate(() => (window as any).__testGlobe.controls().autoRotate)).toBe(false);
+    expect(await page.evaluate(() => (window as any).__testGlobe.pointRadius())).toBe(.6);
+  } finally { await context.close(); }
+});
+
+test('globe remount cleanup cancels animation frames and releases observers', async ({ page }) => {
+  await page.addInitScript(() => {
+    const probe = (window as any).__resources = { raf: new Set<number>(), observed: new Set<object>() };
+    const raf = window.requestAnimationFrame.bind(window), cancel = window.cancelAnimationFrame.bind(window);
+    window.requestAnimationFrame = callback => {
+      const id = raf(time => { probe.raf.delete(id); callback(time); });
+      probe.raf.add(id); return id;
+    };
+    window.cancelAnimationFrame = id => { probe.raf.delete(id); cancel(id); };
+    const NativeObserver = window.ResizeObserver;
+    window.ResizeObserver = class extends NativeObserver {
+      observe(target: Element, options?: ResizeObserverOptions) { probe.observed.add(this); super.observe(target, options); }
+      disconnect() { probe.observed.delete(this); super.disconnect(); }
+      unobserve(target: Element) { probe.observed.delete(this); super.unobserve(target); }
+    };
+  });
+  await page.goto('/data');
+  await page.waitForLoadState('networkidle');
+  const resources = () => page.evaluate(() => ({ raf: (window as any).__resources.raf.size, observers: (window as any).__resources.observed.size }));
+  const baseline = await resources();
+  for (let i = 0; i < 3; i++) {
+    await page.getByRole('navigation').getByRole('link', { name: 'Глобус', exact: true }).click();
+    await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
+    await page.getByRole('navigation').getByRole('link', { name: 'Данные и источники', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Данные за каждой точкой' })).toBeVisible();
+    await expect.poll(resources).toEqual(baseline);
+    await expect(page.locator('.globe-canvas canvas')).toHaveCount(0);
+  }
+});
+
+test('globe late module load does not recreate an unmounted renderer', async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  let requested!: () => void;
+  const requestStarted = new Promise<void>(resolve => { requested = resolve; });
+  await page.route('**/src/ui/GlobeCanvas.tsx*', async route => {
+    requested(); await gate; await route.continue();
+  });
+  await page.goto('/');
+  await requestStarted;
+  await page.getByRole('navigation').getByRole('link', { name: 'Данные и источники', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Данные за каждой точкой' })).toBeVisible();
+  release();
+  await page.waitForLoadState('networkidle');
+  await expect(page.locator('canvas')).toHaveCount(0);
+});
+
+test('landing timeline filters inclusively while preserving a conflict full source series', async ({ page }) => {
+  await page.goto('/?layer=ucdp&from=2011&to=2011&q=11345&selected=11345');
+  await expect(page.getByTestId('map-coverage')).toContainText('1 всего');
+  const detail = page.getByRole('region', { name: 'Подробности записи' });
+  await expect(detail).toContainText('последний 2025');
+  await expect(detail).toContainText('5 822');
+  await page.getByLabel('Период глобуса, от').focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect.poll(() => new URL(page.url()).searchParams.get('from')).toBe('2010');
+  await expect(detail).toContainText('5 822');
+  await page.getByRole('link', { name: 'Как читать данные', exact: true }).click();
+  await expect(page).toHaveURL(/#reading-guide$/);
+});
+
 test('virtual table keeps all 1650 records with bounded DOM and reaches final sorted row', async ({ page }) => {
   const region = page.getByRole('region', { name: 'Таблица исходных данных' });
   await expect(region).toBeVisible();

@@ -2,7 +2,6 @@ import { createServer, type RequestListener, type Server } from 'node:http';
 import { readFile, realpath, stat } from 'node:fs/promises';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { renderPage as productionRender } from '../src/entry-server';
 
 type RenderPage = (url: string) => Promise<{ html: string; status: number }>;
 interface HandlerOptions {
@@ -93,6 +92,8 @@ export async function createAtlasServer(options: { development?: boolean; root?:
     return { server, close: async () => { await closeServer(server); await vite.close(); } };
   }
   const clientDir = resolve(root, 'dist/client');
+  // Development loads UI (including CSS) through Vite, never directly via tsx.
+  const { renderPage: productionRender } = await import('../src/entry-server');
   const template = await readFile(resolve(clientDir, 'index.html'), 'utf8');
   const server = createServer(createHttpHandler({ renderPage: productionRender, template, clientDir }));
   return { server, close: () => closeServer(server) };
