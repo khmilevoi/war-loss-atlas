@@ -1,0 +1,21 @@
+schema = 1
+
+[project]
+name = "war-atlas"
+
+[source]
+repo = "git@github.com:khmilevoi/war-loss-atlas.git"
+branch = "main"
+
+[build]
+compose = "docker-compose.yml"
+
+[ingress]
+hostname = "war-atlas.iiskelo.com"
+service = "web"
+port = 3000
+
+[healthcheck]
+path = "/health"
+expect = "200"
+timeout = "60s"

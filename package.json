@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "data:import": "tsx scripts/import-data.ts",
     "data:check": "tsx scripts/check-public.ts",
+    "public:check": "tsx scripts/check-public.ts --git",
     "test:browser": "playwright test"
   },
   "dependencies": {

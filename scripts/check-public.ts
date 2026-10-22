@@ -1,34 +1,108 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { loadAtlasData, validatePublicData } from '../src/data/index';
 import { parseNativeCsv, sha256, SOURCE_SHA } from './import-data';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const data = loadAtlasData();
-const errors = validatePublicData(data);
-for (const [path, hash] of Object.entries(data.manifest.files)) {
-  if (sha256(readFileSync(resolve(root, path))) !== hash) errors.push(`Hash mismatch: ${path}`);
-}
-const csv = readFileSync(resolve(root, 'data/ucdp-conflict-year.csv'));
-if (sha256(csv) !== SOURCE_SHA) errors.push('Non-allowlisted native CSV');
-if (JSON.stringify(parseNativeCsv(csv)) !== JSON.stringify(data.nativeRows)) errors.push('Generated rows differ from native source');
-for (const [file, values] of [['historical', data.historicalHighlights], ['placements', data.placementRegistry],
-  ['country-anchors', data.countryAnchors], ['sources', data.sources]] as const) {
-  if (JSON.stringify(JSON.parse(readFileSync(resolve(root, `src/data/${file}.json`), 'utf8'))) !== JSON.stringify(values)) errors.push(`Generated ${file} differs from registry`);
-}
-if (JSON.stringify(JSON.parse(readFileSync(resolve(root, 'data/manifest.json'), 'utf8'))) !== JSON.stringify(data.manifest)) errors.push('Manifest differs from generated data');
-// Enumerated public data boundary. Release checking can extend this to built files and repository history.
-const permitted = new Set(['data/manifest.json', 'data/ucdp-conflict-year.csv', 'data/geography/ne_110m_admin_0_countries.geojson',
+const publicFiles = new Set(['data/manifest.json', 'data/ucdp-conflict-year.csv', 'data/geography/ne_110m_admin_0_countries.geojson',
   'public/geo/ne_110m_land.geojson', 'public/licenses/ATTRIBUTION.md', 'public/licenses/CC-BY-4.0.txt',
   'public/licenses/NATURAL-EARTH.txt', 'public/licenses/HISTORICAL-FACTS.md']);
-function visit(path: string) {
-  for (const e of readdirSync(resolve(root, path), { withFileTypes: true })) {
-    const name = `${path}/${e.name}`;
-    if (e.isDirectory()) visit(name);
-    else if (!permitted.has(name)) errors.push(`Unapproved public data file ${name}`);
-  }
+const sourceFiles = new Set(['src/data/generated/atlas.json', 'src/data/historical.json', 'src/data/placements.json',
+  'src/data/country-anchors.json', 'src/data/sources.json']);
+const rootFiles = new Set(['.gitattributes', '.gitignore', '.dockerignore', 'Dockerfile', 'docker-compose.yml', 'rpi.toml',
+  'README.md', 'package.json', 'package-lock.json', 'index.html', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts', 'playwright.config.ts']);
+const scriptFiles = new Set(['scripts/check-public.ts', 'scripts/import-data.ts', 'scripts/check-server.mjs', 'scripts/check-dev.ts']);
+const docsFiles = new Set(['docs/verification.md', 'docs/data-audit.md', 'docs/deployment.md']);
+const localOnly = new Set(['.git', 'node_modules', '.superpowers', 'coverage', 'playwright-report', 'test-results']);
+
+function allowedPath(path: string, built = true): boolean {
+  if (rootFiles.has(path) || publicFiles.has(path) || sourceFiles.has(path) || scriptFiles.has(path) || docsFiles.has(path)) return true;
+  if (/^(?:src|server)\/(?:[\w-]+\/)*[\w-]+\.(?:ts|tsx|css)$/.test(path)) return true;
+  if (/^tests\/(?:[\w-]+\/)*[\w.-]+\.(?:ts|js)$/.test(path)) return true;
+  if (!built) return false;
+  if (/^dist\/(?:client|server)\/assets\/[\w-]+\.(?:js|css)$/.test(path)) return true;
+  if (path === 'dist/client/index.html' || path === 'dist/server/index.js') return true;
+  return ['client', 'server'].some(side => publicFiles.has(path.replace(`dist/${side}/`, 'public/')) && path.startsWith(`dist/${side}/`));
 }
-visit('data'); visit('public');
-if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
-else console.log(`PASS: ${data.nativeRows.length} unique native rows, ${data.conflicts.length} conflicts; best/low/high 2566047/2410880/3330850; 4 historical facts; ${data.manifest.geography.matched} anchors + ${data.manifest.geography.unplaced} unplaced; source SHA256 ${SOURCE_SHA}`);
+
+// These are payload/key signatures, not a ban on explanatory mentions in documentation.
+function inspect(path: string, body: string, built = true): string[] {
+  const errors: string[] = [];
+  if (!allowedPath(path, built)) errors.push(`Unapproved release file: ${path}`);
+  if (/-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----|\b(?:gh[pousr]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{40,255}|sk-proj-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16})\b/.test(body)) errors.push(`Secret material: ${path}`);
+  if (/cow[_-]source[_-]war[_-]ledger|numeric[_-]COW24|(?:Inter|Intra)[-_ ]StateWarData|["']?WarNum["']?\s*[,\t:]|full[_-]research[/\\]/i.test(body)) errors.push(`Restricted payload: ${path}`);
+  return errors;
+}
+
+/** Audit a source/package tree and optional dist; ignored local evidence is never a release input. */
+export async function checkPublicFiles(target: string): Promise<string[]> {
+  const errors: string[] = [];
+  function visit(directory = '') {
+    for (const entry of readdirSync(resolve(target, directory), { withFileTypes: true })) {
+      const path = directory ? `${directory}/${entry.name}` : entry.name;
+      if (!directory && localOnly.has(entry.name)) continue;
+      if (entry.isSymbolicLink()) errors.push(`Symlink in release tree: ${path}`);
+      else if (entry.isDirectory()) visit(path);
+      else errors.push(...inspect(path, readFileSync(resolve(target, path), 'utf8')));
+    }
+  }
+  visit();
+  return errors;
+}
+
+const git = (target: string, args: string[]) => execFileSync('git', ['-C', target, ...args], { maxBuffer: 32 * 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] });
+
+function inspectGitEntries(target: string, entries: string[], label: string): string[] {
+  const errors: string[] = [];
+  const checked = new Set<string>();
+  for (const entry of entries) {
+    if (!entry) continue;
+    const match = /^(\d+) (?:blob |commit )?([a-f0-9]+)(?: \d)?\t(.+)$/.exec(entry);
+    if (!match) { errors.push(`Unreadable ${label} entry`); continue; }
+    const [, mode, hash, path] = match;
+    if (checked.has(`${hash}:${path}`)) continue;
+    checked.add(`${hash}:${path}`);
+    if (mode !== '100644' && mode !== '100755') { errors.push(`Non-file ${label}: ${path}`); continue; }
+    errors.push(...inspect(path, git(target, ['cat-file', 'blob', hash]).toString('utf8'), false).map(error => `${label}: ${error}`));
+  }
+  return errors;
+}
+
+/** Scan every file version reachable from any branch/tag, including deleted files. */
+export async function checkGitHistory(target: string): Promise<string[]> {
+  try {
+    const top = git(target, ['rev-parse', '--show-toplevel']).toString('utf8').trim();
+    if (resolve(top).toLowerCase() !== resolve(target).toLowerCase()) return ['Refusing to audit a parent repository'];
+    const commits = git(target, ['rev-list', '--all']).toString('utf8').trim().split(/\s+/).filter(Boolean);
+    return inspectGitEntries(target, commits.flatMap(commit => git(target, ['ls-tree', '-rz', '--full-tree', commit]).toString('utf8').split('\0')), 'Git history');
+  } catch { return ['Git history audit failed (no repository or unreadable objects)']; }
+}
+
+export async function checkGitIndex(target: string): Promise<string[]> {
+  try { return inspectGitEntries(target, git(target, ['ls-files', '--stage', '-z']).toString('utf8').split('\0'), 'Git index'); }
+  catch { return ['Git index audit failed']; }
+}
+
+export async function runPublicCheck(): Promise<void> {
+  const data = loadAtlasData();
+  const errors = validatePublicData(data);
+  for (const [path, hash] of Object.entries(data.manifest.files)) {
+    if (sha256(readFileSync(resolve(root, path))) !== hash) errors.push(`Hash mismatch: ${path}`);
+  }
+  const csv = readFileSync(resolve(root, 'data/ucdp-conflict-year.csv'));
+  if (sha256(csv) !== SOURCE_SHA) errors.push('Non-allowlisted native CSV');
+  if (JSON.stringify(parseNativeCsv(csv)) !== JSON.stringify(data.nativeRows)) errors.push('Generated rows differ from native source');
+  for (const [file, values] of [['historical', data.historicalHighlights], ['placements', data.placementRegistry],
+    ['country-anchors', data.countryAnchors], ['sources', data.sources]] as const) {
+    if (JSON.stringify(JSON.parse(readFileSync(resolve(root, `src/data/${file}.json`), 'utf8'))) !== JSON.stringify(values)) errors.push(`Generated ${file} differs from registry`);
+  }
+  if (JSON.stringify(JSON.parse(readFileSync(resolve(root, 'data/manifest.json'), 'utf8'))) !== JSON.stringify(data.manifest)) errors.push('Manifest differs from generated data');
+  errors.push(...await checkPublicFiles(root));
+  if (process.argv.includes('--git')) errors.push(...await checkGitHistory(root), ...await checkGitIndex(root));
+  if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
+  else console.log(`PASS: ${data.nativeRows.length} unique native rows, ${data.conflicts.length} conflicts; best/low/high 2566047/2410880/3330850; 4 historical facts; ${data.manifest.geography.matched} anchors + ${data.manifest.geography.unplaced} unplaced; source SHA256 ${SOURCE_SHA}`);
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await runPublicCheck();

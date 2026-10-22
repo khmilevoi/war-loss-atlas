@@ -5,6 +5,8 @@ import type { NativeRow } from '../../src/data/types';
 
 const rowKey = (row: NativeRow) => `${row.conflict_id}:${row.year}`;
 const natural = new Intl.Collator('ru', { numeric: true }).compare;
+// Same lazy-module boundary in Vite development and the compiled release.
+const rendererModule = /\/(?:src\/ui\/GlobeCanvas\.tsx|assets\/GlobeCanvas-[\w-]+\.js)(?:\?.*)?$/;
 test.beforeEach(async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -101,7 +103,7 @@ test('globe reduced motion and mobile layout retain readable controls', async ({
 });
 
 test('globe import rejection preserves the list and source details', async ({ page }) => {
-  await page.route('**/src/ui/GlobeCanvas.tsx*', route => route.fulfill({ contentType: 'text/javascript',
+  await page.route(rendererModule, route => route.fulfill({ contentType: 'text/javascript',
     body: 'throw new Error("Test-only unavailable renderer module")' }));
   await page.goto('/');
   await expect(page.getByTestId('globe-status')).toContainText('Список доступен');
@@ -246,7 +248,7 @@ test('globe late module load does not recreate an unmounted renderer', async ({ 
   const gate = new Promise<void>(resolve => { release = resolve; });
   let requested!: () => void;
   const requestStarted = new Promise<void>(resolve => { requested = resolve; });
-  await page.route('**/src/ui/GlobeCanvas.tsx*', async route => {
+  await page.route(rendererModule, async route => {
     requested(); await gate; await route.continue();
   });
   await page.goto('/');

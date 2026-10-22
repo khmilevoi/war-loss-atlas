@@ -1,0 +1,14 @@
+services:
+  web:
+    build:
+      context: .
+      target: runtime
+    init: true
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+    expose:
+      - "3000"
+    security_opt:
+      - no-new-privileges:true

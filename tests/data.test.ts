@@ -145,7 +145,7 @@ describe('public source boundary', () => {
 
   it('makes the public CLI reject an adapter-only corrupted generated payload', () => {
     const result = spawnSync(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval',
-      "import { loadAtlasData } from './src/data/index.ts'; loadAtlasData().placements[0].latitude = 100; await import('./scripts/check-public.ts');"],
+      "import { loadAtlasData } from './src/data/index.ts'; loadAtlasData().placements[0].latitude = 100; await (await import('./scripts/check-public.ts')).runPublicCheck();"],
     { cwd: process.cwd(), encoding: 'utf8' });
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('Rendering placement mismatch');
