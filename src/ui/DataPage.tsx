@@ -1,9 +1,9 @@
-import { action, atom, withComputed, wrap } from '@reatom/core';
+import { action, atom, batch, reatomField, withComputed, wrap } from '@reatom/core';
 import { reatomFactoryComponent } from '@reatom/react';
 import { atlasData } from '../app/routes';
 import { toCsv, toHistoricalCsv } from '../data/csv';
 import type { AtlasModel } from '../model/atlas';
-import type { Completeness } from '../data/selectors';
+import { defaultPeriod, normalizeFilters, type Completeness } from '../data/selectors';
 import { ConflictDetails } from './ConflictDetails';
 import { nativeRowKey, VirtualTable } from './VirtualTable';
 import './styles.css';
@@ -25,6 +25,40 @@ export const DataPage = reatomFactoryComponent<{ model: AtlasModel }>(({ model }
   const data = atlasData()!;
   const historySourceCount = new Set(data.historicalHighlights.map(item => new URL(item.source_url).origin)).size;
   const historySpan = `${Math.min(...data.historicalHighlights.map(item => item.start_year))}–${Math.max(...data.historicalHighlights.map(item => item.end_year))}`;
+  const committedPeriod = () => {
+    const normalized = normalizeFilters({ layer: model.layer(), from: model.from(), to: model.to(), query: '', sort: 'year:asc' });
+    return { from: String(normalized.from), to: String(normalized.to) };
+  };
+  // Incomplete text is an editable field, not a URL filter. Only a valid pair
+  // is committed on blur/Enter; external model/layer changes reset its draft.
+  const periodDraft = reatomField(committedPeriod(), {
+    name: 'atlas.data.periodDraft',
+    keepErrorOnChange: false,
+    validate: ({ state }) => {
+      const layer = model.layer();
+      const normalized = normalizeFilters({ layer, from: Number(state.from), to: Number(state.to), query: '', sort: 'year:asc' });
+      if (/^\d{4}$/.test(state.from) && /^\d{4}$/.test(state.to)
+        && normalized.from === Number(state.from) && normalized.to === Number(state.to)) return;
+      const [min, max] = defaultPeriod(layer);
+      return `Период не применён. Введите два года из четырёх цифр от ${min} до ${max}; «от» не должно быть позже «до». Исправьте значения или сбросьте фильтры.`;
+    },
+  }).extend(withComputed(committedPeriod));
+  const commitPeriod = action(() => {
+    periodDraft.validation.trigger();
+    // The installed field updates its derived error via a queued change hook;
+    // the actual synchronous validation errors are available immediately.
+    if (periodDraft.validation.errors().length) return;
+    const draft = periodDraft();
+    // Capture both strings before native URL-backed writes rederive the field.
+    batch(() => model.from.set(Number(draft.from)), true);
+    batch(() => model.to.set(Number(draft.to)), true);
+  }, 'atlas.data.commitPeriod');
+  const resetFilters = action(() => {
+    model.resetFilters();
+    // A dirty invalid draft must reset even if committed filters are defaults.
+    periodDraft.reset(committedPeriod());
+    periodDraft.validation.clearErrors();
+  }, 'atlas.data.resetFilters');
   const selectedRowKey = atom<string | null>(null, 'atlas.data.selectedRowKey').extend(withComputed(previous => {
     const id = model.selectedId();
     if (!id || model.layer() !== 'ucdp') return null;
@@ -38,8 +72,11 @@ export const DataPage = reatomFactoryComponent<{ model: AtlasModel }>(({ model }
     selectedRowKey.set(key);
   }, 'atlas.data.openRow');
   const closeDetails = action(() => {
+    const returnTarget = model.layer() === 'ucdp' ? document.getElementById('source-table')
+      : document.getElementById(`history-open-${model.selectedId()}`)
+        ?? document.querySelector<HTMLElement>('.layer-tabs [aria-selected="true"]');
     model.selectedId.set(null);
-    document.getElementById('source-table')?.focus({ preventScroll: true });
+    returnTarget?.focus({ preventScroll: true });
   }, 'atlas.data.closeDetails');
   return () => {
     const filters = model.filters();
@@ -49,6 +86,8 @@ export const DataPage = reatomFactoryComponent<{ model: AtlasModel }>(({ model }
     const selected = model.selectedId();
     const key = isNative ? selectedRowKey() : null;
     const row = key ? data.nativeRows.find(item => nativeRowKey(item) === key) : null;
+    const draft = periodDraft();
+    const periodError = periodDraft.validation().error;
     return <section className="data-page" data-layer={filters.layer} data-selected-id={selected ?? ''}
       onKeyDown={wrap(event => { if (event.key === 'Escape' && selected) closeDetails(); })}>
       <div className="data-intro"><h1>Данные за каждой точкой</h1><p>Разные определения потерь нельзя складывать в общий итог.</p></div>
@@ -79,17 +118,22 @@ export const DataPage = reatomFactoryComponent<{ model: AtlasModel }>(({ model }
         </div>
         <p id="search-help" className="search-help">{isNative ? 'Включая участников; показываем все годы найденного конфликта' : 'По названиям, определениям и источникам четырёх независимых примеров'}</p>
         <div className="filter-strip"><div className="period-filter"><span>{isNative ? 'Первый год наблюдения в UCDP' : 'Год начала войны'}</span><div>
-          <label><span className="sr-only">{isNative ? 'Первый год наблюдения, от' : 'Год начала войны, от'}</span><input type="number" min={isNative ? 1989 : 1861} max={2025} value={filters.from} onChange={wrap(event => model.from.set(Number(event.currentTarget.value)))} /></label>
-          <span aria-hidden="true">—</span><label><span className="sr-only">{isNative ? 'Первый год наблюдения, до' : 'Год начала войны, до'}</span><input type="number" min={isNative ? 1989 : 1861} max={2025} value={filters.to} onChange={wrap(event => model.to.set(Number(event.currentTarget.value)))} /></label>
+          <label><span className="sr-only">{isNative ? 'Первый год наблюдения, от' : 'Год начала войны, от'}</span><input type="number" min={isNative ? 1989 : 1861} max={2025} value={draft.from} aria-describedby="period-help" aria-invalid={!!periodError}
+            onChange={wrap(event => { const from = event.currentTarget.value; periodDraft.set(current => ({ ...current, from })); })}
+            onBlur={wrap(() => commitPeriod())} onKeyDown={wrap(event => { if (event.key === 'Enter') { event.preventDefault(); commitPeriod(); } })} /></label>
+          <span aria-hidden="true">—</span><label><span className="sr-only">{isNative ? 'Первый год наблюдения, до' : 'Год начала войны, до'}</span><input type="number" min={isNative ? 1989 : 1861} max={2025} value={draft.to} aria-describedby="period-help" aria-invalid={!!periodError}
+            onChange={wrap(event => { const to = event.currentTarget.value; periodDraft.set(current => ({ ...current, to })); })}
+            onBlur={wrap(() => commitPeriod())} onKeyDown={wrap(event => { if (event.key === 'Enter') { event.preventDefault(); commitPeriod(); } })} /></label>
         </div></div>
         {isNative ? <label className="completeness-field"><span>Полнота оценок</span><select value={filters.completeness} onChange={wrap(event => model.completeness.set(event.currentTarget.value as Completeness))}>
           <option value="all">Все записи</option><option value="complete">Все 3 оценки</option><option value="partial">Часть оценок</option><option value="missing">Нет оценок</option></select></label> : null}
-        <button className="text-button reset-button" onClick={wrap(() => model.resetFilters())}>Сбросить фильтры</button>
+        <button className="text-button reset-button" onClick={wrap(() => resetFilters())}>Сбросить фильтры</button>
         <p className="result-count" aria-live="polite">{isNative ? `${rows.length.toLocaleString('ru-RU')} строк · ${model.summaries().length} конфликтов` : `${history.length} независимых примера`}</p></div>
+        <p id="period-help" className="search-help" role={periodError ? 'alert' : undefined}>{periodError ?? 'Период применяется по Enter или после выхода из поля.'}</p>
         <p className="period-note">{isNative ? 'Фильтр отбирает конфликты по первому году наблюдения, не по началу войны. Обе границы включены. В таблице остаются все их годы; число в строке относится к указанному году. Карточка показывает сумму за доступный срок.' : model.periodNote()}</p>
         {isNative ? <VirtualTable rows={rows} selectedId={key} onSelect={openRow} /> : <>
           <div className="historical-list">{history.map(item => <article data-history-id={item.highlight_id} key={item.highlight_id}>
-            <div><span className="history-years">{item.start_year}–{item.end_year}</span><h2><button onClick={wrap(() => model.selectConflict(item.highlight_id))}>{item.name_ru}</button></h2></div>
+            <div><span className="history-years">{item.start_year}–{item.end_year}</span><h2><button id={`history-open-${item.highlight_id}`} onClick={wrap(() => model.selectConflict(item.highlight_id))}>{item.name_ru}</button></h2></div>
             <div><p className="historical-value">{item.display_ru}</p><p>{item.scope_ru}</p><p>{item.uncertainty_ru}</p><a href={item.source_url}>{item.source_title}</a><small>{item.source_locator} · Проверено {item.accessed_on}</small></div>
           </article>)}</div>{!history.length ? <p role="status" className="empty-state">Ничего не найдено. Измените условия или сбросьте фильтры.</p> : null}
         </>}

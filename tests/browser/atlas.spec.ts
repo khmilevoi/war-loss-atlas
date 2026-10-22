@@ -151,3 +151,67 @@ test('historical layer and expanded details fit 360px without page overflow', as
   await expect(page.getByRole('region', { name: 'Подробности записи' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+for (const [layer, fromLabel, toLabel, fromYear, toYear] of [
+  ['ucdp', 'Первый год наблюдения, от', 'Первый год наблюдения, до', '2000', '2010'],
+  ['history', 'Год начала войны, от', 'Год начала войны, до', '1900', '1950'],
+] as const) {
+  test(`period keyboard editing preserves incomplete drafts and commits both bounds in ${layer}`, async ({ page }) => {
+    if (layer === 'history') await page.getByRole('tab', { name: 'Исторические примеры' }).click();
+    const from = page.getByLabel(fromLabel, { exact: true });
+    const to = page.getByLabel(toLabel, { exact: true });
+    const beforeUrl = page.url();
+    await from.focus();
+    await from.press('ControlOrMeta+A');
+    await from.press('Backspace');
+    await expect(from).toHaveValue('');
+    await from.pressSequentially(fromYear.slice(0, 2));
+    await expect(from).toHaveValue(fromYear.slice(0, 2));
+    expect(page.url()).toBe(beforeUrl);
+    await from.pressSequentially(fromYear.slice(2));
+    await expect(from).toHaveValue(fromYear);
+    await from.press('Enter');
+    await expect.poll(() => new URL(page.url()).searchParams.get('from')).toBe(fromYear);
+    await to.focus();
+    await to.press('ControlOrMeta+A');
+    await to.press('Backspace');
+    await expect(to).toHaveValue('');
+    await to.pressSequentially(toYear);
+    await to.press('Tab');
+    await expect.poll(() => new URL(page.url()).searchParams.get('to')).toBe(toYear);
+    // Invalid completed input is explained and retained for correction; it does
+    // not silently replace the valid source filter or mutate its shareable URL.
+    const validUrl = page.url();
+    await from.focus();
+    await from.press('ControlOrMeta+A');
+    await from.pressSequentially('2050');
+    await from.press('Enter');
+    await expect(page.getByRole('alert')).toContainText('Период не применён');
+    await expect(from).toHaveValue('2050');
+    expect(page.url()).toBe(validUrl);
+    await page.getByRole('button', { name: 'Сбросить фильтры' }).click();
+    await expect(from).toHaveValue(layer === 'ucdp' ? '1989' : '1861');
+    await expect(to).toHaveValue('2025');
+    await expect(page.getByRole('alert')).toHaveCount(0);
+  });
+}
+
+test('historical detail Escape returns focus to the record trigger and preserves native return path', async ({ page }) => {
+  await page.getByRole('tab', { name: 'Исторические примеры' }).click();
+  const trigger = page.getByRole('button', { name: 'Вторая мировая война', exact: true });
+  await trigger.click();
+  const details = page.getByRole('region', { name: 'Подробности записи' });
+  await details.getByRole('button', { name: 'Закрыть подробности' }).focus();
+  await page.keyboard.press('Escape');
+  await expect(details).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await page.getByRole('tab', { name: 'UCDP: конфликт — год' }).click();
+  const region = page.getByRole('region', { name: 'Таблица исходных данных' });
+  await region.focus();
+  await region.press('End');
+  await page.keyboard.press('Enter');
+  await details.getByRole('button', { name: 'Закрыть подробности' }).focus();
+  await page.keyboard.press('Escape');
+  await expect(details).toHaveCount(0);
+  await expect(region).toBeFocused();
+});
