@@ -3,11 +3,12 @@ import landText from '../../public/geo/ne_110m_land.geojson?raw';
 import type { Placement } from '../data/types';
 
 export type CanvasState = { placements: readonly Placement[]; selectedId: string | null; paused: boolean;
-  onSelect: (id: string) => void };
+  onSelect: (id: string) => void; onPreview: (id: string | null) => void; onCluster: (ids: string[]) => void };
 export type CanvasOwner = { update: (state: CanvasState) => void; dispose: () => void };
 type Ring = number[][];
 type Polygon = Ring[];
 const idOf = (p: Placement) => 'conflict_id' in p ? p.conflict_id : p.highlight_id;
+type Marker = { latitude: number; longitude: number; ids: string[] };
 
 // Deterministic decorative particles from the pinned, public-domain land polygons.
 // These dots are not observations, borders, casualties, or additional placements.
@@ -42,6 +43,7 @@ const particles = landParticles();
 export function mountGlobe(host: HTMLElement, initial: CanvasState, onFailure: () => void): CanvasOwner {
   let state = initial, disposed = false;
   let globe: GlobeInstance | undefined;
+  let previousPlacements: readonly Placement[] = [], markers: Marker[] = [];
   const observer = new ResizeObserver(() => {
     if (globe && !disposed) globe.width(host.clientWidth).height(host.clientHeight);
   });
@@ -73,8 +75,14 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState, onFailure: (
       .particlesData(particles).particlesList('points').particlesColor('color').particlesSize('size')
       .particleAltitude(.002).pointsMerge(false).pointLat('latitude').pointLng('longitude')
       .pointRadius(.6).pointAltitude(.012).pointResolution(20).pointsTransitionDuration(0)
-      .pointLabel(() => '').onPointClick(point => state.onSelect(idOf(point as Placement)))
-      .onPointHover(point => { if (point) state.onSelect(idOf(point as Placement)); });
+      .pointLabel(() => '').onPointClick(point => {
+        const { ids } = point as Marker;
+        if (ids.length > 1) state.onCluster(ids); else state.onSelect(ids[0]);
+      }).onPointHover(point => {
+        if (!point) { state.onPreview(null); return; }
+        const { ids } = point as Marker;
+        if (ids.length > 1) state.onCluster(ids); else state.onPreview(ids[0]);
+      });
     // Installed globeMaterial is a Three material; set existing colors without a second Three import.
     const material = globe.globeMaterial() as ReturnType<GlobeInstance['globeMaterial']> & {
       color: { set: (color: string) => void }; emissive: { set: (color: string) => void }; shininess: number };
@@ -93,8 +101,20 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState, onFailure: (
   const update = (next: CanvasState) => {
     state = next;
     if (!globe || disposed) return;
-    globe.pointsData(next.placements.filter(p => p.latitude !== null && p.longitude !== null))
-      .pointColor(point => idOf(point as Placement) === next.selectedId ? '#ffe2c9' : '#ff8b77');
+    if (next.placements.length !== previousPlacements.length || next.placements.some((p, i) => p !== previousPlacements[i])) {
+      // Group only coincident navigation anchors; never aggregate source values.
+      const grouped = new Map<string, Marker>();
+      for (const p of next.placements) {
+        if (p.latitude === null || p.longitude === null) continue;
+        const key = `${p.latitude}:${p.longitude}`, marker = grouped.get(key)
+          ?? { latitude: p.latitude, longitude: p.longitude, ids: [] };
+        if (!marker.ids.includes(idOf(p))) marker.ids.push(idOf(p));
+        grouped.set(key, marker);
+      }
+      markers = [...grouped.values()];
+      previousPlacements = next.placements;
+    }
+    globe.pointsData(markers).pointColor(point => (point as Marker).ids.includes(next.selectedId ?? '') ? '#ffe2c9' : '#ff8b77');
     globe.controls().autoRotate = !next.paused;
     globe.controls().enableDamping = !next.paused;
   };

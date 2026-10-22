@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
 });
 test.afterEach(async ({ page }) => { expect((page as any).atlasErrors).toEqual([]); });
 
-test('landing historical focus hover click and Escape share the same detail', async ({ page }) => {
+test('landing historical preview pins on activation and repeated activation closes', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'За каждой точкой — человеческие жизни.' })).toBeVisible();
   const list = page.getByRole('region', { name: 'Список конфликтов' });
@@ -30,7 +30,17 @@ test('landing historical focus hover click and Escape share the same detail', as
   await expect(detail).toContainText('Около 16 млн');
   const korea = list.locator('[data-conflict-id="korea"]');
   await korea.focus();
+  await expect(detail).toContainText('Около 16 млн');
+  await first.click();
+  await expect(detail).toHaveCount(0);
+  await korea.focus();
   await expect(detail).toContainText('гражданских');
+  await korea.press('Enter');
+  await expect(detail).toContainText('Около 2 млн');
+  await first.hover();
+  await expect(detail).toContainText('Около 2 млн');
+  await korea.press('Enter');
+  await expect(detail).toHaveCount(0);
   await korea.press('Enter');
   await expect(detail).toContainText('Около 2 млн');
   await page.keyboard.press('Escape');
@@ -99,7 +109,7 @@ test('globe import rejection preserves the list and source details', async ({ pa
   await expect(page.getByRole('region', { name: 'Подробности записи' })).toContainText('Не менее 750 тыс.');
 });
 
-test('globe real marker hover click and touch select the same source card', async ({ browser }) => {
+test('globe real marker preview pins across hover and repeat click or tap closes', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 1536, height: 1024 }, hasTouch: true, reducedMotion: 'reduce' });
   try {
     const page = await context.newPage();
@@ -111,6 +121,12 @@ test('globe real marker hover click and touch select the same source card', asyn
     });
     await page.goto('/');
     await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
+    await page.evaluate(() => {
+      const globe = (window as any).__testGlobe, hover = globe.onPointHover();
+      globe.onPointHover((point: { ids: string[] } | null, ...rest: unknown[]) => {
+        (window as any).__testHovered = point?.ids ?? []; hover(point, ...rest);
+      });
+    });
     const point = await page.evaluate(() => {
       const globe = (window as any).__testGlobe;
       const coords = globe.getScreenCoords(46.5, 2.5, .012);
@@ -122,10 +138,76 @@ test('globe real marker hover click and touch select the same source card', asyn
     await expect(detail).toContainText('Около 16 млн');
     await page.mouse.click(point.x, point.y);
     await expect(detail).toContainText('Около 16 млн');
+    const other = await page.evaluate(() => {
+      const globe = (window as any).__testGlobe;
+      const coords = globe.getScreenCoords(51, 9.5, .012);
+      const bounds = globe.renderer().domElement.getBoundingClientRect();
+      return { x: bounds.left + coords.x, y: bounds.top + coords.y };
+    });
+    await page.mouse.move(other.x, other.y);
+    await expect.poll(() => page.evaluate(() => (window as any).__testHovered)).toContain('ww2');
+    await expect(detail).toContainText('Около 16 млн');
+    await page.mouse.move(point.x, point.y);
+    await expect.poll(() => page.evaluate(() => (window as any).__testHovered)).toContain('ww1');
+    await page.mouse.click(point.x, point.y);
+    await expect(detail).toHaveCount(0);
     await page.touchscreen.tap(point.x, point.y);
     await expect(detail).toContainText('Около 16 млн');
+    await page.touchscreen.tap(point.x, point.y);
+    await expect(detail).toHaveCount(0);
     expect(await page.evaluate(() => (window as any).__testGlobe.controls().autoRotate)).toBe(false);
     expect(await page.evaluate(() => (window as any).__testGlobe.pointRadius())).toBe(.6);
+  } finally { await context.close(); }
+});
+
+for (const mobile of [false, true]) test(`globe shared marker exposes individual members with ${mobile ? 'mobile touch' : 'mouse and keyboard'}`, async ({ browser }) => {
+  const context = await browser.newContext({ viewport: mobile ? { width: 360, height: 800 } : { width: 1536, height: 1024 },
+    hasTouch: true, reducedMotion: 'reduce' });
+  try {
+    const page = await context.newPage();
+    await page.route('**/src/ui/GlobeCanvas.tsx*', async route => {
+      const response = await route.fetch();
+      await route.fulfill({ response, body: (await response.text()).replace('globe = new Globe(', 'globe = window.__testGlobe = new Globe(') });
+    });
+    await page.goto('/?layer=ucdp');
+    await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
+    await page.getByTestId('globe-host').scrollIntoViewIfNeeded();
+    const openAnchor = async (lat: number, lng: number) => {
+      const point = await page.evaluate(async ({ lat, lng }) => {
+        const globe = (window as any).__testGlobe;
+        globe.pointOfView({ lat, lng, altitude: 1.65 }, 0);
+        // Let OrbitControls update camera matrices before projecting the click.
+        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        const coords = globe.getScreenCoords(lat, lng, .012);
+        const bounds = globe.renderer().domElement.getBoundingClientRect();
+        return { x: bounds.left + coords.x, y: bounds.top + coords.y };
+      }, { lat, lng });
+      if (mobile) await page.touchscreen.tap(point.x, point.y); else await page.mouse.click(point.x, point.y);
+    };
+    await openAnchor(11, 122.5);
+    const cluster = page.getByRole('region', { name: 'Конфликты у выбранной метки' });
+    await expect(cluster).toBeVisible();
+    await expect(cluster.locator('[data-cluster-member]')).toHaveCount(2);
+    const detail = page.getByRole('region', { name: 'Подробности записи' });
+    const first = cluster.locator('[data-cluster-member="209"]');
+    if (mobile) await first.tap(); else { await first.focus(); await first.press('Enter'); }
+    await expect(detail).toContainText('Конфликт ID 209:');
+    const second = cluster.locator('[data-cluster-member="14275"]');
+    if (mobile) await second.tap(); else { await second.focus(); await second.press('Enter'); }
+    await expect(detail).toContainText('Конфликт ID 14275:');
+    if (mobile) await second.tap(); else await second.press('Enter');
+    await expect(detail).toHaveCount(0);
+    await second.press('Enter');
+    await second.press('Escape');
+    await expect(detail).toHaveCount(0);
+    await expect(second).toBeFocused();
+    if (!mobile) {
+      await cluster.getByRole('button', { name: 'Закрыть список метки' }).click();
+      await page.getByTestId('globe-host').scrollIntoViewIfNeeded();
+      await openAnchor(22.5, 79.5);
+      await expect(cluster.locator('[data-cluster-member]')).toHaveCount(9);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(mobile ? 360 : 1536);
   } finally { await context.close(); }
 });
 

@@ -1,4 +1,4 @@
-import { action, wrap } from '@reatom/core';
+import { action, atom, withComputed, wrap } from '@reatom/core';
 import { reatomFactoryComponent } from '@reatom/react';
 import { atlasData } from '../app/routes';
 import type { AtlasModel } from '../model/atlas';
@@ -9,16 +9,44 @@ import './styles.css';
 
 export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model }) => {
   const data = atlasData()!;
-  // Hover, focus, touch, and click are idempotent; model.selectConflict toggles.
-  const open = action((id: string) => { if (model.selectedId() !== id) model.selectConflict(id); }, 'atlas.landing.open');
+  // URL identity remains the visible record. Local interaction state distinguishes
+  // an initial/hover/focus preview from a deliberate click/Enter/tap pin.
+  const previewId = atom<string | null>(() => model.selectedId(), 'atlas.landing.previewId')
+    .extend(withComputed(id => id === model.selectedId() ? id : null));
+  const pinnedId = atom<string | null>(null, 'atlas.landing.pinnedId')
+    .extend(withComputed(id => id === model.selectedId() ? id : null));
+  const cluster = atom<{ ids: string[]; filterKey: string } | null>(null, 'atlas.landing.cluster')
+    .extend(withComputed(value => value?.filterKey === JSON.stringify(model.filters()) ? value : null));
   let closing = false;
+  let lastTrigger: HTMLElement | null = null;
   const close = action(() => {
     const id = model.selectedId();
     closing = true;
-    document.getElementById(`map-record-${id}`)?.focus({ preventScroll: true });
+    const target = lastTrigger?.isConnected ? lastTrigger : document.getElementById(`map-record-${id}`);
+    target?.focus({ preventScroll: true });
+    pinnedId.set(null);
+    previewId.set(null);
     model.selectedId.set(null);
     closing = false;
   }, 'atlas.landing.close');
+  const preview = action((id: string | null, target?: HTMLElement) => {
+    if (closing || pinnedId()) return;
+    if (id === null && previewId() === null) return;
+    if (target) lastTrigger = target;
+    model.selectedId.set(id);
+    previewId.set(id);
+  }, 'atlas.landing.preview');
+  const activate = action((id: string, target?: HTMLElement) => {
+    if (target) lastTrigger = target;
+    else lastTrigger = document.getElementById(`map-record-${id}`);
+    if (pinnedId() === id) { close(); return; }
+    model.selectedId.set(id);
+    previewId.set(null);
+    pinnedId.set(id);
+  }, 'atlas.landing.activate');
+  const showCluster = action((ids: string[]) => {
+    cluster.set({ ids, filterKey: JSON.stringify(model.filters()) });
+  }, 'atlas.landing.showCluster');
   return () => {
     const filters = model.filters(), history = filters.layer === 'history';
     const historical = history ? model.historicalHighlights() : [];
@@ -29,14 +57,26 @@ export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model })
     const placements = data.placements.filter(item => ids.has('conflict_id' in item ? item.conflict_id : item.highlight_id));
     const placed = new Set(placements.filter(item => item.latitude !== null).map(item => 'conflict_id' in item ? item.conflict_id : item.highlight_id)).size;
     const selected = model.selectedId();
+    const pinned = pinnedId();
+    const clusterRecords = records.filter(item => cluster()?.ids.includes(item.id));
     const selectedHistory = history ? historical.find(item => item.highlight_id === selected) : undefined;
     const summary = history ? undefined : summaries.find(item => item.id === selected);
     const selectionPlacements = placements.filter(item => ('conflict_id' in item ? item.conflict_id : item.highlight_id) === selected);
     const shortValue = selectedHistory?.display_ru.split(' — ')[0];
     return <section className="landing-page" data-layer={filters.layer} data-selected-id={selected ?? ''}
-      onKeyDown={wrap(event => { if (event.key === 'Escape' && selected) close(); })}>
+      onKeyDown={wrap(event => { if (event.key === 'Escape') { if (selected) close(); else cluster.set(null); } })}>
       <div className="landing-hero">
-        <GlobeView placements={placements} selectedId={selected} onSelect={wrap(open)} />
+        <GlobeView placements={placements} selectedId={selected} onSelect={wrap(id => activate(id))}
+          onPreview={wrap(id => preview(id))} onCluster={wrap(showCluster)} />
+        {clusterRecords.length > 1 ? <section className="marker-cluster" role="region" aria-label="Конфликты у выбранной метки">
+          <div><h2>У этой метки: {clusterRecords.length}</h2><button className="text-button" aria-label="Закрыть список метки" onClick={wrap(() => cluster.set(null))}>×</button></div>
+          <p>Общий ориентир, отдельные конфликты. Выберите запись; числа не складываются.</p>
+          <ul>{clusterRecords.map(record => <li key={record.id}><button data-cluster-member={record.id} aria-pressed={pinned === record.id}
+            onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
+            onFocus={wrap(event => preview(record.id, event.currentTarget))}
+            onClick={wrap(event => activate(record.id, event.currentTarget))}>
+            {record.name}<small>ID {record.id} · {record.years}</small></button></li>)}</ul>
+        </section> : null}
         <div className="hero-copy">
           <div className="hero-layers" role="tablist" aria-label="Слой глобуса" onKeyDown={wrap(event => {
             if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
@@ -59,6 +99,7 @@ export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model })
           <strong>{shortValue ?? formatEstimate(summary!.best)}</strong>
           <p>{history ? selectedHistory?.metric === 'civilian_war_deaths' ? 'Только гражданские · оценка NAM' : selectedHistory?.highlight_id === 'ww1' ? 'Все умершие · оценка NARA' : selectedHistory?.highlight_id === 'us-civil' ? 'Умершие в результате войны · NPS' : 'Все умершие · оценка NAM' : 'Боевые смерти · лучшая оценка UCDP'}</p>
           <p className="callout-caveat">{history ? 'Оценки источников различаются.' : 'За весь доступный ряд источника.'}</p>
+          <p className="callout-caveat">{pinned ? 'Закреплено · повторное нажатие закрывает' : 'Предпросмотр · нажмите, чтобы закрепить'}</p>
           <a href="#selected-detail">Источник и оговорки ↗</a>
         </aside> : null}
         <div className="hero-bottom"><div className="timeline">
@@ -76,14 +117,14 @@ export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model })
         <div className="map-list-heading"><div><h2>{history ? 'Четыре войны. Четыре публикации.' : 'Конфликты в источнике'}</h2>
           <p data-testid="map-coverage">{placed} на глобусе · {records.length - placed} без координат · {records.length} всего</p></div>
           <a href={history ? '/data?layer=history' : '/data'}>Все данные и источники <span aria-hidden="true">↗</span></a></div>
-        <p className="map-list-note">Метки — условные ориентиры, не места гибели или границы фронтов. Совпадающие метки не объединяют конфликты: каждый доступен в списке.</p>
+        <p className="map-list-note">Метки — условные ориентиры, не места гибели или границы фронтов. Совпадающая метка открывает список отдельных конфликтов. Наведение — предпросмотр; нажатие закрепляет карточку, повторное нажатие закрывает.</p>
         <label className="map-search">{history ? 'Найти исторический пример' : 'Найти конфликт, страну или участника'}<input type="search" value={filters.query}
           onChange={wrap(event => model.query.set(event.currentTarget.value))} placeholder="Поиск по исходным данным" /></label>
         <div className={history ? 'map-record-grid' : 'map-record-grid modern-records'}>{records.map(record => {
           const located = placements.some(p => ('conflict_id' in p ? p.conflict_id : p.highlight_id) === record.id && p.latitude !== null);
           return <button key={record.id} id={`map-record-${record.id}`} data-conflict-id={record.id} className={selected === record.id ? 'selected' : ''}
-            aria-pressed={selected === record.id} onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') open(record.id); })}
-            onFocus={wrap(() => { if (!closing) open(record.id); })} onClick={wrap(() => open(record.id))}>
+            aria-pressed={pinned === record.id} onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
+            onFocus={wrap(event => preview(record.id, event.currentTarget))} onClick={wrap(event => activate(record.id, event.currentTarget))}>
             <span className="record-years">{record.years}</span><span className="record-name">{record.name}</span><span className="record-place">{located ? 'Условная метка' : 'Без координат'}{history ? '' : ` · ID ${record.id}`}</span></button>;
         })}</div>
         {!records.length ? <p className="empty-state">Ничего не найдено. Измените период или поиск.</p> : null}

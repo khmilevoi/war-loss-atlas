@@ -1,10 +1,9 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { atom, wrap } from '@reatom/core';
 import { reatomFactoryComponent } from '@reatom/react';
-import type { Placement } from '../data/types';
 import type { CanvasOwner, CanvasState } from './GlobeCanvas';
 
-type Props = { placements: readonly Placement[]; selectedId: string | null; onSelect: (id: string) => void };
+type Props = Omit<CanvasState, 'paused'>;
 const motionQuery = '(prefers-reduced-motion: reduce)';
 const subscribeMotion = (notify: () => void) => {
   const media = window.matchMedia(motionQuery);
