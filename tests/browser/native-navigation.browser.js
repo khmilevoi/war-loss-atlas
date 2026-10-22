@@ -27,8 +27,8 @@ async (seedPage) => {
   await page.goto('http://127.0.0.1:4173/');
   await page.waitForLoadState('networkidle');
   const initial = await page.evaluate(() => ({ ...window.__atlasNavigationProbe, historyLength: history.length }));
-  await page.getByRole('navigation').getByRole('link', { name: 'Данные и расчёты', exact: true }).click();
-  await page.getByRole('heading', { name: 'Данные и расчёты', exact: true }).waitFor();
+  await page.getByRole('navigation').getByRole('link', { name: 'Данные и источники', exact: true }).click();
+  await page.getByRole('heading', { name: 'Данные за каждой точкой', exact: true }).waitFor();
   const afterClick = await page.evaluate(() => ({ ...window.__atlasNavigationProbe, historyLength: history.length }));
   await page.goBack();
   await page.waitForLoadState('networkidle');

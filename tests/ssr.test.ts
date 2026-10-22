@@ -59,7 +59,7 @@ describe('request-isolated server rendering', () => {
     const { html, status } = await renderPage('/data');
     const app = appHtml(html);
     expect(status).toBe(200);
-    expect(app).toContain('Данные и расчёты');
+    expect(app).toContain('Данные за каждой точкой');
     expect(app).toContain('aria-rowcount="1651"');
     expect(app).toContain('data-row-id="');
     expect(app).toContain('1989');

@@ -1,7 +1,8 @@
 import { atom, reatomRoute, wrap } from '@reatom/core';
 import type { AtlasData } from '../data/types';
 import { createAtlasModel } from '../model/atlas';
-import { DataPage, Landing } from '../ui/RoutePages';
+import { Landing } from '../ui/RoutePages';
+import { DataPage } from '../ui/DataPage';
 
 /** The immutable public source is injected into each request/client frame. */
 export const atlasData = atom<AtlasData | null>(null, 'atlas.source');
@@ -16,8 +17,8 @@ export const layoutRoute = reatomRoute({
   render({ outlet }) {
     const pages = outlet();
     return <>
-      <header><a href="/">Атлас потерь войн</a><nav aria-label="Основная навигация">
-        <a href="/">Обзор</a> <a href="/data">Данные и расчёты</a>
+      <header><a href="/">Атлас потерь</a><nav aria-label="Основная навигация">
+        <a href="/">Глобус</a> <a href="/data">Данные и источники</a>
       </nav></header>
       <main>{pages.length ? pages : <section><h1>Страница не найдена</h1><a href="/">Вернуться к обзору</a></section>}</main>
       <footer>Исторические оценки и смерти, связанные с боевыми действиями UCDP, имеют разные определения. Общей суммы нет.</footer>

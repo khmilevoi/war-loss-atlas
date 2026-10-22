@@ -43,4 +43,3 @@ const PageBody = reatomComponent(({ model, heading }: Props & { heading: string 
 }, 'AtlasPageBody');
 
 export const Landing = ({ model }: Props) => <PageBody model={model} heading="Человеческая цена войн" />;
-export const DataPage = ({ model }: Props) => <PageBody model={model} heading="Данные и расчёты" />;

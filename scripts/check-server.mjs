@@ -22,7 +22,7 @@ async function main() {
   const homeHtml = await home.text();
   const dataHtml = await data.text();
   assert.ok(homeHtml.includes('data-selected-id="ww2"'));
-  assert.ok(dataHtml.includes('Данные и расчёты') && dataHtml.includes('data-row-id="'));
+  assert.ok(dataHtml.includes('Данные за каждой точкой') && dataHtml.includes('data-row-id="'));
   const assetPath = dataHtml.match(/src="(\/assets\/[^\"]+\.js)"/)?.[1];
   assert.ok(assetPath, 'Built module script link');
   const asset = await fetch(`${base}${assetPath}`);
