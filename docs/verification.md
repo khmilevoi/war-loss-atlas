@@ -1,6 +1,6 @@
 # Проверка выпуска
 
-Базовый принятый интерфейс: `edb0db92d9e42ba5f916f68bf713b3086bdfae27`. Дата 22.10.2026. Репозиторий содержит только приложение и разрешённые источники. Внешняя публикация и контейнерная проверка остаются отдельным этапом после review; см. [размещение](deployment.md).
+Базовый принятый интерфейс: `edb0db92d9e42ba5f916f68bf713b3086bdfae27`; финальный независимый review всей ветки на `e2a492fa82cc92ef6e74f880b2dbcc4229e209d5` — PASS, замечаний нет. Дата 22.10.2026. Репозиторий содержит только приложение и разрешённые источники. Настоящая rpi build/runtime и HTTPS проверены; см. [размещение и оговорку DNS](deployment.md).
 
 | Требование | Проверка и доказательство |
 |---|---|
@@ -11,8 +11,8 @@
 | 360 px, reduced motion, WebGL/import failure, native navigation | Browser suite; принятые desktop/mobile снимки и ручная проверка контроллера сохранены в рабочем протоколе вне поставки |
 | Границы распространения | `tests/public.test.ts`: allowlisted package PASS, 7 запрещённых путей FAIL, payload/key FAIL, удалённый historical Git файл FAIL; затем scanner GREEN |
 | Tree, bundle, Git index и все исторические blobs | `npm run public:check`; sourcemaps/unknown data/архив/секреты запрещены; npm lock фиксирует third-party зависимости |
-| Минимальный runtime | Multi-stage Dockerfile, default-deny context; `docker compose config`; настоящий image build + runtime HTTP на rpi обязателен до завершения |
-| Private source и публичный healthy HTTPS | Проверяется после review; точный SHA и фактические результаты в [deployment](deployment.md) |
+| Минимальный runtime | Multi-stage/default-deny; Compose config PASS; настоящая rpi image build, non-root allowlist/scan и runtime HTTP PASS |
+| Private source и публичный healthy HTTPS | PRIVATE API + read-only deploy key; source SHA parity; live HTTPS/data/assets и 8 Chrome-проверок PASS с раскрытой временной DNS-оговоркой в [deployment](deployment.md) |
 
 Автоматический scanner проверяет явные пути и известные сигнатуры payload/секретов; он дополняет проверку происхождения и exact diff, не доказывает отсутствие любого теоретически возможного секрета. Локальные node_modules и протоколы не отправляются; runtime-зависимости устанавливаются `npm ci --omit=dev` из lockfile. В bundle нет sourcemaps. Lazy 3D chunk около 2,07 MB (gzip 599 KB) даёт известное предупреждение Vite: загрузка отложена, текст/список доступны без WebGL. Скорость на каждом устройстве не аттестуется. Проверен установленный Chrome; другие браузеры отдельно не заявлены.
 
@@ -30,4 +30,4 @@ npm run test:browser -- --grep 'globe unavailable|globe reduced motion|globe imp
 
 Проверены последний native ряд, ограниченный DOM, полный filtered CSV, resize/360 px, reduced motion, WebGL fallback, rejection/late-load hashed module и direct query/native Back/hydration. Перехват отказа модуля сначала провалился на production URL, затем после поддержки hashed asset прошёл; приложение не менялось. Полный development набор повторно не запускался: Task5 уже принят с отдельными canvas/cluster/pinning доказательствами, изменения Task6 не меняют UI.
 
-Compose config PASS; image build локально не начался из-за отсутствующего Docker daemon. Настоящие image/runtime, private GitHub и public HTTPS пока не аттестованы, остаются обязательными до завершения выпуска. Подробные исходные доказательства, снимки и независимые review сохранены в локальном протоколе проекта; исследовательский архив не изменён.
+Compose config PASS; локальный daemon отсутствует. После review настоящие rpi image build/runtime, private GitHub, read-only key и public HTTPS проверены по [протоколу размещения](deployment.md). Полный SSR payload обеих live страниц равен local verified JSON; все client assets совпали по SHA256. 8/8 actual hosted Chrome проверок PASS, 18,4 с, normal TLS; из-за локального upstream negative DNS cache использован только per-process lookup публичного DNS, без отключения certificate validation. Свежие live desktop1536/mobile360 снимки осмотрены; page overflow отсутствует. Подробные доказательства и независимые review сохранены в рабочем протоколе; исследовательский архив не изменён.
