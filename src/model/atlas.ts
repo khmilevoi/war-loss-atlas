@@ -71,7 +71,7 @@ export function createAtlasModel(data: AtlasData, options: AtlasModelOptions = {
     applyDefaults(layer());
   }, 'atlas.resetFilters');
   const switchLayer = action((next: Layer) => {
-    applyDefaults(next === 'history' ? 'history' : 'ucdp');
+    if (next !== layer()) applyDefaults(next);
   }, 'atlas.switchLayer');
   return { layer, from, to, query, sort, completeness, selectedId, filters, filteredRows, summaries, historicalHighlights,
     periodNote, selectConflict, resetFilters, switchLayer };

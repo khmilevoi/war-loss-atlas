@@ -19,7 +19,7 @@ npm run public:check
 npm start
 ```
 
-Откройте `http://localhost:3000/` или `/data`; `/health` возвращает 200. Для разработки: `npm run dev` (порт задаётся переменной `PORT`). Полный браузерный набор требует установленного Google Chrome и Vite development server на 4173: `PORT=4173 npm run dev`, затем `npm run test:browser`. В PowerShell перед запуском сервера: `$env:PORT='4173'`. Для production используется `ATLAS_TEST_URL` (PowerShell: `$env:ATLAS_TEST_URL='http://localhost:3000'`) и отдельная проверенная выборка из [протокола](docs/verification.md); три canvas-теста с инструментированием исходного модуля выполняются только в development.
+Откройте `http://localhost:3000/` или `/data`; `/health` возвращает 200. Для разработки: `npm run dev` (порт задаётся переменной `PORT`). Для сквозных тестов нужен Google Chrome: `npm run test:browser` автоматически запускает сервер разработки на порту 4173. Чтобы проверить уже запущенную сборку, задайте `ATLAS_TEST_URL` (в PowerShell: `$env:ATLAS_TEST_URL='http://localhost:3000'`). Тесты, которым требуется инструментирование исходного модуля Vite, запускаются только в development; выборка для production приведена в [протоколе](docs/verification.md).
 
 Импорт использует включённый разрешённый CSV и закреплённые геоданные, сетевой запрос к архиву не требуется. Его SHA256: `b34ecb57f1fc0e73d4bfd7b080212da429af3135a8d360b1c902e45506f81147`. [Манифест](data/manifest.json) сохраняет версии и контрольные суммы. `public:check` проверяет исходное дерево, bundle, индекс и все достижимые версии файлов в Git; `.dockerignore` допускает в сборку только необходимые входные файлы.
 

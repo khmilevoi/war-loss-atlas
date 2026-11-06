@@ -1,4 +1,4 @@
-import { action, atom, withComputed, wrap } from '@reatom/core';
+import { action, atom, computed, withComputed, wrap } from '@reatom/core';
 import { reatomFactoryComponent } from '@reatom/react';
 import { atlasData } from '../app/routes';
 import type { AtlasModel } from '../model/atlas';
@@ -9,6 +9,16 @@ import './styles.css';
 
 export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model }) => {
   const data = atlasData()!;
+  const placementId = (item: (typeof data.placements)[number]) => 'conflict_id' in item ? item.conflict_id : item.highlight_id;
+  const visibleRecords = computed(() => {
+    const records = model.filters().layer === 'history'
+      ? model.historicalHighlights().map(item => ({ id: item.highlight_id, name: item.name_ru, years: `${item.start_year}–${item.end_year}` }))
+      : model.summaries().map(item => ({ id: item.id, name: item.name, years: `${item.firstObservedYear}–${item.lastObservedYear}` }));
+    const ids = new Set(records.map(item => item.id));
+    const placements = data.placements.filter(item => ids.has(placementId(item)));
+    const locatedIds = new Set(placements.filter(item => item.latitude !== null).map(placementId));
+    return { records, placements, locatedIds };
+  }, 'atlas.landing.visibleRecords');
   // URL identity remains the visible record. Local interaction state distinguishes
   // an initial/hover/focus preview from a deliberate click/Enter/tap pin.
   const previewId = atom<string | null>(() => model.selectedId(), 'atlas.landing.previewId')
@@ -51,17 +61,14 @@ export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model })
     const filters = model.filters(), history = filters.layer === 'history';
     const historical = history ? model.historicalHighlights() : [];
     const summaries = history ? [] : model.summaries();
-    const records = history ? historical.map(item => ({ id: item.highlight_id, name: item.name_ru, years: `${item.start_year}–${item.end_year}` }))
-      : summaries.map(item => ({ id: item.id, name: item.name, years: `${item.firstObservedYear}–${item.lastObservedYear}` }));
-    const ids = new Set(records.map(item => item.id));
-    const placements = data.placements.filter(item => ids.has('conflict_id' in item ? item.conflict_id : item.highlight_id));
-    const placed = new Set(placements.filter(item => item.latitude !== null).map(item => 'conflict_id' in item ? item.conflict_id : item.highlight_id)).size;
+    const { records, placements, locatedIds } = visibleRecords();
+    const placed = locatedIds.size;
     const selected = model.selectedId();
     const pinned = pinnedId();
     const clusterRecords = records.filter(item => cluster()?.ids.includes(item.id));
     const selectedHistory = history ? historical.find(item => item.highlight_id === selected) : undefined;
     const summary = history ? undefined : summaries.find(item => item.id === selected);
-    const selectionPlacements = placements.filter(item => ('conflict_id' in item ? item.conflict_id : item.highlight_id) === selected);
+    const selectionPlacements = placements.filter(item => placementId(item) === selected);
     const shortValue = selectedHistory?.display_ru.split(' — ')[0];
     return <section className="landing-page" data-layer={filters.layer} data-selected-id={selected ?? ''}
       onKeyDown={wrap(event => { if (event.key === 'Escape') { if (selected) close(); else cluster.set(null); } })}>
@@ -121,7 +128,7 @@ export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model })
         <label className="map-search">{history ? 'Найти исторический пример' : 'Найти конфликт, страну или участника'}<input type="search" value={filters.query}
           onChange={wrap(event => model.query.set(event.currentTarget.value))} placeholder="Поиск по исходным данным" /></label>
         <div className={history ? 'map-record-grid' : 'map-record-grid modern-records'}>{records.map(record => {
-          const located = placements.some(p => ('conflict_id' in p ? p.conflict_id : p.highlight_id) === record.id && p.latitude !== null);
+          const located = locatedIds.has(record.id);
           return <button key={record.id} id={`map-record-${record.id}`} data-conflict-id={record.id} className={selected === record.id ? 'selected' : ''}
             aria-pressed={pinned === record.id} onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
             onFocus={wrap(event => preview(record.id, event.currentTarget))} onClick={wrap(event => activate(record.id, event.currentTarget))}>

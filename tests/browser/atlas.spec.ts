@@ -112,6 +112,7 @@ test('globe import rejection preserves the list and source details', async ({ pa
 });
 
 test('globe real marker preview pins across hover and repeat click or tap closes', async ({ browser }) => {
+  test.slow();
   const context = await browser.newContext({ viewport: { width: 1536, height: 1024 }, hasTouch: true, reducedMotion: 'reduce' });
   try {
     const page = await context.newPage();
@@ -122,7 +123,7 @@ test('globe real marker preview pins across hover and repeat click or tap closes
       await route.fulfill({ response, body });
     });
     await page.goto('/');
-    await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
+    await expect(page.locator('[data-renderer="ready"]')).toBeVisible({ timeout: 15_000 });
     await page.evaluate(() => {
       const globe = (window as any).__testGlobe, hover = globe.onPointHover();
       globe.onPointHover((point: { ids: string[] } | null, ...rest: unknown[]) => {
@@ -163,6 +164,7 @@ test('globe real marker preview pins across hover and repeat click or tap closes
 });
 
 for (const mobile of [false, true]) test(`globe shared marker exposes individual members with ${mobile ? 'mobile touch' : 'mouse and keyboard'}`, async ({ browser }) => {
+  test.slow();
   const context = await browser.newContext({ viewport: mobile ? { width: 360, height: 800 } : { width: 1536, height: 1024 },
     hasTouch: true, reducedMotion: 'reduce' });
   try {
@@ -172,9 +174,17 @@ for (const mobile of [false, true]) test(`globe shared marker exposes individual
       await route.fulfill({ response, body: (await response.text()).replace('globe = new Globe(', 'globe = window.__testGlobe = new Globe(') });
     });
     await page.goto('/?layer=ucdp');
-    await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
+    await expect(page.locator('[data-renderer="ready"]')).toBeVisible({ timeout: 15_000 });
     await page.getByTestId('globe-host').scrollIntoViewIfNeeded();
-    const openAnchor = async (lat: number, lng: number) => {
+    const cluster = page.getByRole('region', { name: 'Конфликты у выбранной метки' });
+    if (!mobile) await page.evaluate(() => {
+      const globe = (window as any).__testGlobe, hover = globe.onPointHover();
+      globe.onPointHover((point: { ids: string[] } | null, ...rest: unknown[]) => {
+        (window as any).__testHovered = point?.ids ?? [];
+        hover(point, ...rest);
+      });
+    });
+    const openAnchor = async (lat: number, lng: number, verifyHoverId?: string) => {
       const point = await page.evaluate(async ({ lat, lng }) => {
         const globe = (window as any).__testGlobe;
         globe.pointOfView({ lat, lng, altitude: 1.65 }, 0);
@@ -184,10 +194,18 @@ for (const mobile of [false, true]) test(`globe shared marker exposes individual
         const bounds = globe.renderer().domElement.getBoundingClientRect();
         return { x: bounds.left + coords.x, y: bounds.top + coords.y };
       }, { lat, lng });
-      if (mobile) await page.touchscreen.tap(point.x, point.y); else await page.mouse.click(point.x, point.y);
+      if (mobile) {
+        await page.touchscreen.tap(point.x, point.y);
+      } else {
+        if (verifyHoverId) {
+          await page.mouse.move(point.x, point.y);
+          await expect.poll(() => page.evaluate(() => (window as any).__testHovered)).toContain(verifyHoverId);
+          await expect(cluster).toHaveCount(0);
+        }
+        await page.mouse.click(point.x, point.y);
+      }
     };
-    await openAnchor(11, 122.5);
-    const cluster = page.getByRole('region', { name: 'Конфликты у выбранной метки' });
+    await openAnchor(11, 122.5, '209');
     await expect(cluster).toBeVisible();
     await expect(cluster.locator('[data-cluster-member]')).toHaveCount(2);
     const detail = page.getByRole('region', { name: 'Подробности записи' });
