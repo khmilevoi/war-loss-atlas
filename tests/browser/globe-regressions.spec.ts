@@ -5,6 +5,7 @@ test('globe recovers from WebGL context loss without resetting the view', async 
   page.on('pageerror', error => errors.push(error.message));
 
   await page.goto('/?layer=ucdp&from=2011&to=2011&q=11345&selected=11345');
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
   const renderer = page.locator('.globe-view');
   const host = page.getByTestId('globe-host');
   const detail = page.getByRole('region', { name: 'Подробности записи' });
@@ -34,25 +35,29 @@ test('globe recovers from WebGL context loss without resetting the view', async 
   await expect(detail).toContainText('5 822');
   await renderer.getByRole('button', { name: 'Включить вращение' }).click();
   await expect(host).toHaveAttribute('data-rotation', 'rotating');
-  await page.getByRole('tab', { name: 'Исторические примеры' }).click();
-  await expect(page.getByTestId('map-coverage')).toContainText('4 на глобусе');
   expect(errors).toEqual([]);
 });
 
-test('activating the current globe layer keeps its filters and selected record', async ({ page }) => {
+test('switching map projections and activating the current source keeps filters and selection', async ({ page }) => {
   await page.goto('/?layer=ucdp&from=2011&to=2011&q=11345&selected=11345');
-  const tab = page.getByRole('tab', { name: 'UCDP 1989–2025' });
+  const source = page.getByRole('button', { name: 'UCDP', exact: true });
   const coverage = page.getByTestId('map-coverage');
-  const search = page.getByRole('searchbox', { name: 'Найти конфликт, страну или участника' });
+  const search = page.getByRole('searchbox', { name: 'Поиск по названию, региону, стране' });
   const detail = page.getByRole('region', { name: 'Подробности записи' });
-  await expect(page.locator('.globe-view')).not.toHaveAttribute('data-renderer', 'loading');
-  await expect(tab).toHaveAttribute('aria-selected', 'true');
-  await expect(coverage).toContainText('1 всего');
-  await tab.click();
+  await expect(page.getByTestId('flat-map')).toBeVisible();
+  await expect(source).toHaveAttribute('aria-pressed', 'true');
+  await expect(coverage).toContainText('0 из 1 на карте');
+  await source.click();
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
+  await expect(page.locator('.globe-view')).toBeVisible();
+  await expect(detail).toContainText('5 822');
+  await page.getByRole('button', { name: 'Карта', exact: true }).click();
+  await expect(page.getByTestId('flat-map')).toBeVisible();
+  await expect(page.locator('.globe-view')).toHaveCount(0);
   await expect(search).toHaveValue('11345');
-  await expect(page.getByLabel('Период глобуса, от')).toHaveValue('2011');
-  await expect(page.getByLabel('Период глобуса, до')).toHaveValue('2011');
-  await expect(coverage).toContainText('1 всего');
+  await expect(page.getByRole('combobox', { name: 'Год, от', exact: true })).toHaveValue('2011');
+  await expect(page.getByRole('combobox', { name: 'Год, до', exact: true })).toHaveValue('2011');
+  await expect(coverage).toContainText('0 из 1 на карте');
   await expect(detail).toContainText('5 822');
   expect(new URL(page.url()).searchParams.get('selected')).toBe('11345');
 });
@@ -60,8 +65,9 @@ test('activating the current globe layer keeps its filters and selected record',
 test('globe rotation caption and timeline label do not overlap on a tablet', async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 1024 });
   await page.goto('/');
-  const caption = page.getByText('Пауза вращения', { exact: true });
-  const timeline = page.getByText('Год начала войны', { exact: true });
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
+  const caption = page.locator('.rotation-button');
+  const timeline = page.getByRole('combobox', { name: 'Год, от', exact: true });
   await expect(caption).toBeVisible();
   await expect(timeline).toBeVisible();
   const captionBox = (await caption.boundingBox())!;

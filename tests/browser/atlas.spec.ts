@@ -18,10 +18,28 @@ test.beforeEach(async ({ page }) => {
 });
 test.afterEach(async ({ page }) => { expect((page as any).atlasErrors).toEqual([]); });
 
-test('landing historical preview pins on activation and repeated activation closes', async ({ page }) => {
+test('landing defaults to a shared register and synchronizes flat map markers with search and selection', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'За каждой точкой — человеческие жизни.' })).toBeVisible();
-  const list = page.getByRole('region', { name: 'Список конфликтов' });
+  const list = page.getByRole('region', { name: 'Реестр событий' });
+  const map = page.getByTestId('flat-map');
+  await expect(page.getByRole('button', { name: 'Все записи', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(map).toBeVisible();
+  await expect(map.locator('[data-marker-kind="history"]').first()).toBeVisible();
+  await expect(map.locator('[data-marker-kind="ucdp"]').first()).toBeVisible();
+  await expect(list.locator('[data-conflict-id]')).toHaveCount(206);
+  await expect(list.locator('[data-conflict-id="11345"]')).toContainText('Без метки на карте');
+
+  await page.getByRole('searchbox', { name: 'Поиск по названию, региону, стране' }).fill('Первая мировая');
+  await expect(list.locator('[data-conflict-id]')).toHaveCount(1);
+  await expect(map.getByTestId('map-marker')).toHaveCount(1);
+  await map.locator('[data-record-ids="ww1"]').click();
+  await expect(list.locator('[data-conflict-id="ww1"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('region', { name: 'Подробности записи' })).toContainText('Около 16 млн');
+});
+
+test('landing historical preview pins on activation and repeated activation closes', async ({ page }) => {
+  await page.goto('/?layer=history');
+  const list = page.getByRole('region', { name: 'Реестр событий' });
   await expect(list.locator('[data-conflict-id]')).toHaveCount(4);
   const detail = page.getByRole('region', { name: 'Подробности записи' });
   await expect(detail).toContainText('Более 65 млн');
@@ -52,14 +70,14 @@ test('landing historical preview pins on activation and repeated activation clos
 
 test('landing modern layer exposes all unknown and coincident anchors with whole source totals', async ({ page }) => {
   await page.goto('/?layer=ucdp');
-  await expect(page.getByTestId('map-coverage')).toContainText('94 на глобусе · 108 без координат · 202 всего');
-  const list = page.getByRole('region', { name: 'Список конфликтов' });
+  await expect(page.getByTestId('map-coverage')).toContainText('94 из 202 на карте · 108 без метки');
+  const list = page.getByRole('region', { name: 'Реестр событий' });
   await expect(list.locator('[data-conflict-id]')).toHaveCount(202);
   await list.locator('[data-conflict-id="11345"]').click();
   const detail = page.getByRole('region', { name: 'Подробности записи' });
   await expect(detail).toContainText('весь доступный ряд');
   await expect(detail).toContainText('без координат');
-  await expect(page.getByTestId('map-period')).toContainText('первому наблюдаемому');
+  await expect(page.getByTestId('map-period')).toContainText(/наблюдени|наблюдаем/i);
   const coincident = await page.locator('#atlas-initial').evaluate(element => {
     const placements = JSON.parse(element.textContent!).data.placements as { conflict_id?: string; latitude: number | null; longitude: number | null }[];
     const groups = new Map<string, string[]>();
@@ -75,9 +93,9 @@ test('landing modern layer exposes all unknown and coincident anchors with whole
     await list.locator(`[data-conflict-id="${id}"]`).click();
     await expect(detail).toContainText(`Конфликт ID ${id}:`);
   }
-  await page.getByRole('tab', { name: 'Исторические примеры', exact: true }).click();
+  await page.getByRole('button', { name: 'Исторические примеры', exact: true }).click();
   await expect(list.locator('[data-conflict-id]')).toHaveCount(4);
-  await expect(page.getByTestId('map-coverage')).toContainText('4 на глобусе');
+  await expect(page.getByTestId('map-coverage')).toContainText('4 из 4 на карте');
 });
 
 test('globe unavailable keeps navigable historical records', async ({ page }) => {
@@ -88,7 +106,8 @@ test('globe unavailable keeps navigable historical records', async ({ page }) =>
     } as any;
   });
   await page.goto('/');
-  await expect(page.getByTestId('globe-status')).toContainText('Список доступен');
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
+  await expect(page.getByTestId('globe-status')).toContainText('Выберите плоскую карту или запись в реестре');
   await page.locator('[data-conflict-id="ww1"]').click();
   await expect(page.getByRole('region', { name: 'Подробности записи' })).toContainText('Около 16 млн');
 });
@@ -97,6 +116,9 @@ test('globe reduced motion and mobile layout retain readable controls', async ({
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('/');
+  await expect(page.getByTestId('flat-map')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Включить вращение' })).toBeVisible();
   await expect(page.getByTestId('globe-host')).toHaveAttribute('data-rotation', 'paused');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
@@ -106,7 +128,8 @@ test('globe import rejection preserves the list and source details', async ({ pa
   await page.route(rendererModule, route => route.fulfill({ contentType: 'text/javascript',
     body: 'throw new Error("Test-only unavailable renderer module")' }));
   await page.goto('/');
-  await expect(page.getByTestId('globe-status')).toContainText('Список доступен');
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
+  await expect(page.getByTestId('globe-status')).toContainText('Выберите плоскую карту или запись в реестре');
   await page.locator('[data-conflict-id="us-civil"]').click();
   await expect(page.getByRole('region', { name: 'Подробности записи' })).toContainText('Не менее 750 тыс.');
 });
@@ -122,12 +145,15 @@ test('globe real marker preview pins across hover and repeat click or tap closes
       const body = (await response.text()).replace('globe = new Globe(', 'globe = window.__testGlobe = new Globe(');
       await route.fulfill({ response, body });
     });
-    await page.goto('/');
+    await page.goto('/?layer=history');
+    await page.getByRole('button', { name: 'Глобус', exact: true }).click();
     await expect(page.locator('[data-renderer="ready"]')).toBeVisible({ timeout: 15_000 });
+    await page.getByTestId('globe-host').scrollIntoViewIfNeeded();
     await page.evaluate(() => {
-      const globe = (window as any).__testGlobe, hover = globe.onPointHover();
-      globe.onPointHover((point: { ids: string[] } | null, ...rest: unknown[]) => {
-        (window as any).__testHovered = point?.ids ?? []; hover(point, ...rest);
+      const globe = (window as any).__testGlobe, hover = globe.onObjectHover();
+      globe.onObjectHover((marker: { ids: string[] } | null, ...rest: unknown[]) => {
+        (window as any).__testHovered = marker?.ids ?? [];
+        hover(marker, ...rest);
       });
     });
     const point = await page.evaluate(() => {
@@ -159,7 +185,6 @@ test('globe real marker preview pins across hover and repeat click or tap closes
     await page.touchscreen.tap(point.x, point.y);
     await expect(detail).toHaveCount(0);
     expect(await page.evaluate(() => (window as any).__testGlobe.controls().autoRotate)).toBe(false);
-    expect(await page.evaluate(() => (window as any).__testGlobe.pointRadius())).toBe(.6);
   } finally { await context.close(); }
 });
 
@@ -174,12 +199,13 @@ for (const mobile of [false, true]) test(`globe shared marker exposes individual
       await route.fulfill({ response, body: (await response.text()).replace('globe = new Globe(', 'globe = window.__testGlobe = new Globe(') });
     });
     await page.goto('/?layer=ucdp');
+    await page.getByRole('button', { name: 'Глобус', exact: true }).click();
     await expect(page.locator('[data-renderer="ready"]')).toBeVisible({ timeout: 15_000 });
     await page.getByTestId('globe-host').scrollIntoViewIfNeeded();
     const cluster = page.getByRole('region', { name: 'Конфликты у выбранной метки' });
     if (!mobile) await page.evaluate(() => {
-      const globe = (window as any).__testGlobe, hover = globe.onPointHover();
-      globe.onPointHover((point: { ids: string[] } | null, ...rest: unknown[]) => {
+      const globe = (window as any).__testGlobe, hover = globe.onObjectHover();
+      globe.onObjectHover((point: { ids: string[] } | null, ...rest: unknown[]) => {
         (window as any).__testHovered = point?.ids ?? [];
         hover(point, ...rest);
       });
@@ -252,7 +278,8 @@ test('globe remount cleanup cancels animation frames and releases observers', as
   const resources = () => page.evaluate(() => ({ raf: (window as any).__resources.raf.size, observers: (window as any).__resources.observed.size }));
   const baseline = await resources();
   for (let i = 0; i < 3; i++) {
-    await page.getByRole('navigation').getByRole('link', { name: 'Глобус', exact: true }).click();
+    await page.getByRole('navigation').locator('a[href="/"]').click();
+    await page.getByRole('button', { name: 'Глобус', exact: true }).click();
     await expect(page.locator('[data-renderer="ready"]')).toBeVisible();
     await page.getByRole('navigation').getByRole('link', { name: 'Данные и источники', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Данные за каждой точкой' })).toBeVisible();
@@ -270,6 +297,7 @@ test('globe late module load does not recreate an unmounted renderer', async ({ 
     requested(); await gate; await route.continue();
   });
   await page.goto('/');
+  await page.getByRole('button', { name: 'Глобус', exact: true }).click();
   await requestStarted;
   await page.getByRole('navigation').getByRole('link', { name: 'Данные и источники', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Данные за каждой точкой' })).toBeVisible();
@@ -280,12 +308,11 @@ test('globe late module load does not recreate an unmounted renderer', async ({ 
 
 test('landing timeline filters inclusively while preserving a conflict full source series', async ({ page }) => {
   await page.goto('/?layer=ucdp&from=2011&to=2011&q=11345&selected=11345');
-  await expect(page.getByTestId('map-coverage')).toContainText('1 всего');
+  await expect(page.getByTestId('map-coverage')).toContainText('0 из 1 на карте');
   const detail = page.getByRole('region', { name: 'Подробности записи' });
   await expect(detail).toContainText('последний 2025');
   await expect(detail).toContainText('5 822');
-  await page.getByLabel('Период глобуса, от').focus();
-  await page.keyboard.press('ArrowLeft');
+  await page.getByRole('combobox', { name: 'Год, от', exact: true }).selectOption('2010');
   await expect.poll(() => new URL(page.url()).searchParams.get('from')).toBe('2010');
   await expect(detail).toContainText('5 822');
   await page.getByRole('link', { name: 'Как читать данные', exact: true }).click();

@@ -42,8 +42,8 @@ export const GlobeView = reatomFactoryComponent<Props>(() => {
     return <div className="globe-view" data-renderer={rendererStatus}>
       <CanvasBridge state={{ ...props, paused }} onStatus={wrap(nextStatus => status.set(nextStatus))} />
       {rendererStatus !== 'ready' ? <p className="globe-status" data-testid="globe-status" role="status">{rendererStatus === 'loading'
-        ? 'Открываем глобус. Все записи уже доступны ниже.' : rendererStatus === 'recovering'
-          ? 'Восстанавливаем глобус. Все записи доступны ниже.' : 'Глобус недоступен. Список доступен ниже — выберите конфликт.'}</p> : null}
+        ? 'Открываем глобус. Записи уже доступны в реестре.' : rendererStatus === 'recovering'
+          ? 'Восстанавливаем глобус. Записи доступны в реестре.' : 'Глобус недоступен. Выберите плоскую карту или запись в реестре.'}</p> : null}
       <button className="rotation-button" disabled={rendererStatus !== 'ready' || reduced} aria-label={paused ? 'Включить вращение' : 'Приостановить вращение'}
         title={reduced ? 'Вращение выключено настройкой уменьшения движения' : undefined}
         onClick={wrap(() => pause.set(value => !value))}><span aria-hidden="true">{paused ? '▷' : 'Ⅱ'}</span><span>{reduced ? 'Без анимации' : paused ? 'Вращение выключено' : 'Пауза вращения'}</span></button>

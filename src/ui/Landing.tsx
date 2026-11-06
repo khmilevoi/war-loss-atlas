@@ -1,30 +1,55 @@
 import { action, atom, computed, withComputed, wrap } from '@reatom/core';
 import { reatomFactoryComponent } from '@reatom/react';
+import type { MouseEvent } from 'react';
 import { atlasData } from '../app/routes';
+import { defaultPeriod } from '../data/selectors';
+import type { Layer } from '../data/types';
 import type { AtlasModel } from '../model/atlas';
 import { ConflictDetails } from './ConflictDetails';
+import { FlatMap } from './FlatMap';
 import { GlobeView } from './GlobeView';
+import { battleDeathBins, clusterMarkerColor, historyMarkerColor, unknownMarkerColor } from './mapMarkers';
 import { formatEstimate } from './VirtualTable';
 import './styles.css';
 
+const sources: { value: Layer; label: string }[] = [
+  { value: 'all', label: 'Все записи' },
+  { value: 'ucdp', label: 'UCDP' },
+  { value: 'history', label: 'Исторические примеры' },
+];
+const [firstYear, lastYear] = defaultPeriod('all');
+const years = Array.from({ length: lastYear - firstYear + 1 }, (_, index) => firstYear + index);
+
+function scrollToSection(event: MouseEvent<HTMLAnchorElement>) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const target = document.getElementById(event.currentTarget.hash.slice(1));
+  target?.focus({ preventScroll: true });
+  target?.scrollIntoView({ block: 'start' });
+}
+
 export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model }) => {
   const data = atlasData()!;
+  const view = atom<'map' | 'globe'>('map', 'atlas.landing.view');
   const placementId = (item: (typeof data.placements)[number]) => 'conflict_id' in item ? item.conflict_id : item.highlight_id;
   const visibleRecords = computed(() => {
-    const records = model.filters().layer === 'history'
-      ? model.historicalHighlights().map(item => ({ id: item.highlight_id, name: item.name_ru, years: `${item.start_year}–${item.end_year}` }))
-      : model.summaries().map(item => ({ id: item.id, name: item.name, years: `${item.firstObservedYear}–${item.lastObservedYear}` }));
+    const historical = model.historicalHighlights();
+    const summaries = model.summaries();
+    const records = [
+      ...historical.map(item => ({ id: item.highlight_id, name: item.name_ru, years: `${item.start_year}–${item.end_year}`, history: true })),
+      ...summaries.map(item => ({ id: item.id, name: item.name, years: `${item.firstObservedYear}–${item.lastObservedYear}`, history: false })),
+    ];
     const ids = new Set(records.map(item => item.id));
     const placements = data.placements.filter(item => ids.has(placementId(item)));
     const locatedIds = new Set(placements.filter(item => item.latitude !== null).map(placementId));
-    return { records, placements, locatedIds };
+    const estimates = new Map(summaries.map(item => [item.id, item.missingCounts.best ? null : item.best]));
+    return { records, ids, placements, locatedIds, historical, summaries, estimates };
   }, 'atlas.landing.visibleRecords');
   // URL identity remains the visible record. Local interaction state distinguishes
   // an initial/hover/focus preview from a deliberate click/Enter/tap pin.
   const previewId = atom<string | null>(() => model.selectedId(), 'atlas.landing.previewId')
     .extend(withComputed(id => id === model.selectedId() ? id : null));
   const pinnedId = atom<string | null>(null, 'atlas.landing.pinnedId')
-    .extend(withComputed(id => id === model.selectedId() ? id : null));
+    .extend(withComputed(id => id && id === model.selectedId() && visibleRecords().ids.has(id) ? id : null));
   const cluster = atom<{ ids: string[]; filterKey: string } | null>(null, 'atlas.landing.cluster')
     .extend(withComputed(value => value?.filterKey === JSON.stringify(model.filters()) ? value : null));
   let closing = false;
@@ -54,92 +79,137 @@ export const Landing = reatomFactoryComponent<{ model: AtlasModel }>(({ model })
     previewId.set(null);
     pinnedId.set(id);
   }, 'atlas.landing.activate');
+  const selectOnMap = action((id: string) => {
+    activate(id);
+    const row = document.getElementById(`map-record-${id}`);
+    const list = row?.closest('.atlas-list');
+    if (!row || !list || list.scrollHeight <= list.clientHeight) return;
+    const rowBounds = row.getBoundingClientRect();
+    const listBounds = list.getBoundingClientRect();
+    if (rowBounds.top < listBounds.top) list.scrollTop += rowBounds.top - listBounds.top;
+    else if (rowBounds.bottom > listBounds.bottom) list.scrollTop += rowBounds.bottom - listBounds.bottom;
+  }, 'atlas.landing.selectOnMap');
   const showCluster = action((ids: string[]) => {
     cluster.set({ ids, filterKey: JSON.stringify(model.filters()) });
   }, 'atlas.landing.showCluster');
+  const switchView = action((next: 'map' | 'globe') => {
+    view.set(next);
+    cluster.set(null);
+  }, 'atlas.landing.switchView');
   return () => {
-    const filters = model.filters(), history = filters.layer === 'history';
-    const historical = history ? model.historicalHighlights() : [];
-    const summaries = history ? [] : model.summaries();
-    const { records, placements, locatedIds } = visibleRecords();
-    const placed = locatedIds.size;
-    const selected = model.selectedId();
+    const filters = model.filters(), projection = view();
+    const { records, placements, locatedIds, historical, summaries, estimates } = visibleRecords();
+    const selectedId = model.selectedId();
+    const selectedHistory = historical.find(item => item.highlight_id === selectedId);
+    const summary = summaries.find(item => item.id === selectedId);
+    const selected = selectedHistory || summary ? selectedId : null;
     const pinned = pinnedId();
-    const clusterRecords = records.filter(item => cluster()?.ids.includes(item.id));
-    const selectedHistory = history ? historical.find(item => item.highlight_id === selected) : undefined;
-    const summary = history ? undefined : summaries.find(item => item.id === selected);
+    const clusterIds = cluster()?.ids;
+    const clusterRecords = clusterIds ? records.filter(item => clusterIds.includes(item.id)) : [];
     const selectionPlacements = placements.filter(item => placementId(item) === selected);
-    const shortValue = selectedHistory?.display_ru.split(' — ')[0];
+    const mapProps = { placements, selectedId: selected, estimates, onSelect: wrap(selectOnMap),
+      onPreview: wrap((id: string | null) => preview(id)), onCluster: wrap(showCluster) };
     return <section className="landing-page" data-layer={filters.layer} data-selected-id={selected ?? ''}
       onKeyDown={wrap(event => { if (event.key === 'Escape') { if (selected) close(); else cluster.set(null); } })}>
-      <div className="landing-hero">
-        <GlobeView placements={placements} selectedId={selected} onSelect={wrap(id => activate(id))}
-          onPreview={wrap(id => preview(id))} onCluster={wrap(showCluster)} />
-        {clusterRecords.length > 1 ? <section className="marker-cluster" role="region" aria-label="Конфликты у выбранной метки">
-          <div><h2>У этой метки: {clusterRecords.length}</h2><button className="text-button" aria-label="Закрыть список метки" onClick={wrap(() => cluster.set(null))}>×</button></div>
-          <p>Общий ориентир, отдельные конфликты. Выберите запись; числа не складываются.</p>
-          <ul>{clusterRecords.map(record => <li key={record.id}><button data-cluster-member={record.id} aria-pressed={pinned === record.id}
-            onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
-            onFocus={wrap(event => preview(record.id, event.currentTarget))}
-            onClick={wrap(event => activate(record.id, event.currentTarget))}>
-            {record.name}<small>ID {record.id} · {record.years}</small></button></li>)}</ul>
-        </section> : null}
-        <div className="hero-copy">
-          <div className="hero-layers" role="tablist" aria-label="Слой глобуса" onKeyDown={wrap(event => {
-            if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
-            event.preventDefault();
-            const index = event.key === 'ArrowRight' || event.key === 'End' ? 1 : 0;
-            model.switchLayer(index ? 'ucdp' : 'history');
-            event.currentTarget.querySelectorAll<HTMLButtonElement>('button')[index]?.focus();
-          })}>
-            <button role="tab" aria-selected={history} tabIndex={history ? 0 : -1} aria-controls="conflict-list" onClick={wrap(() => model.switchLayer('history'))}>Исторические примеры</button>
-            <button role="tab" aria-selected={!history} tabIndex={history ? -1 : 0} aria-controls="conflict-list" onClick={wrap(() => model.switchLayer('ucdp'))}>UCDP 1989–2025</button>
-          </div>
-          <h1>За каждой<br />точкой —<br />человеческие<br />жизни.</h1>
-          <p className="hero-lead">Исследуйте войны, оценки<br className="desktop-break" /> потерь и источники.</p>
-          <a className="hero-cta" href="#conflict-list">Исследовать глобус <span aria-hidden="true">→</span></a>
-          <a className="hero-help" href="#reading-guide">Как читать данные</a>
+      <div className="atlas-workspace">
+        <div className="atlas-main">
+          <div className="atlas-masthead"><strong>Атлас потерь</strong><span>1826–2026</span></div>
+          <p className="atlas-subtitle">Исторические примеры и конфликты UCDP за 1989–2025 годы</p>
+          <div className="atlas-heading"><h1>Человеческие потери в войнах и конфликтах за 200 лет</h1></div>
+          <section className="atlas-visual" aria-label="География конфликтов">
+            <div className="atlas-view-switch" role="group" aria-label="Вид карты">
+              <button type="button" aria-pressed={projection === 'map'} onClick={wrap(() => switchView('map'))}>Карта</button>
+              <button type="button" aria-pressed={projection === 'globe'} onClick={wrap(() => switchView('globe'))}>Глобус</button>
+              <a className="atlas-jump" href="#conflict-list" onClick={scrollToSection}>К реестру</a>
+            </div>
+            <div className="atlas-map-frame">
+              {projection === 'map' ? <FlatMap {...mapProps} /> : <GlobeView {...mapProps} />}
+              {clusterRecords.length > 1 ? <section className="marker-cluster" role="region" aria-label="Конфликты у выбранной метки">
+                <div><h2>У этой метки: {clusterRecords.length}</h2><button type="button" className="text-button" aria-label="Закрыть список метки"
+                  onClick={wrap(() => cluster.set(null))}>×</button></div>
+                <p>У записей общий ориентир. Цвет показывает наибольшую полную оценку UCDP среди них.</p>
+                <ul>{clusterRecords.map(record => <li key={record.id}><button type="button" data-cluster-member={record.id} aria-pressed={pinned === record.id}
+                  onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
+                  onFocus={wrap(event => preview(record.id, event.currentTarget))}
+                  onClick={wrap(event => activate(record.id, event.currentTarget))}>
+                  {record.name}<small>ID {record.id} · {record.years}</small></button></li>)}</ul>
+              </section> : null}
+              {(selectedHistory || summary) ? <aside className="globe-callout" aria-label="Выбранный конфликт">
+                {selectedHistory ? <>
+                  <h2>{selectedHistory.name_ru}</h2>
+                  <p>{selectedHistory.start_year}–{selectedHistory.end_year} · исторический пример</p>
+                  <strong>{selectedHistory.display_ru.split(' — ')[0]}</strong>
+                  <p className="callout-caveat">{selectedHistory.metric === 'civilian_war_deaths' ? 'Гражданские потери' : 'Историческая оценка по источнику'}</p>
+                </> : summary ? <>
+                  <h2>{summary.name}</h2>
+                  <p>{summary.firstObservedYear}–{summary.lastObservedYear} · UCDP</p>
+                  <strong>{formatEstimate(summary.best)}</strong>
+                  <p className="callout-caveat">Смерти, связанные с боями, за весь доступный период{summary.missingCounts.best ? ' · неполная оценка' : ''}</p>
+                </> : null}
+                <a href="#selected-detail" onClick={wrap(event => {
+                  if (selected && !pinned) activate(selected);
+                  scrollToSection(event);
+                })}>Источник и оговорки</a>
+                <button type="button" className="text-button" aria-label="Закрыть карточку" onClick={wrap(close)}>Закрыть</button>
+              </aside> : null}
+            </div>
+            <div className="atlas-legend">
+              <strong>Условные обозначения</strong>
+              <ul>
+                <li><span className="atlas-legend-marker is-history" style={{ color: historyMarkerColor }} />Исторические примеры</li>
+                <li><span className="atlas-legend-marker is-unknown" style={{ color: unknownMarkerColor }} />UCDP без полной оценки</li>
+                <li><span className="atlas-legend-marker is-cluster" style={{ color: clusterMarkerColor }} aria-hidden="true">2</span>Несколько записей в одной точке</li>
+              </ul>
+              <div className="atlas-legend-scale"><span>UCDP · смерти, связанные с боями</span><ul>
+                {battleDeathBins.map(bin => <li key={bin.min}><span className="atlas-legend-marker"
+                  style={{ backgroundColor: bin.color, width: bin.radius * 2, height: bin.radius * 2 }} />{bin.label}</li>)}
+              </ul></div>
+            </div>
+            <div className="atlas-coverage">
+              <p data-testid="map-coverage" role="status">{locatedIds.size} из {records.length} на карте · {records.length - locatedIds.size} без метки</p>
+              <p>Метки условны <span aria-hidden="true">·</span> <a href="#reading-guide" onClick={scrollToSection}>Как читать данные</a></p>
+            </div>
+          </section>
         </div>
-        {(selectedHistory || summary) ? <aside className="globe-callout" aria-label="Выбранный конфликт">
-          <h2>{selectedHistory?.name_ru ?? summary?.name}</h2>
-          <p>{selectedHistory ? `${selectedHistory.start_year}–${selectedHistory.end_year}` : `${summary!.firstObservedYear}–${summary!.lastObservedYear}`}</p>
-          <strong>{shortValue ?? formatEstimate(summary!.best)}</strong>
-          <p>{history ? selectedHistory?.metric === 'civilian_war_deaths' ? 'Только гражданские · оценка NAM' : selectedHistory?.highlight_id === 'ww1' ? 'Все умершие · оценка NARA' : selectedHistory?.highlight_id === 'us-civil' ? 'Умершие в результате войны · NPS' : 'Все умершие · оценка NAM' : 'Боевые смерти · лучшая оценка UCDP'}</p>
-          <p className="callout-caveat">{history ? 'Оценки источников различаются.' : 'За весь доступный ряд источника.'}</p>
-          <p className="callout-caveat">{pinned ? 'Закреплено · повторное нажатие закрывает' : 'Предпросмотр · нажмите, чтобы закрепить'}</p>
-          <a href="#selected-detail">Источник и оговорки ↗</a>
-        </aside> : null}
-        <div className="hero-bottom"><div className="timeline">
-          <div className="timeline-label"><span>{history ? 'Год начала войны' : 'Первый наблюдаемый год UCDP'}</span><strong>{filters.from}–{filters.to}</strong></div>
-          <label><span className="sr-only">Период глобуса, от</span><input type="range" min={history ? 1861 : 1989} max={2025} value={filters.from}
-            onChange={wrap(event => model.from.set(Math.min(Number(event.currentTarget.value), filters.to)))} /></label>
-          <label><span className="sr-only">Период глобуса, до</span><input type="range" min={history ? 1861 : 1989} max={2025} value={filters.to}
-            onChange={wrap(event => model.to.set(Math.max(Number(event.currentTarget.value), filters.from)))} /></label>
-          <div className="timeline-ticks"><span>{history ? '1861' : '1989'}</span><span>{history ? '1900' : '2000'}</span><span>{history ? '1950' : '2010'}</span><span>2025</span></div>
-        </div><p className="marker-note">Метки условные. Размер не показывает число погибших.</p></div>
+        <aside id="conflict-list" className="atlas-registry" role="region" aria-labelledby="atlas-registry-title" tabIndex={-1}>
+          <h2 id="atlas-registry-title">Реестр событий</h2>
+          <label className="atlas-search"><span className="sr-only">Поиск по названию, региону, стране</span>
+            <input type="search" value={filters.query} placeholder="Поиск по названию, региону, стране"
+              onChange={wrap(event => model.query.set(event.currentTarget.value))} />
+          </label>
+          <div className="atlas-source-filters" role="group" aria-label="Источник записей">
+            {sources.map(source => <button type="button" key={source.value} aria-pressed={filters.layer === source.value}
+              onClick={wrap(() => model.switchLayer(source.value))}>{source.label}</button>)}
+          </div>
+          <div className="atlas-period" role="group" aria-label="Период">
+            <span>Период</span>
+            <label><span className="sr-only">Год, от</span><select value={filters.from}
+              onChange={wrap(event => model.from.set(Number(event.currentTarget.value)))}>
+              {years.filter(year => year <= filters.to).map(year => <option key={year}>{year}</option>)}
+            </select></label>
+            <span aria-hidden="true">–</span>
+            <label><span className="sr-only">Год, до</span><select value={filters.to}
+              onChange={wrap(event => model.to.set(Number(event.currentTarget.value)))}>
+              {years.filter(year => year >= filters.from).map(year => <option key={year}>{year}</option>)}
+            </select></label>
+          </div>
+          <p className="atlas-period-note" data-testid="map-period">{model.periodNote()}</p>
+          <ul className="atlas-list">{records.map(record => <li key={record.id} className="atlas-row" data-selected={selected === record.id}>
+            <button type="button" id={`map-record-${record.id}`} data-conflict-id={record.id} aria-pressed={pinned === record.id}
+              onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
+              onFocus={wrap(event => preview(record.id, event.currentTarget))} onClick={wrap(event => activate(record.id, event.currentTarget))}>
+              <span className="atlas-row-name">{record.name}</span>
+              <span className={`atlas-source-badge ${record.history ? 'is-history' : 'is-ucdp'}`}>{record.history ? 'Исторический' : 'UCDP'}</span>
+              <span className="atlas-row-meta">{record.years}{locatedIds.has(record.id) ? '' : ' · Без метки на карте'}</span>
+            </button>
+          </li>)}</ul>
+          {!records.length ? <p className="empty-state">Ничего не найдено. Измените период или поиск.</p> : null}
+        </aside>
       </div>
-      <div className="map-context"><p data-testid="map-period">{history ? model.periodNote() : 'Отбор по первому наблюдаемому году UCDP, не по началу войны. Обе границы включены. Числа — за весь доступный срок источника, не только за выбранные годы.'}</p>
-        <p>{history ? 'Четыре независимые публикации NARA, NPS и NAM. Разные определения; общего итога нет.' : 'UCDP Battle-Related Deaths 26.1 · боевые смерти, включая гражданских, погибших в ходе боёв; не все последствия войны.'}</p></div>
-      <section id="conflict-list" className="map-records" aria-label="Список конфликтов" tabIndex={-1}>
-        <div className="map-list-heading"><div><h2>{history ? 'Четыре войны. Четыре публикации.' : 'Конфликты в источнике'}</h2>
-          <p data-testid="map-coverage">{placed} на глобусе · {records.length - placed} без координат · {records.length} всего</p></div>
-          <a href={history ? '/data?layer=history' : '/data'}>Все данные и источники <span aria-hidden="true">↗</span></a></div>
-        <p className="map-list-note">Метки — условные ориентиры, не места гибели или границы фронтов. Совпадающая метка открывает список отдельных конфликтов. Наведение — предпросмотр; нажатие закрепляет карточку, повторное нажатие закрывает.</p>
-        <label className="map-search">{history ? 'Найти исторический пример' : 'Найти конфликт, страну или участника'}<input type="search" value={filters.query}
-          onChange={wrap(event => model.query.set(event.currentTarget.value))} placeholder="Поиск по исходным данным" /></label>
-        <div className={history ? 'map-record-grid' : 'map-record-grid modern-records'}>{records.map(record => {
-          const located = locatedIds.has(record.id);
-          return <button key={record.id} id={`map-record-${record.id}`} data-conflict-id={record.id} className={selected === record.id ? 'selected' : ''}
-            aria-pressed={pinned === record.id} onPointerEnter={wrap(event => { if (event.pointerType === 'mouse') preview(record.id, event.currentTarget); })}
-            onFocus={wrap(event => preview(record.id, event.currentTarget))} onClick={wrap(event => activate(record.id, event.currentTarget))}>
-            <span className="record-years">{record.years}</span><span className="record-name">{record.name}</span><span className="record-place">{located ? 'Условная метка' : 'Без координат'}{history ? '' : ` · ID ${record.id}`}</span></button>;
-        })}</div>
-        {!records.length ? <p className="empty-state">Ничего не найдено. Измените период или поиск.</p> : null}
-      </section>
-      <div id="selected-detail"><ConflictDetails historical={selectedHistory} summary={summary} placements={selectionPlacements} onClose={close} /></div>
-      <section id="reading-guide" className="source-definitions"><h2>Как читать данные</h2>
+      <div id="selected-detail" tabIndex={selected ? -1 : undefined}><ConflictDetails historical={selectedHistory} summary={summary} placements={selectionPlacements} onClose={close} /></div>
+      <section id="reading-guide" className="source-definitions" tabIndex={-1}><h2>Как читать данные</h2>
         <div className="glossary"><div><h3>Разные числа — разный охват</h3><p>UCDP — Уппсальская программа данных о конфликтах: смерти в боевых действиях. Исторические карточки используют определения своих авторов. Они не складываются в общий итог.</p></div>
-          <div><h3>Источник важнее размера точки</h3><p>NAM — Национальный музей армии Великобритании; NARA — Национальные архивы США; NPS — Служба национальных парков США. «Около», «более» и «не менее» сохраняют смысл публикации.</p></div>
+          <div><h3>Размер и цвет метки</h3><p>Круги UCDP показывают диапазон лучшей оценки за весь доступный период конфликта. Светлый ромб отмечает исторический пример. Если у записей общий ориентир, цвет кольца показывает наибольшую полную оценку UCDP среди них. На плоской карте внутри кольца указано число записей.</p></div>
           <div><h3>Время — способ найти конфликт</h3><p>{model.periodNote()} Нижняя и верхняя оценки UCDP — варианты источника, не доверительный интервал.</p></div>
           <div><h3>География — условный ориентир</h3><p>Мировые войны показаны символическими метками в Европе. Они не сводятся к одной стране. Неизвестное размещение остаётся в списке; потери по странам не рассчитываются.</p></div></div>
         <p className="map-attribution">Схема суши: <a href="https://www.naturalearthdata.com/">Natural Earth</a>, public domain. <a href="/licenses/ATTRIBUTION.md" rel="external">Источники, версии и лицензии</a>.</p>

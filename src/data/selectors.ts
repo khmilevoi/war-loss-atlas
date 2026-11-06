@@ -4,26 +4,30 @@ import { NATIVE_FIELDS, type AtlasData, type ConflictSummary, type Filters, type
 export type Completeness = NonNullable<Filters['completeness']>;
 export const UCDP_PERIOD_NOTE = 'Первый год наблюдения в UCDP, не начало войны. Обе границы включены. Потери за весь доступный период конфликта в источнике, не только за выбранные годы.';
 export const HISTORY_PERIOD_NOTE = 'Год начала войны; обе границы включены. Оценка за весь доступный период в конкретном источнике. Определения карточек различаются; общего итога нет.';
+export const ATLAS_PERIOD_NOTE = 'Поиск по году начала войны или первому году наблюдения в UCDP. Оценки относятся ко всему доступному периоду записи.';
 const compareText = new Intl.Collator('ru', { numeric: true }).compare;
 const normalizeText = (text: string) => text.normalize('NFKC').toLocaleLowerCase('ru').trim();
-export const defaultPeriod = (layer: Layer): [number, number] => layer === 'history' ? [1861, 2025] : [1989, 2025];
+export const defaultPeriod = (layer: Layer): [number, number] => {
+  if (layer === 'all') return [1826, 2026];
+  return layer === 'history' ? [1861, 2025] : [1989, 2025];
+};
 
 export function normalizeSort(value: string, layer: Layer): string {
   const [field, direction, extra] = value.split(':');
   if (extra !== undefined || (direction !== 'asc' && direction !== 'desc')) return 'year:asc';
-  if (layer === 'history') return field === 'year' || field === 'name' ? value : 'year:asc';
+  if (layer !== 'ucdp') return field === 'year' || field === 'name' ? value : 'year:asc';
   return field === 'name' || NATIVE_FIELDS.includes(field as NativeField) ? value : 'year:asc';
 }
 
 /** Normalizes the pair together: one invalid bound resets the whole source window. */
 export function normalizeFilters(filters: Filters): Filters {
-  const layer = filters.layer === 'history' ? 'history' : 'ucdp';
-  const [min, max] = defaultPeriod(layer);
+  const layer = filters.layer === 'all' || filters.layer === 'history' ? filters.layer : 'ucdp';
+  const [min, max] = defaultPeriod(filters.atlasPeriod ? 'all' : layer);
   const valid = Number.isInteger(filters.from) && Number.isInteger(filters.to)
     && filters.from >= min && filters.to <= max && filters.from <= filters.to;
   const completeness = layer === 'history' ? 'all' : filters.completeness ?? 'all';
   return { layer, from: valid ? filters.from : min, to: valid ? filters.to : max,
-    query: filters.query, sort: normalizeSort(filters.sort, layer),
+    query: filters.query, sort: normalizeSort(filters.sort, layer), ...(filters.atlasPeriod ? { atlasPeriod: true as const } : {}),
     completeness: ['complete', 'partial', 'missing'].includes(completeness) ? completeness : 'all' };
 }
 
@@ -34,12 +38,17 @@ export function conflictCompleteness(summary: ConflictSummary): Completeness {
 }
 
 function admittedConflicts(data: AtlasData, filters: Filters): ConflictSummary[] {
-  if (filters.layer !== 'ucdp') return [];
+  if (filters.layer === 'history') return [];
   const query = normalizeText(filters.query);
   const matchingIds = new Set<string>();
   if (query) for (const row of data.nativeRows) {
     if (NATIVE_FIELDS.some(key => row[key] !== null && normalizeText(String(row[key])).includes(query))) {
       matchingIds.add(row.conflict_id);
+    }
+  }
+  if (query && filters.atlasPeriod) for (const placement of data.placements) {
+    if ('conflict_id' in placement && placement.latitude !== null && normalizeText(placement.label_ru).includes(query)) {
+      matchingIds.add(placement.conflict_id);
     }
   }
   return data.conflicts.filter(summary => summary.firstObservedYear >= filters.from && summary.firstObservedYear <= filters.to
@@ -87,7 +96,7 @@ export function selectRows(data: AtlasData, filters: Filters): readonly NativeRo
 /** Historical claims remain independent records, never synthetic UCDP summaries or a casualty ranking. */
 export function selectHistoricalHighlights(data: AtlasData, filters: Filters): readonly HistoricalHighlight[] {
   const normalized = normalizeFilters(filters);
-  if (normalized.layer !== 'history') return [];
+  if (normalized.layer === 'ucdp') return [];
   const query = normalizeText(normalized.query);
   const [field, direction] = normalized.sort.split(':');
   return data.historicalHighlights.filter(highlight => highlight.start_year >= normalized.from && highlight.start_year <= normalized.to

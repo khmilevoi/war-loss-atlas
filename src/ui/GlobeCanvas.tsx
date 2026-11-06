@@ -1,19 +1,20 @@
 import Globe, { type GlobeInstance } from 'globe.gl';
-import { Raycaster, Vector2, type MeshPhongMaterial, type Object3D } from 'three';
+import { CircleGeometry, DoubleSide, Group, Mesh, MeshBasicMaterial, Raycaster, RingGeometry, Vector2,
+  type MeshPhongMaterial, type Object3D } from 'three';
 import landText from '../../public/geo/ne_110m_land.geojson?raw';
 import type { Placement } from '../data/types';
+import { mapMarkers, type MapMarker } from './mapMarkers';
 
 export type CanvasState = { placements: readonly Placement[]; selectedId: string | null; paused: boolean;
+  estimates?: ReadonlyMap<string, number | null>;
   onSelect: (id: string) => void; onPreview: (id: string | null) => void; onCluster: (ids: string[]) => void };
 export type CanvasOwner = { update: (state: CanvasState) => void; dispose: () => void };
 export type RendererStatus = 'loading' | 'ready' | 'recovering' | 'unavailable';
 type Ring = number[][];
 type Polygon = Ring[];
 type Edge = [number[], number[]];
-const idOf = (p: Placement) => 'conflict_id' in p ? p.conflict_id : p.highlight_id;
-type Marker = { latitude: number; longitude: number; ids: string[] };
 // Globe.GL's pinned three-globe layer tags its surface and navigation meshes.
-type PickObject = Object3D & { __globeObjType?: string; __data?: Marker };
+type PickObject = Object3D & { __globeObjType?: string; __data?: MapMarker };
 
 function indexRing(ring: Ring) {
   const bands = new Map<number, Edge[]>();
@@ -69,7 +70,7 @@ function landParticles() {
     if (onLand) land.push({ lat, lng });
     else if (i % 30 === 0) ocean.push({ lat, lng });
   }
-  return [{ points: land, color: '#b1f0db', size: .38 }, { points: ocean, color: '#193531', size: .035 }];
+  return [{ points: land, color: '#a29499', size: .3 }, { points: ocean, color: '#403339', size: .035 }];
 }
 let cachedParticles: ReturnType<typeof landParticles> | undefined;
 
@@ -82,7 +83,9 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState,
   let state = initial, disposed = false, recovering = false, inViewport = true;
   let globe: GlobeInstance | undefined;
   let previousPlacements: readonly Placement[] = [];
+  let previousEstimates: CanvasState['estimates'];
   let previousSelected: string | null | undefined;
+  const selectionHalos = new WeakMap<MapMarker, Mesh>();
   const raycaster = new Raycaster();
   const pointer = new Vector2();
   let press: { id: number; x: number; y: number } | null = null;
@@ -111,9 +114,11 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState,
     camera.updateMatrixWorld();
     raycaster.setFromCamera(pointer, camera);
     for (const hit of raycaster.intersectObjects(scene.children)) {
-      const object = hit.object as PickObject;
+      let object: PickObject | null = hit.object;
+      while (object && !object.__globeObjType) object = object.parent;
+      if (!object) continue;
       if (object.__globeObjType === 'globe') return; // Surface occludes far-side markers.
-      if (object.__globeObjType !== 'point' || !object.__data) continue;
+      if ((object.__globeObjType !== 'point' && object.__globeObjType !== 'object') || !object.__data) continue;
       const { ids } = object.__data;
       if (ids.length > 1) state.onCluster(ids); else state.onSelect(ids[0]);
       return;
@@ -165,18 +170,37 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState,
   try {
     // Globe.GL attaches scene objects to layer records. Share coordinates only.
     const particles = (cachedParticles ??= landParticles()).map(group => ({ ...group }));
+    const hover = (point: object | null) => {
+      canvas.style.cursor = point ? 'pointer' : '';
+      const marker = point as MapMarker | null;
+      state.onPreview(marker && marker.ids.length === 1 ? marker.ids[0] : null);
+    };
     globe = new Globe(host, { animateIn: false, rendererConfig: { canvas, context, antialias: true, alpha: true } });
     globe
       .width(host.clientWidth).height(host.clientHeight).backgroundColor('#00000000')
-      .showAtmosphere(true).atmosphereColor('#61b5a7').atmosphereAltitude(.075)
+      .showAtmosphere(true).atmosphereColor('#78575e').atmosphereAltitude(.045)
       .particlesData(particles).particlesList('points').particlesColor('color').particlesSize('size')
       .particleAltitude(.002).pointsMerge(false).pointLat('latitude').pointLng('longitude')
-      .pointRadius(.6).pointAltitude(.012).pointResolution(20).pointsTransitionDuration(0)
-      .pointLabel(() => '').onPointHover(point => {
-        canvas.style.cursor = point ? 'pointer' : '';
-        if (!point) { state.onPreview(null); return; }
-        const { ids } = point as Marker;
-        state.onPreview(ids.length > 1 ? null : ids[0]);
+      .pointRadius(point => (point as MapMarker).radius * .14)
+      .pointAltitude(.012).pointResolution(20).pointsTransitionDuration(0)
+      .pointLabel(() => '').onPointHover(hover)
+      .objectLat('latitude').objectLng('longitude').objectAltitude(.012)
+      .objectLabel(() => '').onObjectHover(hover)
+      .objectThreeObject(point => {
+        const marker = point as MapMarker;
+        const radius = marker.radius * .26;
+        const sides = marker.kind === 'history' ? 4 : 24;
+        const outline = new Mesh(new RingGeometry(radius * .65, radius, sides),
+          new MeshBasicMaterial({ color: marker.color, side: DoubleSide }));
+        // Cluster centers stay neutral. Other hollow markers still respond to a tap at the center.
+        const center = new Mesh(new CircleGeometry(radius * .65, sides),
+          new MeshBasicMaterial({ color: '#34252a', visible: marker.kind === 'cluster', side: DoubleSide }));
+        const halo = new Mesh(new RingGeometry(radius * 1.13, radius * 1.29, sides),
+          new MeshBasicMaterial({ color: '#fff2e8', side: DoubleSide }));
+        halo.visible = marker.ids.includes(state.selectedId ?? '');
+        halo.raycast = () => {};
+        selectionHalos.set(marker, halo);
+        return new Group().add(outline, center, halo);
       });
     const scene = globe.scene();
     const beforeRender = scene.onBeforeRender;
@@ -193,7 +217,7 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState,
       beforeRender.apply(scene, args);
     };
     const material = globe.globeMaterial() as MeshPhongMaterial;
-    material.color.set('#071315'); material.emissive.set('#030b0c'); material.shininess = 0;
+    material.color.set('#1f1a1c'); material.emissive.set('#0d0a0b'); material.shininess = 0;
     globe.pointOfView({ lat: 23, lng: 10, altitude: 1.65 }, 0);
     globe.controls().enableZoom = false;
     globe.controls().enablePan = false;
@@ -211,25 +235,30 @@ export function mountGlobe(host: HTMLElement, initial: CanvasState,
     document.addEventListener('visibilitychange', syncAnimation);
     syncAnimation();
   } catch (error) { dispose(); throw error; }
+  let markers: MapMarker[] = [];
   const update = (next: CanvasState) => {
     state = next;
     if (!globe || disposed) return;
-    if (next.placements !== previousPlacements && (next.placements.length !== previousPlacements.length
-      || next.placements.some((p, i) => p !== previousPlacements[i]))) {
-      // Group only coincident navigation anchors; never aggregate source values.
-      const grouped = new Map<string, Marker>();
-      for (const p of next.placements) {
-        if (p.latitude === null || p.longitude === null) continue;
-        const key = `${p.latitude}:${p.longitude}`, marker = grouped.get(key)
-          ?? { latitude: p.latitude, longitude: p.longitude, ids: [] };
-        if (!marker.ids.includes(idOf(p))) marker.ids.push(idOf(p));
-        grouped.set(key, marker);
-      }
-      globe.pointsData([...grouped.values()]);
+    const placementsChanged = next.placements !== previousPlacements && (next.placements.length !== previousPlacements.length
+      || next.placements.some((p, i) => p !== previousPlacements[i]));
+    const markersChanged = placementsChanged || next.estimates !== previousEstimates;
+    if (markersChanged) {
+      markers = mapMarkers(next.placements, next.estimates);
+      globe.pointsData(markers.filter(marker => marker.kind === 'ucdp'));
+      globe.objectsData(markers.filter(marker => marker.kind !== 'ucdp'));
       previousPlacements = next.placements;
+      previousEstimates = next.estimates;
     }
-    if (next.selectedId !== previousSelected) {
-      globe.pointColor(point => (point as Marker).ids.includes(next.selectedId ?? '') ? '#ffe2c9' : '#ff8b77');
+    if (markersChanged || next.selectedId !== previousSelected) {
+      globe.pointColor(point => {
+        const marker = point as MapMarker;
+        return marker.ids.includes(next.selectedId ?? '') ? '#fff2e8' : marker.color;
+      });
+      // Keep the hover targets stable through pin and close, including after a tap.
+      for (const marker of markers) {
+        const halo = selectionHalos.get(marker);
+        if (halo) halo.visible = marker.ids.includes(next.selectedId ?? '');
+      }
       previousSelected = next.selectedId;
     }
     globe.controls().autoRotate = !next.paused;

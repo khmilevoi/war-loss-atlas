@@ -21,7 +21,7 @@ describe('request-isolated server rendering', () => {
       atlasData.set(loadAtlasData());
       urlAtom.set(new URL('http://atlas.local/'));
       await wrap(preloadRoutes());
-      expect(landingRoute.loader.data()?.filters().layer).toBe('history');
+      expect(landingRoute.loader.data()?.filters().layer).toBe('all');
       expect(landingRoute.loader.data()?.selectedId()).toBe('ww2');
       dataRoute.go();
       await wrap(preloadRoutes());
@@ -33,7 +33,7 @@ describe('request-isolated server rendering', () => {
       landingRoute.go();
       await wrap(preloadRoutes());
       expect(urlAtom().pathname).toBe('/');
-      expect(landingRoute.loader.data()?.filters().layer).toBe('history');
+      expect(landingRoute.loader.data()?.filters().layer).toBe('all');
       expect(landingRoute.loader.data()?.selectedId()).toBe('ww2');
     });
   });
@@ -72,9 +72,10 @@ describe('request-isolated server rendering', () => {
     const [home, data, explicit] = await Promise.all([
       renderPage('/'), renderPage('/data'), renderPage('/?layer=ucdp&selected=11345'),
     ]);
-    expect(appHtml(home.html)).toContain('data-layer="history"');
+    expect(appHtml(home.html)).toContain('data-layer="all"');
     expect(appHtml(home.html)).toContain('data-selected-id="ww2"');
     expect(appHtml(home.html)).toContain('Вторая мировая');
+    expect(appHtml(home.html)).toContain('data-conflict-id="11345"');
     expect(appHtml(data.html)).toContain('data-layer="ucdp"');
     expect(appHtml(explicit.html)).toContain('data-layer="ucdp"');
     expect(appHtml(explicit.html)).toContain('data-selected-id="11345"');

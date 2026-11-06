@@ -18,7 +18,7 @@ export const layoutRoute = reatomRoute({
     const pages = outlet();
     return <>
       <header><a href="/">Атлас потерь</a><nav aria-label="Основная навигация">
-        <a href="/">Глобус</a> <a href="/data">Данные и источники</a>
+        <a href="/">Карта конфликтов</a> <a href="/data">Данные и источники</a>
       </nav></header>
       <main>{pages.length ? pages : <section><h1>Страница не найдена</h1><a href="/">Вернуться к обзору</a></section>}</main>
       <footer>Исторические оценки и смерти, связанные с боевыми действиями UCDP, имеют разные определения. Общей суммы нет.</footer>
@@ -28,7 +28,7 @@ export const layoutRoute = reatomRoute({
 
 export const landingRoute = layoutRoute.reatomRoute({
   path: '',
-  async loader() { return createAtlasModel(source(), { defaultLayer: 'history', defaultSelectedId: 'ww2' }); },
+  async loader() { return createAtlasModel(source(), { defaultLayer: 'all', defaultSelectedId: 'ww2' }); },
   render(self) {
     void self.loader();
     const model = self.loader.data();

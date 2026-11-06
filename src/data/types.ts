@@ -53,6 +53,7 @@ export interface AtlasData {
   placementRegistry: PlacementRegistryEntry[]; placements: Placement[]; countryAnchors: CountryAnchor[];
   sources: SourceRecord[]; manifest: DataManifest;
 }
-export type Layer = 'ucdp' | 'history';
+export type Layer = 'all' | 'ucdp' | 'history';
 export type Filters = { layer: Layer; from: number; to: number; query: string; sort: string;
+  atlasPeriod?: true;
   completeness?: 'all' | 'complete' | 'partial' | 'missing' };
