@@ -1,0 +1,2 @@
+id,version,path,provider,source_url,access,bytes,sha256
+ucdp-osv,26.1,data/OneSided_v26_1.csv,Uppsala Conflict Data Program,https://ucdp.uu.se/downloads/nsos/ucdp-onesided-261-csv.zip,CC BY 4.0,188066,603a9f8eb084b025b3097cc797012e0a533abe8b2089c7169e16688cd40a1d5c

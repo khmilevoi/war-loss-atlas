@@ -20,7 +20,14 @@ const dataToolFiles = new Set(['scripts/check-public.ts', 'scripts/import-data.t
 const legacyGitFiles = new Set(['.dockerignore', 'docker-compose.yml', 'index.html',
   'scripts/check-server.mjs', 'scripts/check-dev.ts']);
 const docsFiles = new Set(['docs/verification.md', 'docs/data-audit.md', 'docs/deployment.md']);
+// This reproducible starter includes only UCDP OSV data shared under CC BY 4.0.
+const starterFiles = new Set([
+  'starter/.gitattributes', 'starter/.gitignore', 'starter/README.md', 'starter/annual_by_actor_type.sql',
+  'starter/data/OneSided_v26_1.csv', 'starter/expected/ANNUAL_BY_ACTOR_TYPE.csv',
+  'starter/osv.py', 'starter/sources.csv', 'starter/test_osv.py',
+]);
 const localOnly = new Set(['.git', 'node_modules', '.superpowers', 'coverage', 'playwright-report', 'test-results']);
+const starterLocalDirectories = new Set(['starter/work', 'starter/__pycache__']);
 const appFiles = new Set([
   'ru/index.html', 'en/index.html',
   'src/app/main.tsx', 'src/app/styles.css', 'tests/static.test.ts', 'tests/browser/static.spec.ts',
@@ -83,6 +90,7 @@ function allowedPath(path: string, built = true): boolean {
   // Old release commits kept the application in a nested package.
   const sourcePath = !built && path.startsWith('pixel/') ? path.slice('pixel/'.length) : path;
   if (rootFiles.has(sourcePath) || publicFiles.has(path) || sourceFiles.has(path) || dataToolFiles.has(path) || docsFiles.has(path)) return true;
+  if (starterFiles.has(path)) return true;
   if (appFiles.has(sourcePath) || battleReferenceFiles.has(sourcePath) || generatedReferenceFiles.has(sourcePath)) return true;
   if (!built) return legacyGitFiles.has(path)
     || /^(?:src|server)\/(?:[\w-]+\/)*[\w-]+\.(?:ts|tsx|css)$/.test(path)
@@ -108,6 +116,7 @@ export async function checkPublicFiles(target: string): Promise<string[]> {
     for (const entry of readdirSync(resolve(target, directory), { withFileTypes: true })) {
       const path = directory ? `${directory}/${entry.name}` : entry.name;
       if (!directory && localOnly.has(entry.name)) continue;
+      if (entry.isDirectory() && starterLocalDirectories.has(path)) continue;
       if (entry.isSymbolicLink()) errors.push(`Symlink in release tree: ${path}`);
       else if (entry.isDirectory()) visit(path);
       else errors.push(...inspect(path, readFileSync(resolve(target, path), 'utf8')));
