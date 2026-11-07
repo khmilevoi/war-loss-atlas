@@ -4,7 +4,7 @@ import { loadSceneSprites } from '../resources/sprite-assets';
 import { createBattle } from './battle';
 import { createActionPlayback } from './render-actions';
 import { createCanvasRenderer } from './render-canvas';
-import { createSceneDeployment, type BattleSceneDefinition, type SceneDefinition } from './scene-config';
+import { createActionWaves, createSceneDeployment, type ActionSceneDefinition, type BattleSceneDefinition, type SceneDefinition } from './scene-config';
 
 export interface SceneHandle {
   restart(): void;
@@ -12,18 +12,29 @@ export interface SceneHandle {
   dispose(): void;
 }
 
+export interface SceneWaveStatus {
+  current: number;
+  total: number;
+  plannedUnits: number;
+}
+
 interface ScenePlayback {
   render(reduced: boolean, interpolate?: boolean): void;
   step(milliseconds: number): void;
   finished(): boolean;
   reset(): void;
+  readonly plannedUnits: number;
+  wave(): Omit<SceneWaveStatus, 'plannedUnits'> | null;
   setPaused?(value: boolean): void;
   dispose?(): void;
 }
 
 export async function mountScene(
   host: HTMLElement,
-  { scene, signal, estimate }: { scene: SceneDefinition; signal: AbortSignal; estimate: Estimate },
+  { scene, signal, estimate, calibratedUnits, onWave }: {
+    scene: SceneDefinition; signal: AbortSignal; estimate: Estimate; calibratedUnits: number | null;
+    onWave?: (status: SceneWaveStatus) => void;
+  },
 ): Promise<SceneHandle> {
   const document = host.ownerDocument;
   const view = document.defaultView;
@@ -55,14 +66,24 @@ export async function mountScene(
 
   const audio = createSceneAudio();
   const playback: ScenePlayback = scene.action
-    ? createActionPlayback(canvas, scene.action, audio.cue)
+    ? createSchematicPlayback(scene)
     : createBattlePlayback(scene);
   let disposed = false;
   let frameId: number | undefined;
   let lastFrame: number | undefined;
+  let previousWave: number | undefined;
+
+  function createSchematicPlayback(config: ActionSceneDefinition): ScenePlayback {
+    const waves = createActionWaves(config, calibratedUnits);
+    return {
+      ...createActionPlayback(canvas, config.action, audio.cue, waves),
+      plannedUnits: waves.reduce((sum, [first, second]) => sum + first + second, 0),
+    };
+  }
 
   function createBattlePlayback(config: BattleSceneDefinition): ScenePlayback {
     const renderer = createCanvasRenderer(canvas, effects, flash, assets);
+    const deployment = createSceneDeployment(config, estimate, calibratedUnits);
     const battle = createBattle({
       scenario: config.scenario,
       seed: config.seed,
@@ -70,7 +91,7 @@ export async function mountScene(
       aftermathDuration: config.aftermathDuration,
       biome: config.biome,
       landscape: config.landscape,
-      deployment: createSceneDeployment(config, estimate),
+      deployment,
       reducedMotion: () => motion.matches,
       onCue: audio.cue,
       onVehicles: audio.setVehicles,
@@ -89,6 +110,8 @@ export async function mountScene(
       step: battle.step,
       finished: () => battle.frame().finished,
       reset: battle.reset,
+      plannedUnits: deployment?.reduce((sum, [first, second]) => sum + first.length + second.length, 0) ?? 0,
+      wave: () => battle.frame().wave,
       setPaused: battle.setPaused,
       dispose: battle.dispose,
     };
@@ -104,12 +127,21 @@ export async function mountScene(
     lastFrame = undefined;
   }
 
+  function draw(reduced: boolean, interpolate?: boolean) {
+    playback.render(reduced, interpolate);
+    const wave = playback.wave();
+    if (wave && wave.current !== previousWave) {
+      previousWave = wave.current;
+      onWave?.({ ...wave, plannedUnits: playback.plannedUnits });
+    }
+  }
+
   function loop(timestamp: number) {
     frameId = undefined;
     if (!playable()) return;
     if (lastFrame !== undefined) playback.step(Math.min(100, timestamp - lastFrame));
     lastFrame = timestamp;
-    playback.render(false, true);
+    draw(false, true);
     if (playback.finished()) audio.setActive(false);
     else frameId = view!.requestAnimationFrame(loop);
   }
@@ -128,7 +160,7 @@ export async function mountScene(
       audio.setActive(false);
       playback.setPaused?.(true);
     }
-    playback.render(motion.matches);
+    draw(motion.matches);
     sync();
   }
 

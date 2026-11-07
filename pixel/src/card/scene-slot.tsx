@@ -3,15 +3,16 @@ import { h } from '@reatom/jsx';
 import type { Estimate } from '../catalog';
 import { copy, sceneTerrainCopy, type Locale } from '../i18n/atlas-copy';
 import { PixelIcon } from '../ui/pixel-icon';
-import type { SceneHandle, mountScene } from '../simulation/mount-scene';
+import type { SceneHandle, SceneWaveStatus, mountScene } from '../simulation/mount-scene';
 import type { SceneDefinition } from '../simulation/scene-config';
 
 export type SceneLoader = typeof mountScene;
 
 export class SceneModuleLoadError extends Error {}
 
-export function SceneSlot({ scene, estimate, label, locale, load }: {
-  scene: SceneDefinition; estimate: Estimate; label: string; locale: Locale; load: SceneLoader;
+export function SceneSlot({ scene, estimate, calibratedUnits, label, locale, load }: {
+  scene: SceneDefinition; estimate: Estimate; calibratedUnits: number | null;
+  label: string; locale: Locale; load: SceneLoader;
 }) {
   const text = copy[locale];
   const terrain = scene.terrain;
@@ -19,6 +20,8 @@ export function SceneSlot({ scene, estimate, label, locale, load }: {
   const sound = atom(false, 'sceneSlot.sound');
   const soundPending = atom(false, 'sceneSlot.soundPending');
   const soundFailed = atom(false, 'sceneSlot.soundFailed');
+  const wave = atom<SceneWaveStatus | null>(null, 'sceneSlot.wave');
+  const baseline = estimate.qualifier === 'unknown' || (scene.warId.startsWith('ucdp:') && calibratedUnits === null);
   let host: HTMLElement;
   let request: AbortController | undefined;
   let session: SceneHandle | undefined;
@@ -37,6 +40,7 @@ export function SceneSlot({ scene, estimate, label, locale, load }: {
     sound.set(false);
     soundPending.set(false);
     soundFailed.set(false);
+    wave.set(null);
     requiresReload = false;
     const attempt = new AbortController();
     request = attempt;
@@ -53,9 +57,12 @@ export function SceneSlot({ scene, estimate, label, locale, load }: {
       requiresReload = error instanceof SceneModuleLoadError;
       status.set('error');
     });
+    const onWave = bind((next: SceneWaveStatus) => {
+      if (request === attempt && !attempt.signal.aborted) wave.set(next);
+    });
     void Promise.resolve().then(() => {
       attempt.signal.throwIfAborted();
-      return load(host, { scene, estimate, signal: attempt.signal });
+      return load(host, { scene, estimate, calibratedUnits, onWave, signal: attempt.signal });
     }).then(ready, failed);
   }
 
@@ -105,6 +112,14 @@ export function SceneSlot({ scene, estimate, label, locale, load }: {
         </button>
         {() => soundFailed() ? <p role="status">{text.sceneSoundUnavailable}</p> : null}
       </div>
+      {() => {
+        const current = wave();
+        return current ? <p class="scene-slot__note" role="status">
+          {text.sceneWave.replace('{current}', String(current.current))
+            .replace('{total}', String(current.total)).replace('{units}', String(current.plannedUnits))}
+          {baseline ? ' ' + text.sceneWaveBaseline : ''}
+        </p> : null;
+      }}
       <p class="scene-slot__note">{scene.action ? text.actionSceneNote
         : scene.illustrativeEra ? text.illustrativeSceneNote : text.sceneNote}</p>
       {terrain ? <p class="scene-slot__note">

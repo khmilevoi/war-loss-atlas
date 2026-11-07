@@ -264,8 +264,8 @@ test('keeps every selected sprite visually identical to its PNG source in Chrome
   }
 });
 
-test('starts the WWII overview in a city, settles after combat, and restarts', async ({ page }, testInfo) => {
-  test.setTimeout(45000);
+test('deploys five WWII waves in the same city, settles after combat, and restarts', async ({ page }, testInfo) => {
+  test.setTimeout(60000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/en/');
   const start = new Date('2026-11-07T00:00:00.000Z');
@@ -288,20 +288,23 @@ test('starts the WWII overview in a city, settles after combat, and restarts', a
     return { image: canvas.toDataURL(), road, blood };
   });
   await expect(field).toBeVisible();
+  await expect(dialog.getByText('Wave 1 of 5 · 100 units planned', { exact: true })).toBeVisible();
   const initial = await readField();
   expect(initial.road).toBeGreaterThan(200);
   expect(initial.blood).toBe(0);
   await page.clock.runFor(8000);
+  await expect(dialog.getByText('Wave 2 of 5 · 100 units planned', { exact: true })).toBeVisible();
   const fighting = await readField();
   expect(fighting.image).not.toBe(initial.image);
   await expect(flash).toHaveCSS('opacity', '0');
 
   let settled = false;
   let terminal = fighting;
-  for (let elapsed = 8000; elapsed < 120000; elapsed += 2000) {
+  const finalWave = dialog.getByText('Wave 5 of 5 · 100 units planned', { exact: true });
+  for (let elapsed = 8000; elapsed < 160000; elapsed += 2000) {
     await page.clock.runFor(2000);
     const frame = await readField();
-    if (frame.image === terminal.image && frame.blood > 0) {
+    if (frame.image === terminal.image && frame.blood > 0 && await finalWave.isVisible()) {
       settled = true;
       break;
     }
@@ -314,6 +317,7 @@ test('starts the WWII overview in a city, settles after combat, and restarts', a
   await page.screenshot({ path: testInfo.outputPath('ww2-settled-city.png') });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await dialog.getByRole('button', { name: 'Restart', exact: true }).click();
+  await expect(dialog.getByText('Wave 1 of 5 · 100 units planned', { exact: true })).toBeVisible();
   expect((await readField()).image).toBe(initial.image);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(field).toBeVisible();

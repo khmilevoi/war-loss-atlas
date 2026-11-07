@@ -104,13 +104,12 @@ describe('deterministic battle core', () => {
   });
 
 
-  it('deploys the calibrated urban overview and settles only after combat decides it', () => {
+  it('deploys all five calibrated urban waves and settles only after combat decides it', () => {
     const scene = atlasScenes.find(scene => scene.id === 'ww2-overview')!;
     const estimate = readCatalog().wars.find(war => war.id === scene.warId)!.estimate;
     const deployment = createSceneDeployment(scene, estimate);
-    expect(deployment?.map(side => side.length)).toEqual([10, 6]);
-    expect(createSceneDeployment(scene, { ...estimate, low: 48_000_000 })
-      ?.reduce((total, side) => total + side.length, 0)).toBe(12);
+    expect(deployment).toHaveLength(5);
+    expect(deployment?.map(wave => wave.map(side => side.length))).toEqual(Array.from({ length: 5 }, () => [12, 8]));
     const settled: unknown[] = [];
     const cues: BattleCue[] = [];
     const battle = createBattle({
@@ -121,17 +120,29 @@ describe('deterministic battle core', () => {
     const terrain = battle.frame().terrain;
     expect(battle.frame().biome).toBe('ruins');
     expect(terrain.some(tile => tile.road)).toBe(true);
-    expect(initial.units).toHaveLength(16);
-    expect(initial.units.filter(unit => unit.sprite === 't34')).toHaveLength(2);
-    expect(initial.units.filter(unit => unit.sprite === 'stug')).toHaveLength(1);
+    expect(initial.units).toHaveLength(20);
+    expect(battle.frame().wave).toEqual({ current: 1, total: 5 });
 
-    for (let time = 0; time < 120_000 && !battle.frame().finished; time += 40) battle.step(40);
+    const deployed = new Map(initial.units.map(({ id, sprite }) => [id, sprite]));
+    for (let time = 40; time <= 240_000 && !battle.frame().finished; time += 40) {
+      battle.step(40);
+      const current = battle.frame();
+      if (time === 6960) expect(current.wave?.current).toBe(1);
+      if (time === 7000) expect(current.wave?.current).toBe(2);
+      for (const { id, sprite } of current.units) deployed.set(id, sprite);
+    }
     const frame = battle.frame();
     const terminal = battle.snapshot();
     expect(frame.finished).toBe(true);
+    expect(frame.wave).toEqual({ current: 5, total: 5 });
     expect(frame.terrain).toBe(terrain);
     expect(new Set(terminal.units.map(unit => unit.team))).toEqual(new Set([0]));
-    expect(terminal.units.every(unit => initial.units.some(start => start.id === unit.id))).toBe(true);
+    expect(deployed.size).toBe(100);
+    expect(terminal.reinforcements).toBe(80);
+    expect([...deployed.values()].filter(sprite => sprite === 't34')).toHaveLength(12);
+    expect([...deployed.values()].filter(sprite => sprite === 'soviet-sniper')).toHaveLength(48);
+    expect([...deployed.values()].filter(sprite => sprite === 'stug')).toHaveLength(8);
+    expect([...deployed.values()].filter(sprite => sprite === 'german-1943')).toHaveLength(32);
     expect(settled.length).toBeGreaterThan(0);
     expect(frame.whiteout).toBe(0);
     expect(cues).not.toContain('nuke');
@@ -139,7 +150,44 @@ describe('deterministic battle core', () => {
     expect(battle.snapshot()).toEqual(terminal);
     battle.reset();
     expect(battle.snapshot()).toEqual(initial);
+    expect(battle.frame().wave).toEqual({ current: 1, total: 5 });
+  }, 15_000);
+
+  it('waits for fighting units in future waves before deciding the battle', () => {
+    const battle = createBattle({
+      scenario: 'eastern-front',
+      deployment: [
+        [[{ sprite: 't34' }], []],
+        [[], [{ sprite: 'stug' }]],
+      ],
+    });
+    battle.step(6960);
+    expect(battle.frame().finished).toBe(false);
+    expect(battle.snapshot().units.map(unit => unit.team)).toEqual([0]);
+    battle.step(40);
+    expect(battle.frame().finished).toBe(false);
+    expect(battle.snapshot().units.map(unit => unit.team)).toEqual([0, 1]);
   });
+
+  it('retries crowded arrivals until every planned figure is placed', () => {
+    const wave = [
+      Array.from({ length: 10 }, () => ({ sprite: 't34' })),
+      Array.from({ length: 10 }, () => ({ sprite: 'stug' })),
+    ] as const;
+    const battle = createBattle({
+      scenario: 'tank-battle', biome: 'ruins', seed: 1943, width: 160, height: 120,
+      deployment: [wave, wave, wave],
+    });
+    expect(battle.snapshot().units.length).toBeLessThan(20);
+    const deployed = new Set(battle.frame().units.map(unit => unit.id));
+    for (let time = 40; time <= 240_000 && deployed.size < 60; time += 40) {
+      battle.step(40);
+      for (const { id } of battle.frame().units) deployed.add(id);
+    }
+    expect(battle.frame().wave).toEqual({ current: 3, total: 3 });
+    expect(deployed.size).toBe(60);
+    expect(battle.snapshot().reinforcements).toBe(40);
+  }, 15_000);
 
   it.each(['ota-delta', 'urakami-valley'] as const)(
     'preserves %s topography before and after the episode effect without ground craters',

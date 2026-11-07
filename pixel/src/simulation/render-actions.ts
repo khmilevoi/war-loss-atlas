@@ -9,28 +9,59 @@ interface Track {
   arrival: number;
 }
 
-const DURATION = 5500;
-const AIR_TRACKS: readonly Track[] = [
+type Wave = readonly [number, number];
+type Side = 0 | 1;
+
+const WAVE_DURATION = 5500;
+const SIDES = [0, 1] as const;
+const AIR_TRACKS: readonly [Track, Track] = [
   { start: [70, 75], target: [320, 99], launch: 500, arrival: 1900 },
   { start: [320, 149], target: [72, 157], launch: 1900, arrival: 3350 },
 ];
-const SEA_TRACKS: readonly Track[] = [
+const SEA_TRACKS: readonly [Track, Track] = [
   { start: [321, 108], target: [153, 103], launch: 650, arrival: 2300 },
   { start: [115, 149], target: [329, 170], launch: 2150, arrival: 3900 },
 ];
 const COAST = [278, 269, 284, 301, 309, 290, 273, 284];
 const RIDGE = [107, 112, 123, 128, 115, 104, 109, 128];
-const PATROL_COLORS = [[1, '#d0b48a'], [-1, '#a3b5ba']] as const;
+const SIDE_COLORS = [
+  { figure: '#d0b48a', marker: '#ead59d', impact: '#c9a069' },
+  { figure: '#a3b5ba', marker: '#c6d7dd', impact: '#a9b9bf' },
+] as const;
+
+function formationTracks(base: Track, count: number): Track[] {
+  const lanes = Math.min(5, count);
+  const columns = Math.ceil(count / 5);
+  return Array.from({ length: count }, (_, index) => {
+    const column = Math.floor(index / lanes);
+    const x = (column - (columns - 1) / 2) * 12;
+    const y = (index % lanes - (lanes - 1) / 2) * 9;
+    const delay = column * 180;
+    return {
+      start: [base.start[0] + x, base.start[1] + y],
+      target: [base.target[0] + x, base.target[1] + y],
+      launch: base.launch + delay,
+      arrival: base.arrival + delay,
+    };
+  });
+}
 
 export function createActionPlayback(
   canvas: HTMLCanvasElement,
   action: ActionSceneDefinition['action'],
   cue: (kind: BattleCue) => void,
+  waves: readonly Wave[],
 ) {
   const context = canvas.getContext('2d');
   if (!context) throw new Error('Canvas 2D is unavailable');
   const ctx = context;
-  const tracks = action === 'air-strikes' ? AIR_TRACKS : action === 'maritime' ? SEA_TRACKS : [];
+  const baseTracks = action === 'air-strikes' ? AIR_TRACKS : action === 'maritime' ? SEA_TRACKS : null;
+  const tracks = waves.map(wave => baseTracks && SIDES.map(side => formationTracks(baseTracks[side], wave[side])));
+  const cueTimes = baseTracks ? waves.flatMap((wave, index) => SIDES
+    .filter(side => wave[side] > 0)
+    .map(side => index * WAVE_DURATION + baseTracks[side].arrival)) : [];
+  const duration = waves.length * WAVE_DURATION;
+  const current = () => Math.min(waves.length - 1, Math.floor(time / WAVE_DURATION));
   let time = 0;
 
   function block(color: string, x: number, y: number, width: number, height: number) {
@@ -38,9 +69,9 @@ export function createActionPlayback(
     ctx.fillRect(Math.round(x), Math.round(y), width, height);
   }
 
-  function track({ start, target, launch, arrival }: Track, still: boolean) {
-    if (!still && time < launch) return;
-    const progress = still ? 1 : Math.min(1, (time - launch) / (arrival - launch));
+  function track({ start, target, launch, arrival }: Track, side: Side, elapsed: number, still: boolean) {
+    if (!still && elapsed < launch) return;
+    const progress = still ? 1 : Math.min(1, (elapsed - launch) / (arrival - launch));
     const [x, y] = start;
     const dx = target[0] - x;
     const dy = target[1] - y;
@@ -49,14 +80,14 @@ export function createActionPlayback(
       const p = dot / 25;
       block('#b8aa81', x + dx * p, y + dy * p + arc(p), 2, 2);
     }
-    if (!still && time < arrival) {
-      block('#ead59d', x + dx * progress - 2, y + dy * progress + arc(progress) - 1, 5, 3);
+    if (!still && elapsed < arrival) {
+      block(SIDE_COLORS[side].marker, x + dx * progress - 2, y + dy * progress + arc(progress) - 1, 5, 3);
     }
-    const impact = time - arrival;
+    const impact = elapsed - arrival;
     if (still || (impact >= 0 && impact < 700)) {
       const radius = still ? 5 : 3 + Math.floor(impact / 115);
       block('#805643', target[0] - radius, target[1] - radius, radius * 2, radius * 2);
-      block('#c9a069', target[0] - 2, target[1] - 2, 4, 4);
+      block(SIDE_COLORS[side].impact, target[0] - 2, target[1] - 2, 4, 4);
     }
   }
 
@@ -97,7 +128,7 @@ export function createActionPlayback(
     ship(115, 149);
   }
 
-  function patrolField(still: boolean) {
+  function patrolField(wave: Wave | undefined, elapsed: number, still: boolean) {
     block('#565651', 0, 0, canvas.width, canvas.height);
     for (let row = 0; row < RIDGE.length; row++) {
       const rim = RIDGE[row];
@@ -107,34 +138,44 @@ export function createActionPlayback(
       block('#66685c', canvas.width - rim - 20, row * 30 + 6, 13, 3);
     }
     block('#74705d', 88, 103, 224, 34);
-    const approach = still ? 1 : Math.min(1, time / 2550);
-    const stepBack = still ? 0 : Math.min(6, Math.max(0, (time - 3300) / 100));
-    for (const [side, color] of PATROL_COLORS) {
-      for (let person = 0; person < 3; person++) {
-        const x = 200 - side * (105 - approach * 102 + person * 7 + stepBack);
-        const y = 116 + (person - 1) * 8;
+    if (!wave) return;
+    const approach = still ? 1 : Math.min(1, elapsed / 2550);
+    const stepBack = still ? 0 : Math.min(6, Math.max(0, (elapsed - 3300) / 100));
+    for (const side of SIDES) {
+      const rows = Math.min(wave[side], 4);
+      const direction = side === 0 ? 1 : -1;
+      for (let person = 0; person < wave[side]; person++) {
+        const x = 200 - direction * (105 - approach * 100 + Math.floor(person / rows) * 9 + stepBack);
+        const y = 120 + (person % rows - (rows - 1) / 2) * 8;
         block('#3b3d36', x - 3, y - 2, 7, 6);
-        block(color, x - 2, y - 2, 4, 4);
+        block(SIDE_COLORS[side].figure, x - 2, y - 2, 4, 4);
       }
     }
   }
 
   return {
     render(reduced: boolean) {
+      const index = current();
+      const elapsed = time - index * WAVE_DURATION;
       if (action === 'patrol-contact') {
-        patrolField(reduced);
+        patrolField(waves[index], elapsed, reduced);
         return;
       }
       if (action === 'maritime') seaField();
       else airField();
-      for (const flight of tracks) track(flight, reduced);
+      const active = tracks[index];
+      if (!active) return;
+      for (const side of SIDES) {
+        for (const flight of active[side]) track(flight, side, elapsed, reduced);
+      }
     },
     step(milliseconds: number) {
       const before = time;
-      time = Math.min(DURATION, time + milliseconds);
-      for (const { arrival } of tracks) if (before < arrival && time >= arrival) cue('explosion');
+      time = Math.min(duration, time + milliseconds);
+      for (const at of cueTimes) if (before < at && time >= at) cue('explosion');
     },
-    finished: () => time >= DURATION,
+    finished: () => time >= duration,
+    wave: () => waves.length ? { current: current() + 1, total: waves.length } : null,
     reset() { time = 0; },
   };
 }

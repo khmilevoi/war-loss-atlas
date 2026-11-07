@@ -2,7 +2,9 @@ import type { Estimate } from '../catalog';
 
 export type CalibrationEstimate = Pick<Estimate, 'metric' | 'comparisonKey' | 'qualifier' | 'value'>;
 
-const MIN_POSITIVE_PLAN = 16;
+export const MIN_ILLUSTRATIVE_UNITS = 10;
+export const MAX_ILLUSTRATIVE_UNITS = 100;
+const MAX_UNITS_PER_WAVE = 20;
 
 function comparableValue(estimate: CalibrationEstimate) {
   const { value, metric, comparisonKey, qualifier } = estimate;
@@ -11,7 +13,7 @@ function comparableValue(estimate: CalibrationEstimate) {
   return { key: JSON.stringify([metric, comparisonKey]), value };
 }
 
-/** Rank distinct recorded values only inside the same verified metric and scope group. */
+/** Scale recorded values logarithmically inside the same verified metric and scope group. */
 export function createUnitCalibration(estimates: readonly CalibrationEstimate[]) {
   const groups = new Map<string, Set<number>>();
   for (const estimate of estimates) {
@@ -24,9 +26,17 @@ export function createUnitCalibration(estimates: readonly CalibrationEstimate[])
 
   const plans = new Map<string, Map<number, number>>();
   for (const [key, values] of groups) {
-    let next = MIN_POSITIVE_PLAN;
-    const ordered = [...values].sort((left, right) => left - right);
-    plans.set(key, new Map(ordered.map(value => [value, value === 0 ? 0 : next++])));
+    const positive = [...values].filter(value => value > 0);
+    const minimum = Math.min(...positive);
+    const maximum = Math.max(...positive);
+    const logRange = Math.log(maximum / minimum);
+    const plan = new Map(positive.map(value => {
+      const progress = minimum === maximum ? 0 : Math.log(value / minimum) / logRange;
+      const units = MIN_ILLUSTRATIVE_UNITS + Math.round(progress * (MAX_ILLUSTRATIVE_UNITS - MIN_ILLUSTRATIVE_UNITS));
+      return [value, units];
+    }));
+    if (values.has(0)) plan.set(0, 0);
+    plans.set(key, plan);
   }
 
   return (estimate: CalibrationEstimate): number | null => {
@@ -49,4 +59,23 @@ export function allocateUnitPlan(total: number, shares: readonly number[]): numb
     .sort((left, right) => right.fraction - left.fraction || left.index - right.index);
   for (const { index } of ordered.slice(0, remainder)) allocation[index]++;
   return allocation;
+}
+
+/** Balance wave sizes and both sides while preserving the total and cumulative side shares. */
+export function allocateWaves(
+  total: number, preferredWaveCount: number, sideShares: readonly [number, number],
+): readonly (readonly [number, number])[] {
+  if (!Number.isSafeInteger(total) || total < 0 || total > MAX_ILLUSTRATIVE_UNITS
+    || !Number.isSafeInteger(preferredWaveCount) || preferredWaveCount < 1) {
+    throw new RangeError('Invalid deployment total or wave count');
+  }
+  if (total === 0) return [];
+  const waveCount = Math.min(total, Math.max(
+    Math.ceil(total / MAX_UNITS_PER_WAVE),
+    Math.ceil(preferredWaveCount * total / MAX_ILLUSTRATIVE_UNITS),
+  ));
+  const waveSizes = allocateUnitPlan(total, Array<number>(waveCount).fill(1));
+  const [firstTotal] = allocateUnitPlan(total, sideShares);
+  const firstSide = allocateUnitPlan(firstTotal, waveSizes);
+  return waveSizes.map((size, index) => [firstSide[index], size - firstSide[index]]);
 }

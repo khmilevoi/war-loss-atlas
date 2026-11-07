@@ -9,6 +9,7 @@ import { SceneModuleLoadError, type SceneLoader } from '../card/scene-slot';
 import { readCardContent } from '../content';
 import { copy, type Locale } from '../i18n/atlas-copy';
 import { WorldMap, type MapViewState } from '../map/world-map';
+import { createUnitCalibration } from '../simulation/unit-calibration';
 import { PixelIcon } from '../ui/pixel-icon';
 
 const loadWarScene: SceneLoader = async (host, options) => {
@@ -93,6 +94,7 @@ function createAtlasView(
 ) {
   const text = copy[locale];
   const catalog = readCatalog([...ww1Episodes, ...ww2Episodes]);
+  const calibrateUnits = createUnitCalibration(catalog.wars.map(war => war.estimate));
   const placements = selectMapPlacements(catalog).map(placement => {
     const ref = placement.episodeId === null ? placement.warId
       : { warId: placement.warId, episodeId: placement.episodeId };
@@ -153,6 +155,7 @@ function createAtlasView(
 
     const episodes = catalog.episodes.filter(episode => episode.warId === war.id);
     unmountCard = mount(dialog, <WarDialog war={war} episodes={episodes} locale={locale} onClose={closeDialog}
+      calibratedUnits={calibrateUnits(war.estimate)}
       loadScene={loadWarScene} initialEpisodeId={params?.episode} onEpisodeChange={selectEpisode} />).unmount;
     selection.set({ war, origin, hasMapEntry: storedView !== undefined });
     if (!dialog.open) {

@@ -79,8 +79,9 @@ function EpisodeBrief({ episode, locale }: { episode: Episode; locale: Locale })
   );
 }
 
-export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEpisodeId, onEpisodeChange }: {
+export function WarDialog({ war, episodes, locale, onClose, loadScene, calibratedUnits, initialEpisodeId, onEpisodeChange }: {
   war: War; episodes: readonly Episode[]; locale: Locale; onClose: () => void; loadScene?: SceneLoader;
+  calibratedUnits: number | null;
   initialEpisodeId?: string;
   onEpisodeChange: (episodeId: string | null) => void;
 }) {
@@ -107,7 +108,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEp
       : terrain && 'title' in terrain ? terrain.title
         : episode ? readCardContent(episode, locale)?.title ?? episode.names[locale] : text.overview;
     return <SceneSlot scene={selected} estimate={episode?.estimate ?? war.estimate}
-      label={label} locale={locale} load={loadScene} />;
+      calibratedUnits={episode ? null : calibratedUnits} label={label} locale={locale} load={loadScene} />;
   }
 
   return (

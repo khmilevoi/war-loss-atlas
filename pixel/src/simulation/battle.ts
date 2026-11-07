@@ -4,8 +4,16 @@ import { createLandscape, type LandscapeKind } from './landscape';
 export type { BattleScenarioId } from './roster';
 
 export type BattleCue = 'rifle' | 'cannon' | 'explosion' | 'nuke';
-export type BattleDeployment = readonly [readonly string[], readonly string[]];
+export type BattleDeploymentUnit = { readonly sprite: string; readonly support?: boolean };
+export type BattleWave = readonly [readonly BattleDeploymentUnit[], readonly BattleDeploymentUnit[]];
+export type BattleDeployment = readonly BattleWave[];
 type Team = 0 | 1;
+type PendingDeployment = BattleDeploymentUnit & {
+  team: Team;
+  lane: number;
+  fromEdge: boolean;
+  reinforcement: boolean;
+};
 type UnitState = 'advance' | 'patrol' | 'acquire' | 'attack' | 'retreat' | 'cover' | 'support';
 type WreckKind = 'tank' | 'artillery' | 'helicopter' | 'carrier' | 'horse';
 type TerrainObstacle = [left: number, top: number, right: number, bottom: number, tree?: boolean];
@@ -210,6 +218,8 @@ interface BattleOptions {
 const TEAMS = [0, 1] as const;
 
 const TICK_MS = 40;
+const WAVE_INTERVAL_MS = 7000;
+const DEPLOYMENT_RETRY_MS = 400;
 const TRACKED_TURN_RATE = 1.15;
 const TURN_DEADBAND = .012;
 const FLASH_START = 1.44;
@@ -312,6 +322,8 @@ export function createBattle(options: BattleOptions) {
   let craters: Crater[] = [];
   let biomeOverride = options.biome === 'auto' ? undefined : options.biome;
   let time: number, accumulator: number, nextId: number, reinforced: number, reinforcementsAt: number;
+  let waveIndex: number, waveOrigin: number, nextDeploymentAttemptAt: number;
+  let pendingDeployment: PendingDeployment[];
   let paused = true, finished = false, eliminatedAt: [number | null, number | null];
   let nuke: NuclearTransition | null, nukeCount: number, audibleVehicles: number | undefined;
   const spawnedByTeam = [0, 0];
@@ -747,11 +759,12 @@ export function createBattle(options: BattleOptions) {
 
   function deployForces(fromEdge = false) {
     eliminatedAt = [null, null];
-    const { deployment } = options;
-    if (deployment) {
-      for (const team of TEAMS) {
-        deployment[team].forEach((sprite, index) => spawn(team, sprite, false, fromEdge, index % 3));
-      }
+    if (options.deployment) {
+      waveIndex = 0;
+      waveOrigin = Math.round(time * 1000);
+      pendingDeployment = [];
+      queueWave(fromEdge);
+      placePendingDeployment(waveOrigin);
       return;
     }
     for (let lane = 0; lane < 3; lane++) {
@@ -766,6 +779,27 @@ export function createBattle(options: BattleOptions) {
       side.vehicles.forEach((id, index) => spawn(team, id, false, fromEdge, (team + index + 1) % 3));
       side.support.forEach(id => spawn(team, id, true, fromEdge, team));
     }
+  }
+
+  function queueWave(fromEdge: boolean) {
+    const wave = options.deployment?.[waveIndex];
+    if (!wave) return;
+    const reinforcement = waveIndex > 0;
+    waveIndex++;
+    for (const team of TEAMS) {
+      wave[team].forEach((unit, index) => pendingDeployment.push({
+        ...unit, team, lane: index % 3, fromEdge, reinforcement,
+      }));
+    }
+  }
+
+  function placePendingDeployment(timeMs: number) {
+    pendingDeployment = pendingDeployment.filter(({ sprite, support, team, lane, fromEdge, reinforcement }) => {
+      if (!spawn(team, sprite, support, fromEdge, lane)) return true;
+      if (reinforcement) reinforced++;
+      return false;
+    });
+    nextDeploymentAttemptAt = timeMs + DEPLOYMENT_RETRY_MS;
   }
 
   function reinforceTeam(team: Team, lane?: number) {
@@ -1270,6 +1304,12 @@ export function createBattle(options: BattleOptions) {
       particle.dy *= .95;
       return (particle.age += dt) < particle.life;
     });
+    if (options.deployment) {
+      const timeMs = Math.round(time * 1000);
+      const nextWaveDue = waveIndex < options.deployment.length && timeMs >= waveOrigin + waveIndex * WAVE_INTERVAL_MS;
+      if (nextWaveDue) queueWave(true);
+      if (pendingDeployment.length && (nextWaveDue || timeMs >= nextDeploymentAttemptAt)) placePendingDeployment(timeMs);
+    }
     const activeByTeam = [0, 0], armorByTeam = [0, 0];
     for (const unit of units) {
       if (unit.support || unit.hp <= 0 || unit.definition.kind === 'carrier') continue;
@@ -1277,7 +1317,8 @@ export function createBattle(options: BattleOptions) {
       if (unit.vehicle) armorByTeam[unit.team]++;
     }
     if (options.deployment) {
-      if (activeByTeam.includes(0) && !shots.length && !blasts.length && !dust.length && !activeBlood.length
+      if (waveIndex === options.deployment.length && !pendingDeployment.length && activeByTeam.includes(0)
+        && !shots.length && !blasts.length && !dust.length && !activeBlood.length
         && !wrecks.some(wreck => time - wreck.at < 4 * wreck.profile.scale)) {
         finished = true;
         setPaused(true);
@@ -1379,6 +1420,7 @@ export function createBattle(options: BattleOptions) {
     return {
       width: W, height: H, scenario: era, reducedMotion: reducedMotion(), time, biome, terrain, units, shots, blasts, dust,
       activeBlood, wrecks, nuke, craters, landscape,
+      wave: options.deployment?.length ? { current: waveIndex, total: options.deployment.length } : null,
       interpolation: reducedMotion() ? 1 : accumulator / TICK_MS, whiteout: whiteoutOpacity(), finished,
     };
   }
