@@ -2,6 +2,7 @@ import { action, atom, bind, computed, reatomRoute, urlAtom, withLocalStorage } 
 import { h, mount } from '@reatom/jsx';
 import { createInterfaceAudio, type InterfaceCue } from '../audio/interface-audio';
 import { readCatalog, selectMapPlacements, type MapPlacement, type War } from '../catalog';
+import { ww1Episodes } from '../catalog/ww1-episodes';
 import { ww2Episodes } from '../catalog/ww2-episodes';
 import { WarDialog } from '../card/war-dialog';
 import { SceneModuleLoadError, type SceneLoader } from '../card/scene-slot';
@@ -91,7 +92,7 @@ function createAtlasView(
   playCue: (cue: InterfaceCue) => void,
 ) {
   const text = copy[locale];
-  const catalog = readCatalog(ww2Episodes);
+  const catalog = readCatalog([...ww1Episodes, ...ww2Episodes]);
   const placements = selectMapPlacements(catalog).map(placement => {
     const ref = placement.episodeId === null ? placement.warId
       : { warId: placement.warId, episodeId: placement.episodeId };

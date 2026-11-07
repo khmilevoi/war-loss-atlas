@@ -1,8 +1,9 @@
 import landText from '../../../public/geo/ne_110m_land.geojson?raw';
 import { compareEstimates, type Estimate, type MapPlacement } from '../catalog';
 
-export const mapWidth = 250;
-export const mapHeight = 126;
+export const mapWidth = 186;
+export const mapHeight = 94;
+const gridScale = mapWidth / 250;
 
 type Point = [longitude: number, latitude: number];
 type Polygon = Point[][];
@@ -17,7 +18,7 @@ export function project(longitude: number, latitude: number) {
   const x = 2 * Math.sqrt(3) * longitude * Math.PI / 180 * Math.cos(theta)
     / (3 * (a1 + 3 * a2 * t2 + t6 * (7 * a3 + 9 * a4 * t2)));
   const y = theta * (a1 + a2 * t2 + t6 * (a3 + a4 * t2));
-  return { x: mapWidth / 2 + 44.5 * x, y: 72.5 - 54 * y };
+  return { x: (125 + 44.5 * x) * gridScale, y: (72.5 - 54 * y) * gridScale };
 }
 
 export interface Marker {
@@ -39,7 +40,12 @@ export function groupMarkers(placements: readonly MapPlacement[]): Marker[] {
   for (const placement of placements) {
     const { latitude, longitude } = placement.anchor;
     const key = `${latitude}:${longitude}`;
-    const marker = grouped.get(key) ?? { key, ...project(longitude, latitude), placements: [], estimate: null };
+    let marker = grouped.get(key);
+    if (!marker) {
+      const { x, y } = project(longitude, latitude);
+      marker = { key, x: Math.floor(x) + 0.5, y: Math.floor(y) + 0.5, placements: [], estimate: null };
+      grouped.set(key, marker);
+    }
     marker.placements.push(placement);
     const estimate = placement.estimate;
     if (comparisonKey !== null && estimate.comparisonKey === comparisonKey
@@ -48,7 +54,6 @@ export function groupMarkers(placements: readonly MapPlacement[]): Marker[] {
       && (marker.estimate === null || compareEstimates(estimate, marker.estimate) === 1)) {
       marker.estimate = estimate;
     }
-    grouped.set(key, marker);
   }
   return Array.from(grouped.values()).sort((left, right) => left.x - right.x || left.y - right.y);
 }
@@ -90,20 +95,21 @@ export function drawLand(canvas: HTMLCanvasElement, markers: readonly Marker[]):
   const image = context.getImageData(0, 0, mapWidth, mapHeight);
   const shades = new Uint8Array(mapWidth * mapHeight);
   const strengths = new Uint8Array(mapWidth * mapHeight);
+  const haloRadius = Math.ceil(6 * gridScale);
   for (const marker of markers) {
     const value = marker.estimate?.value;
     if (value == null) continue;
     const rank = scaleRank(value);
     const cx = Math.floor(marker.x);
     const cy = Math.floor(marker.y);
-    for (let dy = -6; dy <= 6; dy++) {
-      for (let dx = -6; dx <= 6; dx++) {
+    for (let dy = -haloRadius; dy <= haloRadius; dy++) {
+      for (let dx = -haloRadius; dx <= haloRadius; dx++) {
         const x = cx + dx;
         const y = cy + dy;
         if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) continue;
-        const distance = dx * dx + dy * dy;
+        const distance = (dx * dx + dy * dy) / (gridScale * gridScale);
         if (distance > 36) continue;
-        const strength = distance <= 2 ? 4 : distance <= 9 ? 3 : distance <= 20 ? 2 : 1;
+        const strength = distance === 0 ? 4 : distance <= 9 ? 3 : distance <= 20 ? 2 : 1;
         const index = y * mapWidth + x;
         if (strength < strengths[index] || (strength === strengths[index] && rank < shades[index])) continue;
         strengths[index] = strength;

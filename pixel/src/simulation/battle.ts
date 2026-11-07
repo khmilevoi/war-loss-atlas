@@ -4,6 +4,7 @@ import { createLandscape, type LandscapeKind } from './landscape';
 export type { BattleScenarioId } from './roster';
 
 export type BattleCue = 'rifle' | 'cannon' | 'explosion' | 'nuke';
+export type BattleDeployment = readonly [readonly string[], readonly string[]];
 type Team = 0 | 1;
 type UnitState = 'advance' | 'patrol' | 'acquire' | 'attack' | 'retreat' | 'cover' | 'support';
 type WreckKind = 'tank' | 'artillery' | 'helicopter' | 'carrier' | 'horse';
@@ -197,7 +198,7 @@ interface BattleOptions {
   reducedMotion?: boolean | (() => boolean);
   aftermathAt?: number;
   aftermathDuration?: number;
-  finaleAt?: number;
+  deployment?: BattleDeployment;
   landscape?: LandscapeKind;
   unitBudget?: readonly [number, number];
   onCue?: (cue: BattleCue) => void;
@@ -230,6 +231,7 @@ const terrainFootprints: Record<BattleBiome, Record<number, TerrainObstacle[]>> 
     3: [[7, 4, 22, 16], [4, 18, 13, 26], [19, 18, 29, 29, true]] },
   ruins: { 1: [[5, 4, 27, 28]], 3: [[5, 5, 27, 20], [4, 19, 15, 28]] },
   village: { 1: [[4, 6, 29, 25]], 3: [[6, 6, 26, 28]] },
+  generic: { 1: [], 3: [[11, 11, 22, 21]] },
 };
 const BIOMES: readonly BattleBiome[] = ['desert', 'snow', 'ruins', 'village'];
 const MAX_REINFORCEMENTS = 8;
@@ -443,7 +445,8 @@ export function createBattle(options: BattleOptions) {
     covers = [];
     obstacles = terrain.map(({ x, y, variant }) => {
       if (!isObjectTile(variant)) return [];
-      const shapes: TerrainObstacle[] = options.footprintMode === 'fallback' ? [[7, 8, 24, 24]] : terrainFootprints[biome][variant];
+      const shapes: TerrainObstacle[] = options.footprintMode === 'fallback' && biome !== 'generic'
+        ? [[7, 8, 24, 24]] : terrainFootprints[biome][variant];
       if (shapes.length && x > W * .16 && x + TILE_SIZE < W * .84 && y + TILE_SIZE < H) {
         covers.push({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 });
       }
@@ -452,7 +455,7 @@ export function createBattle(options: BattleOptions) {
   }
 
   function setBiome(value: BattleBiome | 'auto') {
-    if (nuke || (value !== 'auto' && !BIOMES.includes(value))) return false;
+    if (nuke || (value !== 'auto' && value !== 'generic' && !BIOMES.includes(value))) return false;
     biomeOverride = value === 'auto' ? undefined : value;
     const nextBiome = biomeOverride ?? period.biome;
     if (nextBiome === biome) return true;
@@ -744,6 +747,13 @@ export function createBattle(options: BattleOptions) {
 
   function deployForces(fromEdge = false) {
     eliminatedAt = [null, null];
+    const { deployment } = options;
+    if (deployment) {
+      for (const team of TEAMS) {
+        deployment[team].forEach((sprite, index) => spawn(team, sprite, false, fromEdge, index % 3));
+      }
+      return;
+    }
     for (let lane = 0; lane < 3; lane++) {
       if (period.armoredBattle && lane === 1) continue;
       for (const team of TEAMS) {
@@ -1191,39 +1201,6 @@ export function createBattle(options: BattleOptions) {
     return wreck;
   }
 
-  function finishOverview() {
-    buildTerrain('ruins', true);
-    const randomFinale = randomFrom(seed + ':overview-finale');
-    const columns = 10, rows = 6;
-    craters = Array.from({ length: columns * rows }, (_, index) => ({
-      x: Math.round(W * (index % columns + .24 + randomFinale() * .52) / columns),
-      y: Math.round(H * (Math.floor(index / columns) + .24 + randomFinale() * .52) / rows),
-      radius: 5 + Math.floor(randomFinale() * 10),
-      texture: Math.floor(randomFinale() * 7),
-    }));
-    for (const stain of activeBlood) options.onSettledBlood?.(stain);
-    activeBlood = [];
-    for (const [index, crater] of craters.entries()) {
-      const { x, y } = crater;
-      const angle = randomFinale() * Math.PI * 2;
-      if (index % 3 !== 0) {
-        options.onSettledBlood?.(makeBloodStain(
-          { id: -index - 1, x: x + Math.round(Math.cos(angle) * 9), y: y + Math.round(Math.sin(angle) * 9), vehicle: false },
-          { x, y, endX: x + Math.cos(angle), endY: y + Math.sin(angle) },
-          true,
-        ));
-      }
-      if (index % 7 === 4) {
-        const sprite = index % 2 === 0 ? 't34' : 'stug';
-        addEquipmentWreck({ id: -index - 1, x, y, angle, sprite, definition: roster[sprite], pose: { angle } }, 'tank');
-      }
-    }
-    for (const wreck of wrecks) wreck.at = Math.min(wreck.at, time - 8);
-    units = []; shots = []; blasts = []; dust = [];
-    finished = true;
-    setPaused(true);
-  }
-
   function tick() {
     const dt = TICK_MS / 1000;
     time += dt;
@@ -1253,6 +1230,10 @@ export function createBattle(options: BattleOptions) {
       const target = shot.target;
       const impact = { x: shot.endX, y: shot.endY };
       const landed = shot.hit && target.hp > 0 && distance(target, impact) < (shot.shell ? 12 : 7);
+      if (options.deployment && shot.shell && !landed && craters.length < 40
+        && !craters.some(crater => distance(crater, impact) < 9)) {
+        craters.push({ ...impact, radius: 5, texture: craters.length % 7 });
+      }
       if (landed) {
         target.hp -= shot.damage;
         target.suppression += shot.shell ? .8 : .48;
@@ -1290,6 +1271,15 @@ export function createBattle(options: BattleOptions) {
       if (unit.support || unit.hp <= 0) continue;
       activeByTeam[unit.team]++;
       if (unit.vehicle) armorByTeam[unit.team]++;
+    }
+    if (options.deployment) {
+      if (activeByTeam.includes(0) && !shots.length && !blasts.length && !dust.length && !activeBlood.length
+        && !wrecks.some(wreck => time - wreck.at < 4 * wreck.profile.scale)) {
+        finished = true;
+        setPaused(true);
+      }
+      syncVehicleSound();
+      return;
     }
     const reservesAvailable = () => unitBudget
       ? TEAMS.some(team => spawnedByTeam[team] < unitBudget[team])
@@ -1360,9 +1350,6 @@ export function createBattle(options: BattleOptions) {
     while (!finished && accumulator >= TICK_MS) {
       tick();
       accumulator -= TICK_MS;
-      if (!nuke && !finished && options.finaleAt !== undefined && Math.round(time * 1000) >= options.finaleAt) {
-        finishOverview();
-      }
       if (!nuke && !finished && options.aftermathAt !== undefined && Math.round(time * 1000) >= options.aftermathAt) {
         triggerNuke('aftermath');
       }

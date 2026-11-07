@@ -2,9 +2,9 @@ import { atom, computed } from '@reatom/core';
 import { h } from '@reatom/jsx';
 import type { Episode, Estimate, Period, War } from '../catalog';
 import { readCardContent } from '../content';
-import { copy, formatDate, formatNumber, formatPeriod, historicEstimateScope, type Locale } from '../i18n/atlas-copy';
+import { copy, formatDate, formatNumber, formatPeriod, historicEstimateScope, sceneEraCopy, sceneTerrainCopy, type Locale } from '../i18n/atlas-copy';
 import { PixelIcon } from '../ui/pixel-icon';
-import { atlasScenes, resolveCardScene } from '../simulation/scene-config';
+import { atlasScenes, groundSceneExceptions, resolveCardScene, resolveIllustrativeScenes } from '../simulation/scene-config';
 import { SceneSlot, type SceneLoader } from './scene-slot';
 import './card.css';
 
@@ -55,6 +55,8 @@ function EpisodeBrief({ episode, locale }: { episode: Episode; locale: Locale })
     ? `${formatDate(sourcePeriod.from, locale)} – ${formatDate(sourcePeriod.through, locale)}`
     : episode.period;
   const sources = new Map([episode.estimate.source, ...(brief?.sources ?? [])].map(source => [source.url, source]));
+  const scope = locale === 'ru' ? episode.estimate.scope
+    : episode.estimate.metric === 'atomic_bombing_deaths' ? text.episodeScope : text.battleEpisodeScope;
   return (
     <div class="war-episode__detail">
       {episode.date ? (
@@ -66,8 +68,7 @@ function EpisodeBrief({ episode, locale }: { episode: Episode; locale: Locale })
           {brief.paragraphs.map(paragraph => <p>{paragraph}</p>)}
         </div>
       ) : null}
-      <EstimateSummary estimate={episode.estimate} period={estimatePeriod}
-        scope={locale === 'ru' ? episode.estimate.scope : text.episodeScope} locale={locale} />
+      <EstimateSummary estimate={episode.estimate} period={estimatePeriod} scope={scope} locale={locale} />
       <ul class="war-dialog__sources" aria-label={text.sources}>
         {Array.from(sources.values(), source => <li><a href={source.url}>{source.title}</a></li>)}
         {episode.anchor?.coordinateSourceUrl ? (
@@ -91,7 +92,25 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEp
   const sources = new Map([war.estimate.source, ...(brief?.sources ?? [])].map(source => [source.url, source]));
   const initialEpisode = episodes.find(episode => episode.episodeId === initialEpisodeId);
   const expanded = atom<string | null>(initialEpisode?.episodeId ?? null, 'warDialog.expandedEpisode');
-  const scene = computed(() => loadScene ? resolveCardScene(atlasScenes, war.id, expanded()) : null, 'warDialog.scene');
+  const authoredOverview = resolveCardScene(atlasScenes, war.id);
+  const illustrative = loadScene && !authoredOverview ? resolveIllustrativeScenes(war) : [];
+  const illustrativeIndex = atom(0, 'warDialog.illustrativeIndex');
+  const scene = computed(() => loadScene
+    ? resolveCardScene(atlasScenes, war.id, expanded()) ?? illustrative[illustrativeIndex()] ?? null
+    : null, 'warDialog.scene');
+
+  function renderScene() {
+    const selected = scene();
+    if (!selected || !loadScene) return null;
+    const episode = episodes.find(candidate => candidate.episodeId === selected.episodeId);
+    const terrain = selected.terrain ? sceneTerrainCopy[locale][selected.terrain.copyKey] : null;
+    const label = selected.illustrativeEra ? sceneEraCopy[locale][selected.illustrativeEra].title
+      : terrain && 'title' in terrain ? terrain.title
+        : episode ? readCardContent(episode, locale)?.title ?? episode.names[locale] : text.overview;
+    return <SceneSlot scene={selected} estimate={episode?.estimate ?? war.estimate}
+      label={label} locale={locale} load={loadScene} />;
+  }
+
   return (
     <div class="war-dialog__frame">
       <header class="war-dialog__header">
@@ -102,13 +121,17 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEp
           on:click={onClose}><PixelIcon name="close" size={24} /></button>
       </header>
       <div class={() => `war-dialog__body${scene() ? ' war-dialog__body--scene' : ''}`}>
-        {() => {
-          const selected = scene();
-          if (!selected || !loadScene) return null;
-          const episode = episodes.find(candidate => candidate.episodeId === selected.episodeId);
-          const label = episode ? readCardContent(episode, locale)?.title ?? episode.names[locale] : text.overview;
-          return <SceneSlot scene={selected} label={label} locale={locale} load={loadScene} />;
-        }}
+        {illustrative.length > 1 ? (
+          <div>
+            <div class="scene-era" role="group" aria-label={text.sceneEra}>
+              {illustrative.map(({ illustrativeEra }, index) => (
+                <button type="button" class="pixel-action" aria-pressed={() => illustrativeIndex() === index}
+                  on:click={() => illustrativeIndex.set(index)}>{sceneEraCopy[locale][illustrativeEra].button}</button>
+              ))}
+            </div>
+            {renderScene}
+          </div>
+        ) : renderScene}
         <aside class="war-dialog__information">
           <EstimateSummary estimate={war.estimate} period={war.period} scope={scope} uncertainty={uncertainty} locale={locale} />
           <div class="war-dialog__brief">
@@ -118,6 +141,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEp
               {brief.paragraphs.map(paragraph => <p>{paragraph}</p>)}
             </section>
           ) : null}
+          {!authoredOverview && groundSceneExceptions.has(war.id) ? <p>{text.differentCombatScene}</p> : null}
           <section>
             <h3>{text.geography}</h3>
             {brief ? <p>{brief.region}</p> : null}

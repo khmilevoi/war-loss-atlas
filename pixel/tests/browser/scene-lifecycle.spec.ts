@@ -1,8 +1,7 @@
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
 
-test('stops scene audio before computing the reduced-motion overview', async ({ page }) => {
+test('pauses the overview and its audio when reduced motion is enabled', async ({ page }) => {
   await page.addInitScript(() => {
     const audio = { motorStarts: 0, motorStops: 0, voiceStarts: 0 };
     Object.defineProperty(window, 'motionAudioAudit', { value: audio });
@@ -61,12 +60,12 @@ test('stops scene audio before computing the reduced-motion overview', async ({ 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect.poll(async () => (await counts()).motorStops).toBe(before.motorStarts);
   const field = dialog.locator('canvas[data-scene-canvas="ww2-overview"]');
-  const finale = await field.evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL());
+  const pausedFrame = await field.evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL());
   await advance(1200);
   expect(await counts()).toEqual({
     motorStarts: before.motorStarts, motorStops: before.motorStarts, voiceStarts: before.voiceStarts,
   });
-  expect(await field.evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL())).toBe(finale);
+  expect(await field.evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL())).toBe(pausedFrame);
 });
 
 const frozenPreview = new URL('../../reference/battle-preview/', import.meta.url);
@@ -153,59 +152,6 @@ test('closes the native AudioContext when a scene is removed', async ({ page }) 
 });
 
 
-test('matches the frozen preview opening frame pixel for pixel', async ({ page }) => {
-  await page.goto('/en/');
-  const testClock = new Date('2026-11-07T00:00:00.000Z');
-  await page.clock.install({ time: testClock });
-  await page.clock.pauseAt(new Date(testClock.getTime() + 1000));
-  await page.getByRole('button', { name: 'Atomic bombing of Hiroshima', exact: true }).click();
-  const canvas = page.locator('canvas[data-scene-canvas="ww2-overview"]');
-  await expect(canvas).toBeVisible();
-
-  const frozen = (name: string) => new URL(name, frozenPreview);
-  const roster = await import(frozen('atlas-unit-roster.mjs').href);
-  await page.addScriptTag({ path: fileURLToPath(frozen('battle-engine.js')) });
-  const assets = Object.fromEntries(await Promise.all(
-    Object.entries({
-      infantrySprites: 'infantry',
-      vehicleSprites: 'vehicles',
-      terrainSprites: 'terrain',
-      roadSprites: 'roads',
-      nukeSprites: 'nuke',
-      tankCrewSprites: 'tank-crew',
-      equipmentWreckSprites: 'equipment-wrecks',
-    }).map(async ([key, name]) => {
-      const image = await readFile(frozen(`battle-topdown-${name}.png`));
-      return [key, `data:image/png;base64,${image.toString('base64')}`] as const;
-    }),
-  ));
-  const original = await page.evaluate(async ({ assets, roster }) => {
-    const images = Object.fromEntries(await Promise.all(Object.entries(assets).map(async ([key, url]) => {
-      const image = new Image();
-      image.src = url;
-      await image.decode();
-      return [key, image];
-    })));
-    const canvas = document.createElement('canvas');
-    canvas.width = 960;
-    canvas.height = 576;
-    const createPreview = (window as Window & {
-      createAtlasBattle?: (canvas: HTMLCanvasElement, options: Record<string, unknown>) => { dispose(): void };
-    }).createAtlasBattle;
-    if (!createPreview) throw new Error('Frozen preview engine did not initialize');
-    const preview = createPreview(canvas, {
-      ...images, roster, seed: 1943, era: 'eastern-front', paused: true, reducedMotion: false,
-    });
-    try {
-      return canvas.toDataURL();
-    } finally {
-      preview.dispose();
-    }
-  }, { assets, roster: { units: roster.units, scenarios: roster.scenarios, equipmentSheets: roster.equipmentSheets } });
-  expect(await canvas.evaluate((field: HTMLCanvasElement) => field.toDataURL()) === original).toBe(true);
-});
-
-
 test('measures a cold throttled start and a cached scene reopening', async ({ page, context }, testInfo) => {
   test.setTimeout(70000);
   await page.addInitScript(() => {
@@ -276,12 +222,13 @@ test('keeps every selected sprite visually identical to its PNG source in Chrome
   const selected = (name: string) => new URL(`../../src/resources/assets/${name}`, import.meta.url);
   const dataUrl = async (file: URL) => `data:image/${file.pathname.endsWith('.webp') ? 'webp' : 'png'};base64,${(await readFile(file)).toString('base64')}`;
   const manifest = JSON.parse(await readFile(selected('scene-sprites.json'), 'utf8')) as {
-    files: Record<string, { path: string; frameGrid: { width: number; height: number } }>;
+    files: Record<string, { path: string; originalPath?: string; frameGrid: { width: number; height: number } }>;
   };
   const inputs = await Promise.all(Object.values(manifest.files).map(async asset => ({
     name: asset.path,
     expected: [asset.frameGrid.width, asset.frameGrid.height],
-    source: await dataUrl(source(asset.path.replace(/\.[^.]+$/, '.png'))),
+    source: await dataUrl(asset.originalPath ? new URL('../' + asset.originalPath, frozenPreview)
+      : source(asset.path.replace(/\.[^.]+$/, '.png'))),
     selected: await dataUrl(selected(asset.path)),
   })));
   const result = await page.evaluate(async inputs => {
@@ -317,11 +264,13 @@ test('keeps every selected sprite visually identical to its PNG source in Chrome
   }
 });
 
-test('finishes the WWII overview on a settled field without a flash and restarts', async ({ page }, testInfo) => {
+test('starts the WWII overview in a city, settles after combat, and restarts', async ({ page }, testInfo) => {
   test.setTimeout(45000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/en/');
-  await page.clock.install();
+  const start = new Date('2026-11-07T00:00:00.000Z');
+  await page.clock.install({ time: start });
+  await page.clock.pauseAt(new Date(start.getTime() + 1000));
   await page.getByRole('button', { name: 'Atomic bombing of Hiroshima', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Second World War' });
   const field = dialog.locator('canvas[data-scene-canvas="ww2-overview"]');
@@ -330,26 +279,46 @@ test('finishes the WWII overview on a settled field without a flash and restarts
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Canvas 2D is unavailable');
     const rgba = context.getImageData(0, 0, canvas.width, canvas.height).data;
-    let craters = 0;
+    let road = 0;
     let blood = 0;
     for (let offset = 0; offset < rgba.length; offset += 4) {
-      if (rgba[offset] === 29 && rgba[offset + 1] === 23 && rgba[offset + 2] === 24) craters++;
+      if (rgba[offset] === 63 && rgba[offset + 1] === 65 && rgba[offset + 2] === 70) road++;
       if (rgba[offset] === 153 && rgba[offset + 1] === 14 && rgba[offset + 2] === 32) blood++;
     }
-    return { image: canvas.toDataURL(), craters, blood };
+    return { image: canvas.toDataURL(), road, blood };
   });
   await expect(field).toBeVisible();
-  expect((await readField()).craters).toBe(0);
-  await page.clock.runFor(24600);
+  const initial = await readField();
+  expect(initial.road).toBeGreaterThan(200);
+  expect(initial.blood).toBe(0);
+  await page.clock.runFor(8000);
+  const fighting = await readField();
+  expect(fighting.image).not.toBe(initial.image);
   await expect(flash).toHaveCSS('opacity', '0');
-  const terminal = await readField();
-  expect(terminal.craters).toBeGreaterThan(500);
-  expect(terminal.blood).toBeGreaterThan(300);
-  await page.clock.runFor(1000);
-  expect((await readField()).image === terminal.image).toBe(true);
-  await page.screenshot({ path: testInfo.outputPath('ww2-finale.png') });
+
+  let settled = false;
+  let terminal = fighting;
+  for (let elapsed = 8000; elapsed < 120000; elapsed += 2000) {
+    await page.clock.runFor(2000);
+    const frame = await readField();
+    if (frame.image === terminal.image && frame.blood > 0) {
+      settled = true;
+      break;
+    }
+    terminal = frame;
+  }
+  expect(settled).toBe(true);
+  expect(terminal.road).toBeGreaterThan(200);
+  expect(terminal.blood).toBeGreaterThan(0);
+  await expect(flash).toHaveCSS('opacity', '0');
+  await page.screenshot({ path: testInfo.outputPath('ww2-settled-city.png') });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await dialog.getByRole('button', { name: 'Restart', exact: true }).click();
-  expect((await readField()).craters).toBe(0);
+  expect((await readField()).image).toBe(initial.image);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(field).toBeVisible();
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+  await page.screenshot({ path: testInfo.outputPath('ww2-mobile-city.png') });
 });
 
 test('uses distinct river motifs in the two static episode fields', async ({ page }, testInfo) => {

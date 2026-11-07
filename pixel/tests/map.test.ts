@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readCatalog, selectMapPlacements, type MapPlacement } from '../src/catalog';
 import { ww2Episodes } from '../src/catalog/ww2-episodes';
-import { groupMarkers, scale, scaleRank } from '../src/map/land';
+import { groupMarkers, mapHeight, mapWidth, scale, scaleRank } from '../src/map/land';
 
 const placements = selectMapPlacements(readCatalog(ww2Episodes));
 const ucdp = placements.find(placement => placement.sourceKind === 'ucdp')!;
@@ -51,5 +51,15 @@ describe('loss estimation on the world map', () => {
       if (marker.estimate) expect(marker.estimate.comparisonKey).toBe(ucdp.estimate.comparisonKey);
     }
     expect(markers.filter(marker => marker.estimate !== null).length).toBeGreaterThan(0);
+  });
+
+  it('keeps distinct sourced marker groups centered in distinct map cells', () => {
+    const markers = groupMarkers(placements);
+    expect(new Set(markers.map(({ x, y }) => `${x}:${y}`)).size).toBe(markers.length);
+    for (const { x, y } of markers) {
+      expect([x % 1, y % 1]).toEqual([0.5, 0.5]);
+      expect(x).toBeLessThan(mapWidth);
+      expect(y).toBeLessThan(mapHeight);
+    }
   });
 });

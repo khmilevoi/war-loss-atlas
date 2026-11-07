@@ -5,6 +5,7 @@ import type { MapPlacement } from '../catalog';
 import { copy, formatNumber, type Locale } from '../i18n/atlas-copy';
 import { PixelIcon } from '../ui/pixel-icon';
 import { drawLand, groupMarkers, mapHeight, mapWidth, project, scale, scaleRank, type Marker } from './land';
+import { MapFlag, type MapFlagKind } from './map-flag';
 import './map.css';
 
 export interface MapViewState {
@@ -32,9 +33,9 @@ function episodeMarkerOffsets(markers: readonly Marker[]) {
   for (const family of byWar.values()) {
     if (family.length !== 2) continue;
     const [left, right] = family;
-    if (Math.hypot(right.x - left.x, right.y - left.y) > 7) continue;
-    offsets.set(left.key, -13);
-    offsets.set(right.key, 13);
+    if (Math.hypot(right.x - left.x, right.y - left.y) > 5) continue;
+    offsets.set(left.key, -3);
+    offsets.set(right.key, 3);
   }
   return offsets;
 }
@@ -122,7 +123,8 @@ export function WorldMap({ placements, locale, onFlagOpen, registerRestore, play
   });
 
   return (
-    <section class="world-map" aria-labelledby="map-title" aria-describedby="map-help">
+    <section class="world-map" aria-labelledby="map-title" aria-describedby="map-help"
+      style={`--map-aspect:${mapHeight / mapWidth};--map-columns:${mapWidth}`}>
       <div class="map-toolbar">
         <div>
           <h2 id="map-title" tabindex={-1}>{text.worldMap}</h2>
@@ -154,11 +156,15 @@ export function WorldMap({ placements, locale, onFlagOpen, registerRestore, play
               const value = marker.estimate?.value;
               const ink = value == null ? '#381823' : scale[scaleRank(value)].color;
               const label = multiple ? `${text.flagGroup} (${marker.placements.length})` : first.names[locale];
+              const kind: MapFlagKind = marker.placements.every(placement => placement.sourceKind === 'history')
+                ? 'history' : value == null ? 'unknown' : 'estimate';
+              const y = marker.y / mapHeight;
+              const verticalClass = y < 0.21 ? ' map-marker--north' : y < 0.5 ? ' map-marker--upper' : '';
               return (
                 <button
                   type="button"
-                  class={`map-marker map-marker--${multiple ? 'group' : first.sourceKind}${marker.estimate === null ? ' map-marker--no-scale' : ''}${marker.y < 26 ? ' map-marker--north' : ''}${marker.x > 185 ? ' map-marker--east' : ''}`}
-                  style={`--map-x:${marker.x / mapWidth * 100}%;--map-y:${marker.y / mapHeight * 100}%;--marker-offset:${offset}px;--marker-ink:${ink}`}
+                  class={`map-marker map-marker--${kind}${offset !== 0 ? ' map-marker--displaced' : ''}${verticalClass}${marker.x / mapWidth > 0.74 ? ' map-marker--east' : ''}`}
+                  style={`--map-x:${(marker.x + offset) / mapWidth * 100}%;--map-y:${y * 100}%;--marker-ink:${ink}`}
                   aria-label={label}
                   aria-haspopup={multiple ? undefined : 'dialog'}
                   aria-expanded={multiple ? () => activeGroup() === marker : undefined}
@@ -188,9 +194,11 @@ export function WorldMap({ placements, locale, onFlagOpen, registerRestore, play
                   }}
                 >
                   {offset !== 0 ? <span class="map-marker__tether" aria-hidden="true"
-                    style={`--tether-size:${Math.abs(offset)}px;--tether-start:${offset > 0 ? '-1px' : '50%'}`} /> : null}
-                  <span class="map-marker__point" aria-hidden="true">{multiple ? marker.placements.length : null}</span>
-                  <PixelIcon name="flag" size={32} />
+                    style={`--tether-columns:${Math.abs(offset)};--tether-west:${Math.max(0, offset)}`} /> : null}
+                  <span class="map-marker__point" aria-hidden="true" />
+                  <MapFlag kind={kind} />
+                  {multiple ? <span class="map-marker__count" aria-hidden="true">{marker.placements.length}</span> : null}
+                  <MapFlag raised />
                   <span class="map-marker__label" aria-hidden="true">{label}</span>
                 </button>
               );
@@ -225,8 +233,8 @@ export function WorldMap({ placements, locale, onFlagOpen, registerRestore, play
           </div>
           <span>{text.scaleHigh}</span>
         </div>
-        <span class="map-legend__key"><i class="map-legend__diamond" aria-hidden="true" />{text.mapHistory}</span>
-        <span class="map-legend__key"><i class="map-legend__unknown" aria-hidden="true" />{text.mapUnknown}</span>
+        <span class="map-legend__key"><MapFlag kind="history" />{text.mapHistory}</span>
+        <span class="map-legend__key"><MapFlag kind="unknown" />{text.mapUnknown}</span>
         <p>{text.mapAnchors} <a href="https://www.naturalearthdata.com/about/terms-of-use/">{text.mapSource}</a></p>
         <details class="map-legend__method">
           <summary>{text.scaleDetails}</summary>

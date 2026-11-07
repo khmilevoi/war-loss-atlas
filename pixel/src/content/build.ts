@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
 import type { AtlasData } from '../../../src/data/types.ts';
+import { ww1Episodes } from '../catalog/ww1-episodes.ts';
 import { ww2Episodes } from '../catalog/ww2-episodes.ts';
 import { copy, startupCopy } from '../i18n/atlas-copy.ts';
 import { contentId, parseBriefCollection, validateContentCoverage } from './parse.ts';
@@ -72,7 +73,7 @@ export function atlasContent(): Plugin {
       validateContentCoverage(collections, [
         ...atlas.conflicts.map(({ id }) => `ucdp:${id}`),
         ...atlas.historicalHighlights.map(({ highlight_id }) => `history:${highlight_id}`),
-        ...ww2Episodes.map(contentId),
+        ...[...ww1Episodes, ...ww2Episodes].map(contentId),
       ]);
 
       return 'export default ' + JSON.stringify({ ru: [...collections.ru], en: [...collections.en] });

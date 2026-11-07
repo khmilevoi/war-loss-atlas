@@ -50,11 +50,16 @@ describe('release boundary', () => {
   it('accepts declared hashed sprite outputs and keeps raw references outside dist', async () => {
     const root = await fixture({
       'pixel/reference/battle-preview/manifest.json': '{}',
+      'pixel/src/map/map-flag.ts': 'export {}',
+      'pixel/src/resources/assets/battle-topdown-japan-terrain.webp': 'fixture',
       'dist/pixel/assets/battle-topdown-infantry-abc123.png': 'fixture',
+      'dist/pixel/assets/battle-topdown-japan-terrain-abc123.webp': 'fixture',
+      'dist/pixel/assets/battle-topdown-japan-terrain-abc123.png': 'fixture',
       'dist/pixel/assets/extra-abc123.png': 'fixture',
       'dist/pixel/reference/battle-preview/manifest.json': '{}',
     });
     expect((await checkPublicFiles(root)).sort()).toEqual([
+      'Unapproved release file: dist/pixel/assets/battle-topdown-japan-terrain-abc123.png',
       'Unapproved release file: dist/pixel/assets/extra-abc123.png',
       'Unapproved release file: dist/pixel/reference/battle-preview/manifest.json',
     ]);

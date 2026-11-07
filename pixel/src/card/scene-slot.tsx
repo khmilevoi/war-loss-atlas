@@ -1,5 +1,6 @@
 import { atom, bind } from '@reatom/core';
 import { h } from '@reatom/jsx';
+import type { Estimate } from '../catalog';
 import { copy, sceneTerrainCopy, type Locale } from '../i18n/atlas-copy';
 import { PixelIcon } from '../ui/pixel-icon';
 import type { SceneHandle, mountScene } from '../simulation/mount-scene';
@@ -9,8 +10,8 @@ export type SceneLoader = typeof mountScene;
 
 export class SceneModuleLoadError extends Error {}
 
-export function SceneSlot({ scene, label, locale, load }: {
-  scene: SceneDefinition; label: string; locale: Locale; load: SceneLoader;
+export function SceneSlot({ scene, estimate, label, locale, load }: {
+  scene: SceneDefinition; estimate: Estimate; label: string; locale: Locale; load: SceneLoader;
 }) {
   const text = copy[locale];
   const terrain = scene.terrain;
@@ -54,7 +55,7 @@ export function SceneSlot({ scene, label, locale, load }: {
     });
     void Promise.resolve().then(() => {
       attempt.signal.throwIfAborted();
-      return load(host, { scene, signal: attempt.signal });
+      return load(host, { scene, estimate, signal: attempt.signal });
     }).then(ready, failed);
   }
 
@@ -102,7 +103,7 @@ export function SceneSlot({ scene, label, locale, load }: {
         </button>
         {() => soundFailed() ? <p role="status">{text.sceneSoundUnavailable}</p> : null}
       </div>
-      <p class="scene-slot__note">{text.sceneNote}</p>
+      <p class="scene-slot__note">{scene.illustrativeEra ? text.illustrativeSceneNote : text.sceneNote}</p>
       {terrain ? <p class="scene-slot__note">
         {sceneTerrainCopy[locale][terrain.copyKey].note}{' '}
         <a href={terrain.source[locale]}>{sceneTerrainCopy[locale][terrain.copyKey].source}</a>

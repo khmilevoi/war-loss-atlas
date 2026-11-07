@@ -18,7 +18,17 @@ describe('scene configuration', () => {
 
   it('keeps the explicitly labelled overview for an episode without a scene', () => {
     expect(resolveCardScene(scenes, 'history:korea', 'other')).toBe(extra);
-    expect(resolveCardScene(scenes, 'history:ww1', 'extra-episode')).toBeNull();
+    expect(resolveCardScene(scenes, 'ucdp:205', 'extra-episode')).toBeNull();
     expect(resolveCardScene(scenes, 'history:ww2', 'nagasaki')?.assets).toBe('nagasaki');
+  });
+
+  it.each([
+    ['history:ww1', null, 'western-front'],
+    ['history:ww1', 'beersheba', 'palestine'],
+    ['history:us-civil', null, 'south-carolina'],
+    ['ucdp:371', null, 'cold-war-neutral'],
+    ['ucdp:420', null, 'contemporary-neutral'],
+  ] as const)('resolves the configured scenario for %s / %s', (warId, episodeId, scenario) => {
+    expect(resolveCardScene(atlasScenes, warId, episodeId)?.scenario).toBe(scenario);
   });
 });

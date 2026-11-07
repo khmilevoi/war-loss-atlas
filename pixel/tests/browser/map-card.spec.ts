@@ -1,5 +1,57 @@
 import { expect, test } from '@playwright/test';
 
+test('switches the First World War card between its separate historical settings', async ({ page }) => {
+  await page.goto('/en/?war=history%3Aww1');
+  const dialog = page.getByRole('dialog', { name: 'First World War' });
+  const westernFront = dialog.getByRole('region', { name: 'Western Front · 1918' });
+  await expect(westernFront.locator('canvas[data-scene-canvas]')).toBeVisible();
+
+  const episode = dialog.getByRole('button', { name: 'Battle of Beersheba' });
+  await episode.click();
+  const palestine = dialog.getByRole('region', { name: 'Palestine campaign · 1917–1918' });
+  await expect(palestine.locator('canvas[data-scene-canvas]')).toBeVisible();
+  await expect(westernFront).toHaveCount(0);
+  await expect(dialog.getByRole('region', { name: 'Battle of Beersheba' })
+    .getByText('No data', { exact: true })).toBeVisible();
+  await expect(palestine.getByRole('button', { name: 'Restart' })).toBeEnabled();
+  await episode.click();
+  await expect(westernFront.locator('canvas[data-scene-canvas]')).toBeVisible();
+});
+
+for (const [warId, heading, asset] of [
+  ['371', 'Gulf War · February 1991', 'cold-war-units'],
+  ['420', 'Invasion of Iraq · March 2003', 'contemporary-units'],
+] as const) {
+  test(`loads the era-appropriate neutral sprites for UCDP ${warId}`, async ({ page }) => {
+    const sprites: string[] = [];
+    page.on('request', request => {
+      const url = request.url();
+      if (url.includes('battle-topdown-')) sprites.push(url);
+    });
+    await page.goto(`/en/?war=ucdp%3A${warId}`);
+    const scene = page.getByRole('dialog').getByRole('region', { name: heading });
+    await expect(scene.locator('canvas[data-scene-canvas]')).toBeVisible();
+    expect(sprites).toHaveLength(2);
+    expect(sprites).toEqual(expect.arrayContaining([
+      expect.stringContaining(`battle-topdown-${asset}-`),
+      expect.stringContaining('battle-topdown-generic-terrain-'),
+    ]));
+  });
+}
+
+test('opens the illustrative South Carolina scene on a narrow screen', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/ru/?war=history%3Aus-civil');
+  const dialog = page.getByRole('dialog', { name: 'Гражданская война в США' });
+  const scene = dialog.getByRole('region', { name: 'Южная Каролина · 1863' });
+  await expect(scene.locator('canvas[data-scene-canvas]')).toBeVisible();
+  await expect(scene.getByRole('button', { name: 'Перезапустить' })).toBeEnabled();
+  await expect(scene.getByRole('link', { name: 'Служба национальных парков США' }))
+    .toHaveAttribute('href', 'https://www.nps.gov/articles/the-54th-massachusetts-and-the-second-battle-of-fort-wagner.htm');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+});
+
 test('opens the sourced Russian WWII card and restores map zoom and keyboard focus on Escape', async ({ page }, testInfo) => {
   await page.goto('/ru/');
   const flag = page.getByRole('button', { name: 'Атомная бомбардировка Хиросимы', exact: true });
@@ -195,15 +247,41 @@ test('opens a direct stable war link and closes it without leaving the map', asy
   await expect(page.getByRole('button', { name: 'Atomic bombing of Hiroshima', exact: true })).toBeFocused();
 });
 
-test('keeps a catalog entry without coordinates readable from a stable link', async ({ page }) => {
+test('switches separate illustrative eras on a catalog entry without coordinates', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/ru/?war=ucdp%3A205');
   const dialog = page.getByRole('dialog', { name: 'Иран — Курдистан' });
   await expect(dialog.locator('.war-dialog__period')).toHaveText('1990–2018');
-  await expect(dialog.locator('canvas[data-scene-canvas]')).toHaveCount(0);
+  const eras = dialog.getByRole('group', { name: 'Эпоха сцены' });
+  const later = eras.getByRole('button', { name: 'С 1992 года', exact: true });
+  const earlier = eras.getByRole('button', { name: 'До 1992 года', exact: true });
+  const contemporary = dialog.locator('canvas[data-scene-canvas="contemporary-neutral"]');
+  const coldWar = dialog.locator('canvas[data-scene-canvas="cold-war-neutral"]');
+  await expect(contemporary).toBeVisible();
+  await expect(later).toHaveAttribute('aria-pressed', 'true');
+  await earlier.focus();
+  await earlier.press('Enter');
+  await expect(coldWar).toBeVisible();
+  await expect(contemporary).toHaveCount(0);
+  await expect(earlier).toBeFocused();
+  await expect(earlier).toHaveAttribute('aria-pressed', 'true');
+  await expect(later).toHaveAttribute('aria-pressed', 'false');
+  await expect(dialog.getByText(/Условный бой на вымышленной местности/)).toBeVisible();
+  await expect(dialog.locator('.war-dialog__period')).toHaveText('1990–2018');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
   await expect(page.locator('[data-flag-id="war:ucdp:205"]')).toHaveCount(0);
   await dialog.getByRole('button', { name: 'Закрыть', exact: true }).click();
   await expect(page).toHaveURL('/ru/');
   await expect(page.getByRole('heading', { name: 'Карта мира', exact: true })).toBeFocused();
+});
+
+test('keeps an atypical conflict readable without substituting a ranged ground battle', async ({ page }) => {
+  await page.goto('/en/?war=ucdp%3A274');
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.getByText('This conflict requires a scene suited to the type of fighting.')).toBeVisible();
+  await expect(dialog.locator('canvas[data-scene-canvas]')).toHaveCount(0);
+  await expect(dialog.getByRole('heading', { name: 'Deaths' })).toBeVisible();
 });
 
 test('persists interface sound separately and unlocks audio only after a user action', async ({ page }) => {

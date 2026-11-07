@@ -1,6 +1,8 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
+import { readCatalog } from '../src/catalog';
 import { createBattle, type BattleCue, type BattleScenarioId } from '../src/simulation/battle';
+import { atlasScenes, createSceneDeployment, resolveCardScene } from '../src/simulation/scene-config';
 
 const originalSnapshots: Partial<Record<BattleScenarioId, readonly string[]>> = {
   'south-carolina': ['effe256c58fa', '99ecfee80b10', '51edb1a5a0d8', '17ca1d62760c'],
@@ -79,35 +81,41 @@ describe('deterministic battle core', () => {
   });
 
 
-  it('leaves a deterministic, unit-budget-independent overview finale without a flash', () => {
-    const run = (unitBudget?: readonly [number, number]) => {
-      const settled: unknown[] = [];
-      const cues: BattleCue[] = [];
-      const battle = createBattle({
-        scenario: 'eastern-front', seed: 1943, finaleAt: 2400, unitBudget,
-        onSettledBlood: stain => settled.push(stain), onCue: cue => cues.push(cue),
-      });
-      expect(battle.frame().craters).toHaveLength(0);
-      battle.step(2360);
-      expect(battle.frame().finished).toBe(false);
-      battle.step(40);
-      const frame = battle.frame();
-      expect(frame.finished).toBe(true);
-      expect(frame.biome).toBe('ruins');
-      expect(frame.terrain.filter(tile => tile.variant === 1 || tile.variant === 3).length).toBeGreaterThan(40);
-      expect(frame.craters.length).toBeGreaterThan(45);
-      expect(frame.wrecks.filter(wreck => wreck.kind === 'tank').length).toBeGreaterThanOrEqual(8);
-      expect(settled.length).toBeGreaterThanOrEqual(40);
-      expect(frame.whiteout).toBe(0);
-      expect(cues).not.toContain('nuke');
-      battle.step(4000);
-      expect(battle.frame().time).toBe(frame.time);
-      battle.reset();
-      expect(battle.frame().craters).toHaveLength(0);
-      expect(battle.frame().finished).toBe(false);
-      return frame.craters;
-    };
-    expect(run()).toEqual(run([0, 0]));
+  it('deploys the calibrated urban overview and settles only after combat decides it', () => {
+    const scene = resolveCardScene(atlasScenes, 'history:ww2')!;
+    const estimate = readCatalog().wars.find(war => war.id === scene.warId)!.estimate;
+    const deployment = createSceneDeployment(scene, estimate);
+    expect(deployment?.map(side => side.length)).toEqual([10, 6]);
+    expect(createSceneDeployment(scene, { ...estimate, low: 48_000_000 })
+      ?.reduce((total, side) => total + side.length, 0)).toBe(12);
+    const settled: unknown[] = [];
+    const cues: BattleCue[] = [];
+    const battle = createBattle({
+      ...scene, deployment,
+      onSettledBlood: stain => settled.push(stain), onCue: cue => cues.push(cue),
+    });
+    const initial = battle.snapshot();
+    const terrain = battle.frame().terrain;
+    expect(battle.frame().biome).toBe('ruins');
+    expect(terrain.some(tile => tile.road)).toBe(true);
+    expect(initial.units).toHaveLength(16);
+    expect(initial.units.filter(unit => unit.sprite === 't34')).toHaveLength(2);
+    expect(initial.units.filter(unit => unit.sprite === 'stug')).toHaveLength(1);
+
+    for (let time = 0; time < 120_000 && !battle.frame().finished; time += 40) battle.step(40);
+    const frame = battle.frame();
+    const terminal = battle.snapshot();
+    expect(frame.finished).toBe(true);
+    expect(frame.terrain).toBe(terrain);
+    expect(new Set(terminal.units.map(unit => unit.team))).toEqual(new Set([0]));
+    expect(terminal.units.every(unit => initial.units.some(start => start.id === unit.id))).toBe(true);
+    expect(settled.length).toBeGreaterThan(0);
+    expect(frame.whiteout).toBe(0);
+    expect(cues).not.toContain('nuke');
+    battle.step(4000);
+    expect(battle.snapshot()).toEqual(terminal);
+    battle.reset();
+    expect(battle.snapshot()).toEqual(initial);
   });
 
   it.each(['ota-delta', 'urakami-valley'] as const)(

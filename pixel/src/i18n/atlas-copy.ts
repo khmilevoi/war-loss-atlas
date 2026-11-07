@@ -69,7 +69,11 @@ export const copy = {
     sceneSound: 'Звук',
     sceneSoundUnavailable: 'Не удалось включить звук.',
     sceneNote: 'Число юнитов задаёт условный масштаб сцены. Оценка погибших приведена отдельно.',
+    sceneEra: 'Эпоха сцены',
+    illustrativeSceneNote: 'Условный бой на вымышленной местности. Униформа и вооружение собирательные. Историческая справка и оценка погибших приведены отдельно.',
+    differentCombatScene: 'Для этого конфликта нужна отдельная сцена, соответствующая характеру боевых действий.',
     episodeScope: 'Смерти от атомной бомбардировки в городе за указанный период.',
+    battleEpisodeScope: 'Погибшие в сражении.',
     continents: ['Северная Америка', 'Южная Америка', 'Европа', 'Африка', 'Азия', 'Австралия'],
   },
   en: {
@@ -125,25 +129,50 @@ export const copy = {
     sceneSound: 'Sound',
     sceneSoundUnavailable: 'Sound could not be enabled.',
     sceneNote: 'Unit counts set the scale of the illustrative scene. The death estimate is shown separately.',
+    sceneEra: 'Scene era',
+    illustrativeSceneNote: 'An illustrative battle in a fictional location with generic uniforms and equipment. The historical account and death estimate appear separately.',
+    differentCombatScene: 'This conflict requires a scene suited to the type of fighting.',
     episodeScope: 'Deaths caused by the atomic bombing in the city during the period shown.',
+    battleEpisodeScope: 'Deaths during the battle.',
     continents: ['North America', 'South America', 'Europe', 'Africa', 'Asia', 'Australia'],
   },
 } as const;
 
 export type Locale = keyof typeof copy;
 
+export const sceneEraCopy = {
+  ru: {
+    'cold-war-neutral': { title: 'Условный бой · до 1992 года', button: 'До 1992 года' },
+    'contemporary-neutral': { title: 'Условный бой · с 1992 года', button: 'С 1992 года' },
+  },
+  en: {
+    'cold-war-neutral': { title: 'Illustrative battle · before 1992', button: 'Before 1992' },
+    'contemporary-neutral': { title: 'Illustrative battle · from 1992', button: 'From 1992' },
+  },
+} as const;
+
 export const sceneTerrainCopy = {
   ru: {
-    'ww2-overview': { note: 'Начальный зимний ландшафт отсылает к Восточному фронту 1943 года.', source: 'Мемориальный музей Холокоста США' },
+    'ww1-western-front': { title: 'Западный фронт · 1918', note: 'Условная сцена по мотивам боёв на Западном фронте в последний год войны.', source: 'Национальный музей армии Великобритании' },
+    'ww1-palestine': { title: 'Палестинская кампания · 1917–1918', note: 'Условная сцена по мотивам Палестинской кампании. Справка о сражении у Беэр-Шевы приведена отдельно.', source: 'Австралийский военный мемориал' },
+    'us-civil-south-carolina': { title: 'Южная Каролина · 1863', note: 'Условная сцена по мотивам боёв в Южной Каролине. В июле 1863 года 54-й Массачусетский полк возглавил штурм форта Вагнер.', source: 'Служба национальных парков США' },
+    'gulf-war-ground-campaign': { title: 'Война в Персидском заливе · февраль 1991', note: 'С 24 по 28 февраля коалиция вела наземное наступление, вытеснив иракские войска из Кувейта. Сцена показывает условную пехоту эпохи.', source: 'Управление историка Госдепартамента США' },
+    'iraq-invasion': { title: 'Вторжение в Ирак · март 2003', note: '20 марта 2003 года коалиция во главе с США начала военные действия против Ирака. Сцена показывает условную пехоту эпохи.', source: 'Библиотека Конгресса США' },
+    'ww2-overview': { note: 'Условный городской бой на Восточном фронте 1943 года. Число юнитов зависит от общей оценки погибших. Доли советских и немецких сил, пехоты и техники выбраны для симуляции.', source: 'Мемориальный музей Холокоста США' },
     hiroshima: { note: 'Мотив местности — город на равнине в дельте реки Ота.', source: 'История Хиросимы' },
     nagasaki: { note: 'Мотив местности — долина Ураками и склоны холмов.', source: 'Архив Нагасаки' },
   },
   en: {
-    'ww2-overview': { note: 'The opening winter landscape evokes the Eastern Front in 1943.', source: 'US Holocaust Memorial Museum' },
+    'ww1-western-front': { title: 'Western Front · 1918', note: 'An illustrative scene inspired by fighting on the Western Front in the last year of the war.', source: 'UK National Army Museum' },
+    'ww1-palestine': { title: 'Palestine campaign · 1917–1918', note: 'An illustrative scene inspired by the Palestine campaign. The account of the Battle of Beersheba appears separately.', source: 'Australian War Memorial' },
+    'us-civil-south-carolina': { title: 'South Carolina · 1863', note: 'An illustrative scene inspired by fighting in South Carolina. In July 1863, the 54th Massachusetts led the assault on Fort Wagner.', source: 'US National Park Service' },
+    'gulf-war-ground-campaign': { title: 'Gulf War · February 1991', note: 'From 24 to 28 February, the coalition drove Iraqi troops out of Kuwait in a ground offensive. The scene uses generic infantry from the period.', source: 'US Department of State, Office of the Historian' },
+    'iraq-invasion': { title: 'Invasion of Iraq · March 2003', note: 'The US-led coalition began military operations against Iraq on 20 March 2003. The scene uses generic infantry from the period.', source: 'US Library of Congress' },
+    'ww2-overview': { note: 'An illustrative urban battle on the Eastern Front in 1943. The overall death estimate sets the unit count. The shares of Soviet and German forces, infantry, and armor are simulation settings.', source: 'US Holocaust Memorial Museum' },
     hiroshima: { note: 'The terrain is inspired by the city on the flat Ōta River delta.', source: 'History of Hiroshima' },
     nagasaki: { note: 'The terrain is inspired by the Urakami valley and its hillsides.', source: 'Nagasaki city archive' },
   },
-} as const satisfies Record<Locale, Record<string, { note: string; source: string }>>;
+} as const satisfies Record<Locale, Record<string, { title?: string; note: string; source: string }>>;
 
 const scopeKeys: Readonly<Partial<Record<string, Exclude<keyof typeof copy.en, 'continents'>>>> = {
   'history:ww1': 'ww1EstimateScope',

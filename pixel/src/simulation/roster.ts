@@ -1,4 +1,4 @@
-export type BattleBiome = 'desert' | 'snow' | 'ruins' | 'village';
+export type BattleBiome = 'desert' | 'snow' | 'ruins' | 'village' | 'generic';
 
 export interface VehicleStats {
   speed: number;
@@ -16,6 +16,7 @@ export interface UnitDefinition {
   range?: number;
   sheet?: string;
   row?: number;
+  sprite?: { sheet: 'coldWarUnits' | 'contemporaryUnits'; frame: number };
   symbolic?: boolean;
   kind?: 'wheeled' | 'mount' | 'tracked' | 'airborne';
   stats?: VehicleStats;
@@ -73,6 +74,12 @@ export const units: Record<string, UnitDefinition> = {
   m113: machine('M113A1', 'vietnam-equipment', 1, 'tracked', { ...tank, speed: 14, range: 65, rate: 1.2 }),
   centurion: machine('Centurion', 'vietnam-equipment', 2, 'tracked', { ...tank, health: 9, range: 105 }),
   'symbolic-infantry': person('Условный юнит', 'infantry', { symbolic: true }),
+  'cold-war-olive': person('Стрелок Холодной войны', 'infantry', { sprite: { sheet: 'coldWarUnits', frame: 0 } }),
+  'cold-war-slate': person('Стрелок Холодной войны', 'infantry', { sprite: { sheet: 'coldWarUnits', frame: 1 } }),
+  'cold-war-medic': person('Санитар Холодной войны', 'medic', { sprite: { sheet: 'coldWarUnits', frame: 2 } }),
+  'contemporary-olive': person('Современный стрелок', 'infantry', { sprite: { sheet: 'contemporaryUnits', frame: 0 } }),
+  'contemporary-slate': person('Современный стрелок', 'infantry', { sprite: { sheet: 'contemporaryUnits', frame: 1 } }),
+  'contemporary-medic': person('Современный санитар', 'medic', { sprite: { sheet: 'contemporaryUnits', frame: 2 } }),
 };
 
 const team = (fighters: string[], support: string[] = [], vehicles: string[] = []): TeamRoster => ({ fighters, support, vehicles });
@@ -109,6 +116,14 @@ export const scenarios = {
   'pacific-symbolic': {
     label: 'Условная сцена последствий', biome: 'village', speed: 14, range: 65, fire: 1.1,
     teams: [team(['symbolic-infantry']), team(['symbolic-infantry'])],
+  },
+  'cold-war-neutral': {
+    label: 'Условная сцена Холодной войны', biome: 'generic', speed: 16, range: 70, fire: 1,
+    teams: [team(['cold-war-olive'], ['cold-war-medic']), team(['cold-war-slate'])],
+  },
+  'contemporary-neutral': {
+    label: 'Условная сцена современного конфликта', biome: 'generic', speed: 16, range: 70, fire: 1,
+    teams: [team(['contemporary-olive'], ['contemporary-medic']), team(['contemporary-slate'])],
   },
 } satisfies Record<string, BattleScenario>;
 

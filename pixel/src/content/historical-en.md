@@ -16,6 +16,21 @@ The US National Archives cites an estimate of about 16 million deaths during the
 - [US National Archives — death estimate](https://www.archives.gov/press/press-releases/2009/nr09-77)
 - [UK National Army Museum — First World War](https://www.nam.ac.uk/explore/first-world-war#the-western-front)
 
+# history:ww1/beersheba
+## Battle of Beersheba
+
+### Period
+31 October 1917
+
+### Region
+Beersheba, Ottoman Palestine
+
+### Context
+The Australian 4th Light Horse Brigade charged Ottoman trenches as part of the Allied attack on Beersheba. Taking the town helped the Allies outflank the Ottoman line that stretched to Gaza.
+
+### Sources
+- [Australian War Memorial — Attack on Beersheba](https://www.awm.gov.au/collection/E84287)
+
 # history:ww2
 ## Second World War
 

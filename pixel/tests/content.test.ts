@@ -48,6 +48,7 @@ describe('brief collections', () => {
     const { wars } = readCatalog();
     validateContentCoverage(readBriefCollections(), [
       ...wars.map(war => war.id),
+      'history:ww1/beersheba',
       'history:ww2/hiroshima',
       'history:ww2/nagasaki',
     ]);

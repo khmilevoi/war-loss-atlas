@@ -1,8 +1,9 @@
 import { createSceneAudio } from '../audio/scene-audio';
+import type { Estimate } from '../catalog';
 import { loadSceneSprites } from '../resources/sprite-assets';
 import { createBattle } from './battle';
 import { createCanvasRenderer } from './render-canvas';
-import type { SceneDefinition } from './scene-config';
+import { createSceneDeployment, type SceneDefinition } from './scene-config';
 
 export interface SceneHandle {
   restart(): void;
@@ -12,7 +13,7 @@ export interface SceneHandle {
 
 export async function mountScene(
   host: HTMLElement,
-  { scene, signal, unitBudget }: { scene: SceneDefinition; signal: AbortSignal; unitBudget?: readonly [number, number] },
+  { scene, signal, estimate }: { scene: SceneDefinition; signal: AbortSignal; estimate: Estimate },
 ): Promise<SceneHandle> {
   const document = host.ownerDocument;
   const view = document.defaultView;
@@ -49,9 +50,9 @@ export async function mountScene(
     seed: scene.seed,
     aftermathAt: scene.aftermathAt,
     aftermathDuration: scene.aftermathDuration,
-    finaleAt: scene.finaleAt,
+    biome: scene.biome,
     landscape: scene.landscape,
-    unitBudget,
+    deployment: createSceneDeployment(scene, estimate),
     reducedMotion: () => motion.matches,
     onCue: audio.cue,
     onVehicles: audio.setVehicles,
@@ -97,15 +98,12 @@ export async function mountScene(
 
   function applyReducedMotion() {
     if (motion.matches && !battle.frame().finished) {
-      // Computing the static frame may simulate several seconds in one turn.
       stopFrame();
       audio.setActive(false);
       battle.setPaused(true);
       if (scene.aftermathDuration !== undefined) {
         battle.triggerNuke('aftermath');
         battle.step(scene.aftermathDuration + 40);
-      } else if (scene.finaleAt !== undefined) {
-        battle.step(scene.finaleAt + 40);
       }
     }
     draw();

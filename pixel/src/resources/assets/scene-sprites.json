@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": "battle-v1-b8ee707b8b96",
+  "version": "battle-v1-1b062336b3b0",
   "encoder": {
     "pillow": "12.3.0",
     "libwebp": "1.6.0"
@@ -147,9 +147,145 @@
         "losslessWebp": 1574
       },
       "excludedByBrowserParity": []
+    },
+    "coldWarUnits": {
+      "path": "battle-topdown-cold-war-units.webp",
+      "format": "losslessWebp",
+      "bytes": 9208,
+      "sha256": "63e661deba205986c2556b25a1c94a7cab0dd8c7d8718b4387ed049a7496cc06",
+      "rgbaSha256": "9688aeea03d917587119b40baac034d4c4fa54e01b2da05b12cc69afb4d7d3c4",
+      "originalSha256": "3a49eb8f4e2f34ba42271d88e2b5e2774515418908e574311ae6bf63f574df4a",
+      "frameGrid": {
+        "width": 192,
+        "height": 128,
+        "columns": 3,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 12844,
+        "optimizedPng": 12844,
+        "losslessWebp": 9208
+      },
+      "excludedByBrowserParity": [],
+      "originalPath": "generated-sprites/battle-topdown-cold-war-units.png"
+    },
+    "contemporaryUnits": {
+      "path": "battle-topdown-contemporary-units.webp",
+      "format": "losslessWebp",
+      "bytes": 9214,
+      "sha256": "a83e9c844a5ce89d56429ce87cbca84034949d4efd339ce3e5b57ba773d0a0fe",
+      "rgbaSha256": "366c17fccb73b2e4cb309cc7db1499bc02eacb4995ec5b40553fe00f247efb9f",
+      "originalSha256": "9aa420e7d86aa6390f49cf0a4f08623d599c824d5a64fb72855dcef3d3c9e2b6",
+      "frameGrid": {
+        "width": 192,
+        "height": 128,
+        "columns": 3,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 12906,
+        "optimizedPng": 12906,
+        "losslessWebp": 9214
+      },
+      "excludedByBrowserParity": [],
+      "originalPath": "generated-sprites/battle-topdown-contemporary-units.png"
+    },
+    "genericTerrain": {
+      "path": "battle-topdown-generic-terrain.webp",
+      "format": "losslessWebp",
+      "bytes": 11994,
+      "sha256": "7640d021f7bf913b8994927264b74dc17bef5ae75e17975ce42b9246ff3b7319",
+      "rgbaSha256": "a0c3cf708e87393d6fb5caa85d661088bd9b4aa40f5628b19f1bb5c69d57720b",
+      "originalSha256": "16d955ca2e9473caa61788cdb2e12ad47df59991efa58901defe63282ec48076",
+      "frameGrid": {
+        "width": 192,
+        "height": 128,
+        "columns": 3,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 18489,
+        "optimizedPng": 18489,
+        "losslessWebp": 11994
+      },
+      "excludedByBrowserParity": [],
+      "originalPath": "generated-sprites/battle-topdown-generic-terrain.png"
+    },
+    "japanTerrain": {
+      "path": "battle-topdown-japan-terrain.webp",
+      "format": "losslessWebp",
+      "bytes": 17794,
+      "sha256": "ca3def98adf04744c07458b5509729b54d357e9f351cc847cc082f8b32b8a897",
+      "rgbaSha256": "8be92e1f2e2ae57ff42a05a0a7cb8fc5705808af8cc31e925d821c529f8b7d56",
+      "originalSha256": "db98e36d53c19725baa30559945275b826364c216146d77e4b8babfdfe0f02f1",
+      "frameGrid": {
+        "width": 128,
+        "height": 128,
+        "columns": 2,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 29578,
+        "optimizedPng": 29578,
+        "losslessWebp": 17794
+      },
+      "excludedByBrowserParity": [],
+      "originalPath": "generated-sprites/battle-topdown-japan-terrain.png"
     }
   },
   "scenes": {
+    "ww1-western-front": {
+      "required": [
+        "infantry",
+        "vehicles",
+        "terrain"
+      ],
+      "optional": [
+        "roads",
+        "tankCrew",
+        "equipmentWrecks"
+      ],
+      "animated": []
+    },
+    "ww1-palestine": {
+      "required": [
+        "infantry",
+        "vehicles",
+        "terrain"
+      ],
+      "optional": [
+        "equipmentWrecks"
+      ],
+      "animated": []
+    },
+    "us-civil-south-carolina": {
+      "required": [
+        "infantry",
+        "vehicles",
+        "terrain"
+      ],
+      "optional": [
+        "roads",
+        "equipmentWrecks"
+      ],
+      "animated": []
+    },
+    "cold-war-neutral": {
+      "required": [
+        "coldWarUnits",
+        "genericTerrain"
+      ],
+      "optional": [],
+      "animated": []
+    },
+    "contemporary-neutral": {
+      "required": [
+        "contemporaryUnits",
+        "genericTerrain"
+      ],
+      "optional": [],
+      "animated": []
+    },
     "ww2-overview": {
       "required": [
         "infantry",
@@ -168,7 +304,8 @@
         "terrain"
       ],
       "optional": [
-        "roads"
+        "roads",
+        "japanTerrain"
       ],
       "animated": [
         "nuke"
@@ -179,7 +316,8 @@
         "terrain"
       ],
       "optional": [
-        "roads"
+        "roads",
+        "japanTerrain"
       ],
       "animated": [
         "nuke"

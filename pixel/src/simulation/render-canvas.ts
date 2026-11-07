@@ -11,7 +11,11 @@ const GROUND_COLORS = {
   snow: ['#809596', '#a0b0ac', '#b6c2bd', '#334a42'],
   ruins: ['#555453', '#63605c', '#756b61', '#353637'],
   village: ['#596343', '#687149', '#83734e', '#484936'],
+  generic: ['#68684c', '#767355', '#9c9273', '#494634'],
 };
+const GENERIC_PROP_FRAMES = [null, 3, 5, 4] as const;
+const JAPAN_VILLAGE_FRAMES = [0, 1, 2, 1] as const;
+const JAPAN_RUINS_FRAMES = [0, 3, 2, 3] as const;
 const TANK_BLAST_END = .48;
 const TANK_SMOKE_END = 3.6;
 const ease = (a: number, b: number, fraction: number) => a + (b - a) * fraction;
@@ -55,7 +59,13 @@ export function createCanvasRenderer(
   const bloodContext = canvasContext(bloodCanvas);
   const infantry = prepareSheet(assets.infantry, 5, 4);
   const vehicles = prepareSheet(assets.vehicles, 4, 3);
+  const neutralUnits = {
+    coldWarUnits: prepareSheet(assets.coldWarUnits, 3, 2),
+    contemporaryUnits: prepareSheet(assets.contemporaryUnits, 3, 2),
+  };
   const terrainAtlas = prepareSheet(assets.terrain, 4, 4);
+  const genericTerrain = prepareSheet(assets.genericTerrain, 3, 2);
+  const japanTerrain = prepareSheet(assets.japanTerrain, 2, 2);
   const roadAtlas = prepareSheet(assets.roads, 16, 2);
   const nukeAtlas = prepareSheet(assets.nuke, 2, 2);
   const crewAtlas = prepareSheet(assets.tankCrew, 4, 1);
@@ -65,8 +75,9 @@ export function createCanvasRenderer(
   let vehicleIndex = 0;
   for (const [id, definition] of Object.entries(roster)) {
     if (definition.symbolic) continue;
-    const atlas = definition.sheet ? vehicles : infantry;
-    const index = definition.sheet ? vehicleIndex++ : infantryIndex++;
+    const sprite = definition.sprite;
+    const atlas = sprite ? neutralUnits[sprite.sheet] : definition.sheet ? vehicles : infantry;
+    const index = sprite?.frame ?? (definition.sheet ? vehicleIndex++ : infantryIndex++);
     if (atlas?.frames[index]) unitSprites.set(id, { atlas, index });
   }
   let frame: BattleFrame;
@@ -113,17 +124,37 @@ export function createCanvasRenderer(
   }
 
   function field() {
-    const row = BIOMES.indexOf(frame.biome) * 4;
+    const legacyRow = BIOMES.indexOf(frame.biome) * 4;
     const colors = GROUND_COLORS[frame.biome];
+    const japanFrames = frame.biome === 'village' ? JAPAN_VILLAGE_FRAMES
+      : frame.biome === 'ruins' ? JAPAN_RUINS_FRAMES : null;
     for (const { x, y, variant, flipX, flipY } of frame.terrain) {
-      if (terrainAtlas) {
-        drawFrame(terrainAtlas, row + variant, x, y, TILE_SIZE, TILE_SIZE);
+      if (frame.biome === 'generic' && genericTerrain) {
+        const ground = Number(flipX) + Number(flipY);
+        drawFrame(genericTerrain, ground, x, y, TILE_SIZE, TILE_SIZE);
+        const prop = GENERIC_PROP_FRAMES[variant];
+        if (prop !== null) drawFrame(genericTerrain, prop, x, y, TILE_SIZE, TILE_SIZE);
+        continue;
+      }
+      if (japanTerrain && japanFrames) {
+        drawFrame(japanTerrain, japanFrames[variant], x, y, TILE_SIZE, TILE_SIZE);
+        continue;
+      }
+      if (terrainAtlas && legacyRow >= 0) {
+        drawFrame(terrainAtlas, legacyRow + variant, x, y, TILE_SIZE, TILE_SIZE);
         continue;
       }
       ctx.fillStyle = colors[0];
       ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
       ctx.fillStyle = colors[1];
       ctx.fillRect(x + (flipX ? 4 : 17), y + (flipY ? 7 : 20), 9, 2);
+      if (frame.biome === 'generic') {
+        if (variant === 3) {
+          ctx.fillStyle = colors[3];
+          ctx.fillRect(x + 11, y + 11, 11, 10);
+        }
+        continue;
+      }
       if (!isObjectTile(variant)) continue;
       ctx.fillStyle = colors[3];
       ctx.fillRect(x + 7, y + 8, 17, 16);

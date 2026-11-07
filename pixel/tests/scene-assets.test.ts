@@ -37,7 +37,8 @@ describe('versioned scene sprite sets', () => {
     await load('hiroshima', signal);
     await load('nagasaki', signal);
     expect(decode.mock.calls.filter(([, name]) => name === 'nuke')).toHaveLength(1);
-    expect(decode).toHaveBeenCalledTimes(7);
+    expect(decode.mock.calls.filter(([, name]) => name === 'japanTerrain')).toHaveLength(1);
+    expect(decode).toHaveBeenCalledTimes(8);
   });
 
   it('can abort one waiter without rejecting another and omits effect sheets when reduced', async () => {
@@ -52,7 +53,7 @@ describe('versioned scene sprite sets', () => {
     await expect(first).rejects.toMatchObject({ name: 'AbortError' });
     resolveTerrain(decodedImage('terrain'));
     await expect(second).resolves.toHaveProperty('terrain');
-    expect(decode.mock.calls.map(([, name]) => name).sort()).toEqual(['roads', 'terrain']);
+    expect(decode.mock.calls.map(([, name]) => name).sort()).toEqual(['japanTerrain', 'roads', 'terrain']);
   });
 
   it('retries rejected or dimension-mismatched required assets', async () => {
