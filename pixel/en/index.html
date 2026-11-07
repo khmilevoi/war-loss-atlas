@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>%atlas-title%</title>
+    <link rel="stylesheet" href="/src/app/styles.css">
+  </head>
+  <body>
+    <div id="app" data-startup-error="%atlas-startup-error%" data-startup-retry="%atlas-startup-retry%">
+      <main class="startup">
+        <div class="startup__tiles" aria-hidden="true"></div>
+        <p class="startup__status" role="status">%atlas-startup-status%</p>
+        <noscript>
+          <style>.startup__tiles, .startup__status { display: none; }</style>
+          <p>%atlas-startup-no-script%</p>
+        </noscript>
+      </main>
+    </div>
+    <script type="module" src="/src/app/main.tsx"></script>
+  </body>
+</html>

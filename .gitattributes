@@ -3,3 +3,4 @@
 data/ucdp-conflict-year.csv -text -diff
 data/geography/*.geojson -text
 public/geo/*.geojson -text
+pixel/reference/battle-preview/** -text -whitespace

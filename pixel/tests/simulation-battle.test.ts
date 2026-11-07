@@ -1,0 +1,133 @@
+import { createHash } from 'node:crypto';
+import { describe, expect, it } from 'vitest';
+import { createBattle, type BattleCue, type BattleScenarioId } from '../src/simulation/battle';
+
+const originalSnapshots: Partial<Record<BattleScenarioId, readonly string[]>> = {
+  'south-carolina': ['effe256c58fa', '99ecfee80b10', '51edb1a5a0d8', '17ca1d62760c'],
+  palestine: ['84035763e170', 'ffdc1496082d', '4a0db4036361', '3c3cbb7bf7fd'],
+  'western-front': ['132a7438be47', 'c86c555aeced', '36368d456dff', '732210ba5cc6'],
+  'eastern-front': ['8838917ea3ca', '54f788c82f4c', '650b46913c96', '9c373ff7886d'],
+  'tank-battle': ['811c892a5ace', 'aa4aa1964ddf', 'a6acf8e88863', 'acd861729244'],
+  vietnam: ['6f87f94b09cc', '5375605ad7c8', '09695e9e5ef4', 'c02b6aab95d9'],
+};
+
+const hash = (snapshot: unknown) =>
+  createHash('sha256').update(JSON.stringify(snapshot)).digest('hex').slice(0, 12);
+
+describe('deterministic battle core', () => {
+  it.each(Object.entries(originalSnapshots))('matches frozen %s snapshots', (scenario, expected) => {
+    const cues: BattleCue[] = [];
+    const battle = createBattle({ scenario: scenario as BattleScenarioId, seed: 1846, onCue: cue => cues.push(cue) });
+    const hashes = [hash(battle.snapshot())];
+    for (const ticks of [250, 500, 1500]) {
+      for (let index = 0; index < ticks; index++) battle.step(40);
+      hashes.push(hash(battle.snapshot()));
+    }
+    expect(hashes).toEqual(expected);
+    expect(new Set(cues)).toEqual(new Set(['rifle', 'cannon', 'explosion']));
+    battle.reset();
+    expect(hash(battle.snapshot())).toBe(expected[0]);
+  });
+
+  it.each([[false, 1880], [true, 480]] as const)(
+    'keeps the original manual effect timing with reduced motion set to %s',
+    (reducedMotion, peak) => {
+      const cues: BattleCue[] = [];
+      const battle = createBattle({ scenario: 'tank-battle', seed: 1846, reducedMotion, onCue: cue => cues.push(cue) });
+      expect(battle.triggerNuke()).toBe(true);
+      expect(battle.triggerNuke()).toBe(false);
+      expect(battle.snapshot().units).toHaveLength(0);
+      for (let time = 40; time < peak; time += 40) battle.step(40);
+      expect(battle.snapshot().terrain.biome).toBe('snow');
+      battle.step(40);
+      expect(battle.snapshot().nuke.whiteout).toBe(1);
+      expect(battle.snapshot().terrain.biome).toBe('ruins');
+      for (let time = peak + 40; time <= 3000; time += 40) battle.step(40);
+      expect(battle.snapshot().nuke.active).toBe(false);
+      expect(battle.snapshot().units).toHaveLength(14);
+      expect(cues).toEqual(['nuke']);
+    },
+  );
+  it('keeps troops and damage through a scripted episode without redeploying', () => {
+    const battle = createBattle({ scenario: 'pacific-symbolic', seed: 19450806 });
+    for (let time = 40; time <= 6000; time += 40) battle.step(40);
+    const before = battle.snapshot().units;
+    expect(before.length).toBeGreaterThan(0);
+    expect(battle.triggerNuke('aftermath')).toBe(true);
+    expect(battle.snapshot().units).toEqual(before);
+    battle.step(3200);
+    expect(battle.frame().finished).toBe(true);
+    expect(battle.snapshot().terrain.biome).toBe('ruins');
+    expect(battle.snapshot().units).toEqual(before);
+    const terminal = battle.snapshot();
+    battle.step(400);
+    expect(battle.snapshot()).toEqual(terminal);
+    battle.reset();
+    expect(battle.frame().finished).toBe(false);
+    expect(battle.snapshot().time).toBe(0);
+  });
+
+  it('leaves a static aftermath without a white flash in reduced motion', () => {
+    const battle = createBattle({ scenario: 'pacific-symbolic', reducedMotion: true });
+    battle.triggerNuke('aftermath');
+    for (let time = 40; time <= 3200; time += 40) {
+      battle.step(40);
+      expect(battle.snapshot().nuke.whiteout).toBe(0);
+    }
+    expect(battle.frame().finished).toBe(true);
+    expect(battle.snapshot().terrain.biome).toBe('ruins');
+  });
+
+
+  it('leaves a deterministic, unit-budget-independent overview finale without a flash', () => {
+    const run = (unitBudget?: readonly [number, number]) => {
+      const settled: unknown[] = [];
+      const cues: BattleCue[] = [];
+      const battle = createBattle({
+        scenario: 'eastern-front', seed: 1943, finaleAt: 2400, unitBudget,
+        onSettledBlood: stain => settled.push(stain), onCue: cue => cues.push(cue),
+      });
+      expect(battle.frame().craters).toHaveLength(0);
+      battle.step(2360);
+      expect(battle.frame().finished).toBe(false);
+      battle.step(40);
+      const frame = battle.frame();
+      expect(frame.finished).toBe(true);
+      expect(frame.biome).toBe('ruins');
+      expect(frame.terrain.filter(tile => tile.variant === 1 || tile.variant === 3).length).toBeGreaterThan(40);
+      expect(frame.craters.length).toBeGreaterThan(45);
+      expect(frame.wrecks.filter(wreck => wreck.kind === 'tank').length).toBeGreaterThanOrEqual(8);
+      expect(settled.length).toBeGreaterThanOrEqual(40);
+      expect(frame.whiteout).toBe(0);
+      expect(cues).not.toContain('nuke');
+      battle.step(4000);
+      expect(battle.frame().time).toBe(frame.time);
+      battle.reset();
+      expect(battle.frame().craters).toHaveLength(0);
+      expect(battle.frame().finished).toBe(false);
+      return frame.craters;
+    };
+    expect(run()).toEqual(run([0, 0]));
+  });
+
+  it.each(['ota-delta', 'urakami-valley'] as const)(
+    'preserves %s topography before and after the episode effect without ground craters',
+    (landscape) => {
+      const battle = createBattle({ scenario: 'pacific-symbolic', landscape, aftermathDuration: 3200 });
+      const initial = battle.frame().landscape;
+      expect(initial).toBeDefined();
+      expect(initial?.water.length).toBeGreaterThan(20);
+      expect(initial?.bridges.length).toBeGreaterThan(0);
+      expect(initial?.ridges.length).toBe(landscape === 'ota-delta' ? 0 : 60);
+      expect(battle.snapshot().units.length).toBeGreaterThan(0);
+      battle.triggerNuke('aftermath');
+      battle.step(3040);
+      expect(battle.frame().finished).toBe(false);
+      battle.step(200);
+      expect(battle.frame().finished).toBe(true);
+      expect(battle.frame().landscape).toBe(initial);
+      expect(battle.frame().craters).toEqual([]);
+    },
+  );
+
+});

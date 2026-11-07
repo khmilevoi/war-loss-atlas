@@ -12,16 +12,57 @@ const publicFiles = new Set(['data/manifest.json', 'data/ucdp-conflict-year.csv'
 const sourceFiles = new Set(['src/data/generated/atlas.json', 'src/data/historical.json', 'src/data/placements.json',
   'src/data/country-anchors.json', 'src/data/sources.json']);
 const rootFiles = new Set(['.gitattributes', '.gitignore', '.dockerignore', 'Dockerfile', 'docker-compose.yml', 'rpi.toml',
-  'README.md', 'package.json', 'package-lock.json', 'index.html', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts', 'playwright.config.ts']);
+  'README.md', 'package.json', 'package-lock.json', 'index.html', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts', 'playwright.config.ts',
+  'rpi.pixel.toml', 'docker-compose.pixel.yml']);
 const scriptFiles = new Set(['scripts/check-public.ts', 'scripts/import-data.ts', 'scripts/check-server.mjs', 'scripts/check-dev.ts']);
 const docsFiles = new Set(['docs/verification.md', 'docs/data-audit.md', 'docs/deployment.md']);
 const localOnly = new Set(['.git', 'node_modules', '.superpowers', 'coverage', 'playwright-report', 'test-results']);
+const pixelFiles = new Set([
+  'pixel/package.json', 'pixel/package-lock.json', 'pixel/tsconfig.json', 'pixel/vite.config.ts',
+  'pixel/vitest.config.ts', 'pixel/playwright.config.ts', 'pixel/ru/index.html', 'pixel/en/index.html',
+  'pixel/src/app/main.tsx', 'pixel/src/app/styles.css', 'pixel/tests/static.test.ts', 'pixel/tests/browser/static.spec.ts',
+  'pixel/src/app/atlas-view.tsx', 'pixel/src/catalog/index.ts', 'pixel/tests/catalog.test.ts',
+  'pixel/src/map/land.ts', 'pixel/src/map/world-map.tsx', 'pixel/src/map/map.css', 'pixel/tests/map.test.ts',
+  'pixel/src/card/war-dialog.tsx', 'pixel/src/card/card.css', 'pixel/src/i18n/atlas-copy.ts',
+  'pixel/src/content/build.ts', 'pixel/src/content/compiled.d.ts',
+  'pixel/src/content/generate-ucdp.ts', 'pixel/src/content/index.ts', 'pixel/src/content/parse.ts',
+  'pixel/src/content/ucdp-names-ru.ts', 'pixel/src/content/historical-en.md', 'pixel/src/content/historical-ru.md',
+  'pixel/src/content/ucdp-en.md', 'pixel/src/content/ucdp-ru.md', 'pixel/tests/content.test.ts',
+  'pixel/tests/browser/map-card.spec.ts', 'pixel/src/catalog/ww2-episodes.ts', 'pixel/src/card/scene-slot.tsx',
+  'pixel/src/simulation/battle.ts', 'pixel/src/simulation/roster.ts', 'pixel/src/simulation/render-canvas.ts',
+  'pixel/src/simulation/mount-scene.ts', 'pixel/src/resources/sprite-assets.ts', 'pixel/src/audio/scene-audio.ts',
+  'pixel/src/simulation/landscape.ts',
+  'pixel/src/simulation/scene-config.ts', 'pixel/tests/scene-config.test.ts',
+  'pixel/src/ui/pixel-icon.tsx', 'pixel/src/ui/pixel-icon.css',
+  'pixel/src/simulation/unit-calibration.ts', 'pixel/tests/unit-calibration.test.ts', 'pixel/tests/scene-assets.test.ts',
+  'pixel/src/audio/interface-audio.ts', 'pixel/scripts/build-scene-sprites.py',
+  'pixel/src/resources/assets/scene-sprites.json',
+  'pixel/src/resources/assets/battle-topdown-equipment-wrecks.webp', 'pixel/src/resources/assets/battle-topdown-infantry.webp',
+  'pixel/src/resources/assets/battle-topdown-nuke.webp', 'pixel/src/resources/assets/battle-topdown-roads.webp',
+  'pixel/src/resources/assets/battle-topdown-tank-crew.webp', 'pixel/src/resources/assets/battle-topdown-terrain.webp',
+  'pixel/src/resources/assets/battle-topdown-vehicles.png',
+  'pixel/tests/simulation-battle.test.ts', 'pixel/tests/scene-audio.test.ts', 'pixel/tests/browser/scene-lifecycle.spec.ts',
+  'pixel/Dockerfile', 'pixel/Dockerfile.dockerignore', 'pixel/nginx.conf',
+]);
+const battleReferenceFiles = new Set([
+  'README.md', 'manifest.json', 'atlas-battle-audio.js', 'atlas-grounded-component.js',
+  'atlas-grounded-preview.mjs', 'atlas-grounded-theme.css', 'atlas-pixel-drip.webp', 'atlas-press-start-OFL.txt',
+  'atlas-unit-roster.mjs', 'battle-engine.js', 'battle-topdown-equipment-wrecks.png',
+  'battle-topdown-infantry.png', 'battle-topdown-nuke.png', 'battle-topdown-roads.png',
+  'battle-topdown-tank-crew.png', 'battle-topdown-terrain.png', 'battle-topdown-vehicles.png',
+].map(name => `pixel/reference/battle-preview/${name}`));
+const battleSprites = /^dist\/pixel\/assets\/battle-topdown-(?:equipment-wrecks|infantry|nuke|roads|tank-crew|terrain|vehicles)-[\w-]+\.(?:png|webp)$/;
+const pixelLocalDirectories = new Set(['pixel/node_modules', 'pixel/coverage', 'pixel/playwright-report', 'pixel/test-results']);
 
 function allowedPath(path: string, built = true): boolean {
   if (rootFiles.has(path) || publicFiles.has(path) || sourceFiles.has(path) || scriptFiles.has(path) || docsFiles.has(path)) return true;
+  if (pixelFiles.has(path) || battleReferenceFiles.has(path)) return true;
   if (/^(?:src|server)\/(?:[\w-]+\/)*[\w-]+\.(?:ts|tsx|css)$/.test(path)) return true;
   if (/^tests\/(?:[\w-]+\/)*[\w.-]+\.(?:ts|js)$/.test(path)) return true;
   if (!built) return false;
+  if (/^dist\/pixel\/(?:ru|en)\/index\.html$/.test(path)) return true;
+  if (/^dist\/pixel\/assets\/[\w-]+-[\w-]+\.(?:js|css)$/.test(path)) return true;
+  if (battleSprites.test(path)) return true;
   if (/^dist\/(?:client|server)\/assets\/[\w-]+\.(?:js|css)$/.test(path)) return true;
   if (path === 'dist/client/index.html' || path === 'dist/server/index.js') return true;
   return ['client', 'server'].some(side => publicFiles.has(path.replace(`dist/${side}/`, 'public/')) && path.startsWith(`dist/${side}/`));
@@ -43,6 +84,7 @@ export async function checkPublicFiles(target: string): Promise<string[]> {
     for (const entry of readdirSync(resolve(target, directory), { withFileTypes: true })) {
       const path = directory ? `${directory}/${entry.name}` : entry.name;
       if (!directory && localOnly.has(entry.name)) continue;
+      if (entry.isDirectory() && pixelLocalDirectories.has(path)) continue;
       if (entry.isSymbolicLink()) errors.push(`Symlink in release tree: ${path}`);
       else if (entry.isDirectory()) visit(path);
       else errors.push(...inspect(path, readFileSync(resolve(target, path), 'utf8')));

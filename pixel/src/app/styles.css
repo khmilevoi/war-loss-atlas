@@ -1,0 +1,129 @@
+:root {
+  color-scheme: dark;
+  color: #f3e4cb;
+  background: #190b12;
+  font: 1rem / 1.5 system-ui, sans-serif;
+  --text: #f3e4cb;
+  --muted: #dbc1b7;
+  --panel: #26151b;
+  --border: #794c4c;
+  --accent: #f1b85c;
+  --tile: #a4494c;
+}
+
+body {
+  margin: 0;
+}
+
+.startup {
+  display: grid;
+  place-content: center;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.startup {
+  min-block-size: 100vh;
+  box-sizing: border-box;
+  justify-items: center;
+  gap: 1.5rem;
+}
+
+.startup__tiles {
+  inline-size: 11rem;
+  block-size: 5.5rem;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 3px, #190b12 3px 4px),
+    repeating-linear-gradient(0deg, transparent 0 3px, #190b12 3px 4px),
+    var(--tile);
+  /* A 44×22 cell mask sampled from the same Natural Earth land as the map. */
+  mask: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 44 22%22%3E%3Cpath d%3D%22M15 0h6v1H15zM23 0h1v1H23zM25 0h1v1H25zM7 1h1v1H7zM9 1h6v1H9zM16 1h1v1H16zM18 1h1v1H18zM23 1h2v1H23zM26 1h11v1H26zM10 2h4v1H10zM15 2h1v1H15zM22 2h13v1H22zM36 2h1v1H36zM10 3h7v1H10zM22 3h13v1H22zM10 4h6v1H10zM22 4h14v1H22zM9 5h5v1H9zM21 5h1v1H21zM25 5h2v1H25zM28 5h6v1H28zM9 6h4v1H9zM21 6h2v1H21zM26 6h9v1H26zM10 7h1v1H10zM21 7h6v1H21zM28 7h7v1H28zM10 8h1v1H10zM20 8h9v1H20zM30 8h5v1H30zM11 9h1v1H11zM20 9h8v1H20zM30 9h1v1H30zM33 9h1v1H33zM13 10h1v1H13zM20 10h7v1H20zM34 10h1v1H34zM13 11h2v1H13zM21 11h1v1H21zM23 11h5v1H23zM13 12h3v1H13zM23 12h4v1H23zM35 12h2v1H35zM12 13h6v1H12zM23 13h4v1H23zM38 13h1v1H38zM13 14h5v1H13zM24 14h3v1H24zM36 14h1v1H36zM39 14h1v1H39zM13 15h4v1H13zM23 15h5v1H23zM36 15h3v1H36zM14 16h3v1H14zM23 16h3v1H23zM27 16h1v1H27zM36 16h3v1H36zM14 17h3v1H14zM24 17h2v1H24zM35 17h4v1H35zM14 18h2v1H14zM24 18h1v1H24zM35 18h4v1H35zM14 19h2v1H14zM37 19h1v1H37zM39 20h1v1H39z%22%2F%3E%3C%2Fsvg%3E") center / 100% 100% no-repeat;
+  animation: build-tiles 0.85s steps(11, end) both;
+}
+
+@keyframes build-tiles {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .startup__tiles {
+    animation: none;
+  }
+}
+
+.startup p,
+.atlas-header h1 {
+  margin: 0;
+}
+
+.atlas-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.8rem;
+}
+
+.atlas-interface-sound {
+  min-block-size: 2.5rem;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.atlas-shell {
+  min-block-size: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.atlas-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding: 0.75rem clamp(1rem, 4vw, 3rem);
+  border-block-end: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.atlas-header h1 {
+  font: 600 clamp(1.375rem, 3vw, 2rem) / 1.15 Georgia, serif;
+}
+
+.atlas-languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.atlas-languages a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding-inline: 0.75rem;
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+.atlas-languages a[aria-current='page'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+a {
+  color: #95ded7;
+  text-underline-offset: 0.18em;
+}
+
+button, summary {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

@@ -1,0 +1,293 @@
+.war-dialog {
+  inline-size: min(72rem, calc(100% - 2rem));
+  max-block-size: calc(100dvh - 2rem);
+  max-inline-size: none;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e1b9a0;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: 0 1rem 5rem #13060d;
+}
+
+.war-dialog__frame {
+  display: flex;
+  flex-direction: column;
+  max-block-size: calc(100dvh - 2rem - 2px);
+}
+
+.war-dialog::backdrop {
+  background: rgb(22 6 13 / 52%);
+}
+
+body:has(.war-dialog[open]) {
+  overflow: hidden;
+}
+
+.war-dialog__header {
+  flex: none;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem clamp(1rem, 2vw, 1.8rem);
+  border-block-end: 1px solid #b45157;
+}
+
+.war-dialog__header h2 {
+  margin: 0;
+  font: 600 clamp(1.45rem, 3.4vw, 2.75rem)/1.12 Georgia, serif;
+  overflow-wrap: anywhere;
+}
+
+.war-dialog__period {
+  border-inline-start: 1px solid #b45157;
+  padding-inline-start: 1rem;
+  font: 1.2rem/1.2 Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.war-dialog button {
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.7rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.war-dialog button:hover {
+  background: #4a2028;
+}
+
+.war-dialog__body {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+  min-block-size: 0;
+  overflow: auto;
+}
+
+.war-dialog__body:not(.war-dialog__body--scene) :is(.war-dialog__brief, .war-dialog__information > .war-estimate),
+.war-dialog__body--scene > * {
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.war-dialog__body:not(.war-dialog__body--scene) .war-dialog__information {
+  display: contents;
+}
+
+.war-dialog__body:not(.war-dialog__body--scene) .war-dialog__brief {
+  grid-area: 1 / 1;
+}
+
+.war-dialog__body--scene {
+  grid-template-columns: minmax(0, 7fr) minmax(17rem, 3fr);
+}
+
+.war-dialog__body--scene .war-dialog__information {
+  max-block-size: min(66vh, 45rem);
+  overflow-y: auto;
+  border-inline-start: 1px solid #b45157;
+  background: #2f1620;
+}
+
+.war-dialog__body--scene .war-dialog__brief {
+  margin-block-start: 1.45rem;
+}
+
+.war-dialog__brief {
+  display: grid;
+  align-content: start;
+  gap: 1.4rem;
+}
+
+.war-dialog h3 {
+  margin: 0 0 0.5rem;
+  color: var(--text);
+  font: 600 1.25rem/1.15 Georgia, serif;
+}
+
+.war-dialog p {
+  margin: 0;
+}
+
+.war-dialog__context p + p {
+  margin-block-start: 0.6rem;
+}
+
+.war-dialog__sources {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding-inline-start: 1.1rem;
+}
+
+.war-dialog__body:not(.war-dialog__body--scene) .war-dialog__information > .war-estimate {
+  grid-area: 1 / 2;
+  border-inline-start: 1px solid #b45157;
+  background: #2f1620;
+}
+
+.war-estimate .war-estimate__value {
+  margin: 0.5rem 0 1rem;
+  color: #ffe4a8;
+  font: 600 clamp(1.4rem, 2.65vw, 2.25rem)/1.15 Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.war-estimate dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.war-estimate dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.war-estimate dd {
+  margin: 0;
+}
+
+.war-estimate .war-estimate__note {
+  margin-block-start: 0.9rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.war-dialog__footer {
+  flex: none;
+  padding: 0.6rem clamp(1rem, 2vw, 1.8rem);
+  border-block-start: 1px solid #b45157;
+}
+
+.war-episode {
+  padding: 0.55rem 0;
+  border-block-end: 1px solid var(--border);
+}
+
+.war-dialog .war-episode > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  inline-size: 100%;
+  text-align: start;
+}
+
+.war-episode > button::after {
+  content: '';
+  flex: none;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border: solid var(--accent);
+  border-width: 0 1px 1px 0;
+  rotate: 45deg;
+}
+
+.war-episode > button[aria-expanded='true']::after {
+  rotate: 225deg;
+}
+
+.war-episode__detail {
+  display: grid;
+  gap: 0.85rem;
+  padding-block-start: 0.7rem;
+}
+
+.war-episode__detail time {
+  font-weight: 650;
+}
+
+.war-episode__detail .war-estimate__value {
+  font-size: 1.3rem;
+}
+
+.scene-slot {
+  min-inline-size: 0;
+}
+
+.scene-slot__view {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: min(100%, calc(max(13rem, 100dvh - 22rem) * 1.66667));
+  aspect-ratio: 5 / 3;
+  border: 1px solid var(--border);
+  background: #22191a;
+}
+
+.scene-slot__host, .scene-slot__status {
+  position: absolute;
+  inset: 0;
+}
+
+.scene-slot__status {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  background: #22191a;
+}
+
+.scene-slot__status i {
+  inline-size: 2.5rem;
+  block-size: 2rem;
+  background: repeating-linear-gradient(90deg, #a24e4c 0 6px, transparent 6px 9px);
+  animation: build-tiles 0.85s steps(5, end) both;
+}
+
+.scene-slot__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block-start: 0.75rem;
+}
+
+.scene-slot .scene-slot__note {
+  margin-block-start: 0.55rem;
+  color: var(--muted);
+  font-size: 0.83rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-slot__status i { animation: none; }
+}
+
+@media (max-width: 43rem) {
+  .war-dialog__header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.4rem 0.65rem;
+  }
+  .war-dialog__period {
+    grid-column: 2;
+    border: 0;
+    padding: 0;
+  }
+  .war-dialog__close {
+    grid-area: 1 / 3 / 3;
+  }
+  .war-dialog__body,
+  .war-dialog__body--scene {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .war-dialog__body:not(.war-dialog__body--scene) .war-dialog__brief {
+    grid-area: 2 / 1;
+  }
+  .war-dialog__body:not(.war-dialog__body--scene) .war-dialog__information > .war-estimate {
+    grid-area: 1 / 1;
+    border-inline-start: 0;
+    border-block-end: 1px solid var(--border);
+  }
+  .war-dialog__body--scene .war-dialog__information {
+    max-block-size: none;
+    border-inline-start: 0;
+    border-block-start: 1px solid #b45157;
+  }
+  .scene-slot__view {
+    inline-size: 100%;
+  }
+}

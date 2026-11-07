@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "version": "battle-v1-b8ee707b8b96",
+  "encoder": {
+    "pillow": "12.3.0",
+    "libwebp": "1.6.0"
+  },
+  "files": {
+    "infantry": {
+      "path": "battle-topdown-infantry.webp",
+      "format": "losslessWebp",
+      "bytes": 1990,
+      "sha256": "d233a3026f6390add24e0119470deab814d8938314729a7e4226b29543463c17",
+      "rgbaSha256": "dcb92a15af239649ffc31f9a723e530a072f8fa22e53d1248b73c77c0d279250",
+      "originalSha256": "2c1bb4e2d8ab3e8f889655c9c3b41f9b11f6c558de98ea910fbf6729e434cfeb",
+      "frameGrid": {
+        "width": 320,
+        "height": 256,
+        "columns": 5,
+        "rows": 4
+      },
+      "candidateBytes": {
+        "originalPng": 6490,
+        "optimizedPng": 4858,
+        "losslessWebp": 1990
+      },
+      "excludedByBrowserParity": []
+    },
+    "vehicles": {
+      "path": "battle-topdown-vehicles.png",
+      "format": "originalPng",
+      "bytes": 39854,
+      "sha256": "021edfab38f52df5b2dd80cd499566040530a0ad49d72480fd24ab815c5e91a3",
+      "rgbaSha256": "459542ed2f6e22735c915c030316a762b8c48c983931f48590a84d6f6efe2d21",
+      "originalSha256": "021edfab38f52df5b2dd80cd499566040530a0ad49d72480fd24ab815c5e91a3",
+      "frameGrid": {
+        "width": 256,
+        "height": 192,
+        "columns": 4,
+        "rows": 3
+      },
+      "candidateBytes": {
+        "originalPng": 39854,
+        "optimizedPng": 39854,
+        "losslessWebp": 27308
+      },
+      "excludedByBrowserParity": [
+        "losslessWebp"
+      ]
+    },
+    "terrain": {
+      "path": "battle-topdown-terrain.webp",
+      "format": "losslessWebp",
+      "bytes": 108500,
+      "sha256": "84c268bdc3984e6403c0848667a85b8c521a8c32b290fca1b14e2632a651894f",
+      "rgbaSha256": "e5b4b9a71b3f754932184fd96a2115bbc3590e0405e18daa853f264fc5480d68",
+      "originalSha256": "b324942ee04bb674f531c79433a1b35e82175136a90c800bd1969f5edffbef94",
+      "frameGrid": {
+        "width": 256,
+        "height": 256,
+        "columns": 4,
+        "rows": 4
+      },
+      "candidateBytes": {
+        "originalPng": 152706,
+        "optimizedPng": 142664,
+        "losslessWebp": 108500
+      },
+      "excludedByBrowserParity": []
+    },
+    "roads": {
+      "path": "battle-topdown-roads.webp",
+      "format": "losslessWebp",
+      "bytes": 36160,
+      "sha256": "b3f340ec5ab6f1e2f68d2db4bce6b22265d6fa11b8b3a12414294ebca80aa7df",
+      "rgbaSha256": "af5781db4e1b83bcc115197a7330de95e709817f8b923ae43c61b2eb255feba4",
+      "originalSha256": "698ffaabcb3ba9a5e65eee475ce19ec4bb0a8cf07a0bd14c676de9d93c2fb82c",
+      "frameGrid": {
+        "width": 1024,
+        "height": 128,
+        "columns": 16,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 56310,
+        "optimizedPng": 49752,
+        "losslessWebp": 36160
+      },
+      "excludedByBrowserParity": []
+    },
+    "nuke": {
+      "path": "battle-topdown-nuke.webp",
+      "format": "losslessWebp",
+      "bytes": 3124,
+      "sha256": "e99ca3dc01b4ac3b4108f6ca99941165ad90453de99f77faf9f65dbebbc01974",
+      "rgbaSha256": "32337f67193da99082ab3c53973d7c982a1de15bcde44cc7034eae949d897bfd",
+      "originalSha256": "87a4562c7b0c15b5e603a07d7d54b093f695d8ce2949941aa21dbf367358d792",
+      "frameGrid": {
+        "width": 256,
+        "height": 256,
+        "columns": 2,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 9687,
+        "optimizedPng": 9797,
+        "losslessWebp": 3124
+      },
+      "excludedByBrowserParity": []
+    },
+    "tankCrew": {
+      "path": "battle-topdown-tank-crew.webp",
+      "format": "losslessWebp",
+      "bytes": 674,
+      "sha256": "2f9af39bd284dd22f6e339ac353fd89c54042344042199e93459fe0bfaa8a4ac",
+      "rgbaSha256": "761cefe18b7b28229b54a3c68e832f15440ea23faef234122029ef558214a507",
+      "originalSha256": "e05a0bc6f5c5bb8a14c50ada7cabd5421e3f72a5aeee3f20973bc41c4a791064",
+      "frameGrid": {
+        "width": 256,
+        "height": 64,
+        "columns": 4,
+        "rows": 1
+      },
+      "candidateBytes": {
+        "originalPng": 1502,
+        "optimizedPng": 1719,
+        "losslessWebp": 674
+      },
+      "excludedByBrowserParity": []
+    },
+    "equipmentWrecks": {
+      "path": "battle-topdown-equipment-wrecks.webp",
+      "format": "losslessWebp",
+      "bytes": 1574,
+      "sha256": "862c19a7210f0566637112b07bae015f2345f25385d82d47784cc2444f9a3dc6",
+      "rgbaSha256": "2c91da57d54b9323c08e118fd5f32104cb98629875ea3cb38ae5473f05640b66",
+      "originalSha256": "714f0f239512172fdaa1369079b9a0c205b40b028c9e06723a73c0d2b3b3e08c",
+      "frameGrid": {
+        "width": 256,
+        "height": 128,
+        "columns": 4,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 3099,
+        "optimizedPng": 4355,
+        "losslessWebp": 1574
+      },
+      "excludedByBrowserParity": []
+    }
+  },
+  "scenes": {
+    "ww2-overview": {
+      "required": [
+        "infantry",
+        "vehicles",
+        "terrain"
+      ],
+      "optional": [
+        "roads",
+        "tankCrew",
+        "equipmentWrecks"
+      ],
+      "animated": []
+    },
+    "hiroshima": {
+      "required": [
+        "terrain"
+      ],
+      "optional": [
+        "roads"
+      ],
+      "animated": [
+        "nuke"
+      ]
+    },
+    "nagasaki": {
+      "required": [
+        "terrain"
+      ],
+      "optional": [
+        "roads"
+      ],
+      "animated": [
+        "nuke"
+      ]
+    }
+  }
+}

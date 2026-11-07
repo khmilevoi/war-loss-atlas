@@ -1,0 +1,76 @@
+import type { Episode } from './index.ts';
+
+export const ww2Episodes = [
+  {
+    warId: 'history:ww2',
+    episodeId: 'hiroshima',
+    names: { ru: 'Атомная бомбардировка Хиросимы', en: 'Atomic bombing of Hiroshima' },
+    period: { from: 1945, to: 1945 },
+    date: {
+      iso: '1945-08-06',
+      precision: 'day',
+      sourceUrl: 'https://www.city.hiroshima.lg.jp/english/peace/1029869/1009930.html',
+    },
+    estimatePeriod: { from: '1945-08-06', through: '1945-12-31' },
+    anchor: {
+      latitude: 34.395,
+      longitude: 132.455,
+      precision: 'illustrative_landmark',
+      label: 'Хиросима, район больницы Сима',
+      basis: 'The City of Hiroshima gives 34°23′41″ N, 132°27′17″ E for the hypocentre above Shima Hospital. The illustrative anchor rounds both coordinates to 0.001°.',
+      sourceUrl: 'https://www.city.hiroshima.lg.jp/faq/atomicbomb-peace/1001613/1002383.html',
+    },
+    estimate: {
+      metric: 'atomic_bombing_deaths',
+      qualifier: 'approximate',
+      value: 140_000,
+      low: null,
+      high: null,
+      comparisonKey: null,
+      source: {
+        title: 'City of Hiroshima — The Realities of the Atomic Bombing',
+        url: 'https://www.city.hiroshima.lg.jp/english/peace/1029920/1009857.html',
+        locator: 'Number of deaths',
+      },
+      scope: 'Смерти от атомной бомбардировки в Хиросиме до конца декабря 1945 года.',
+      uncertainty: 'Точное число неизвестно. Последствия после указанной даты в оценку не входят.',
+    },
+  },
+  {
+    warId: 'history:ww2',
+    episodeId: 'nagasaki',
+    names: { ru: 'Атомная бомбардировка Нагасаки', en: 'Atomic bombing of Nagasaki' },
+    period: { from: 1945, to: 1945 },
+    date: {
+      iso: '1945-08-09',
+      precision: 'day',
+      sourceUrl: 'https://nagasakipeace.jp/en/search/record/photo/part_2_01.html',
+    },
+    estimatePeriod: { from: '1945-08-09', through: '1945-12-31' },
+    anchor: {
+      latitude: 32.774,
+      longitude: 129.863,
+      precision: 'illustrative_landmark',
+      label: 'Нагасаки, район Парка мира',
+      basis: 'Nagasaki City identifies the Prayer Zone in Peace Park as the approximate hypocentre. The city’s published correspondence gives 32°46′25″ N, 129°51′48″ E in the proposal. The illustrative anchor rounds both coordinates to 0.001°.',
+      sourceUrl: 'https://nagasakipeace.jp/en/search/survivors/ruins.html',
+      coordinateSourceUrl: 'https://www.city.nagasaki.lg.jp/teian/61615.html',
+    },
+    estimate: {
+      metric: 'atomic_bombing_deaths',
+      qualifier: 'reported',
+      value: 73_884,
+      low: null,
+      high: null,
+      comparisonKey: null,
+      source: {
+        title: 'City of Nagasaki — Damage Caused by the Atomic Bombing',
+        url: 'https://nagasakipeace.jp/en/reference/materials/kids/higai.html',
+        locator: 'Damage caused by Atomic bombing',
+        version: 'Committee for the Preservation of Atomic Bomb Artifacts report, July 1950',
+      },
+      scope: 'Смерти от атомной бомбардировки в Нагасаки до конца декабря 1945 года.',
+      uncertainty: 'Оценка опубликована в июле 1950 года. Источник не приводит интервал неопределённости.',
+    },
+  },
+] as const satisfies readonly Episode[];

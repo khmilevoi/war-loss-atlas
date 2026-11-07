@@ -30,6 +30,36 @@ describe('release boundary', () => {
     expect(result).toContain('PASS: 1650 unique native rows, 202 conflicts');
   });
 
+  it('allows the declared pixel shell and still checks pixel source and build output', async () => {
+    const root = await fixture({
+      'pixel/ru/index.html': '<html lang="ru"></html>',
+      'pixel/src/app/main.tsx': '-----BEGIN ' + 'PRIVATE KEY-----',
+      'pixel/.env': 'fixture',
+      'pixel/node_modules/dependency/package.json': '{}',
+      'dist/pixel/en/index.html': '<html lang="en"></html>',
+      'dist/pixel/assets/main-abc123.js': 'export {}',
+      'dist/pixel/assets/main-abc123.js.map': '{}',
+    });
+    expect((await checkPublicFiles(root)).sort()).toEqual([
+      'Secret material: pixel/src/app/main.tsx',
+      'Unapproved release file: dist/pixel/assets/main-abc123.js.map',
+      'Unapproved release file: pixel/.env',
+    ]);
+  });
+
+  it('accepts declared hashed sprite outputs and keeps raw references outside dist', async () => {
+    const root = await fixture({
+      'pixel/reference/battle-preview/manifest.json': '{}',
+      'dist/pixel/assets/battle-topdown-infantry-abc123.png': 'fixture',
+      'dist/pixel/assets/extra-abc123.png': 'fixture',
+      'dist/pixel/reference/battle-preview/manifest.json': '{}',
+    });
+    expect((await checkPublicFiles(root)).sort()).toEqual([
+      'Unapproved release file: dist/pixel/assets/extra-abc123.png',
+      'Unapproved release file: dist/pixel/reference/battle-preview/manifest.json',
+    ]);
+  });
+
   it.each(['.env', 'src/.env.local', 'data/' + ['cow', 'source', 'war', 'ledger.csv'].join('_'), 'full_' + 'research/source.csv',
     'src/data/extra.json', 'dist/client/assets/index-abc123.js.map', 'dist/server/archive.csv'])
   ('rejects unexpected or sensitive packaged path %s', async path => {
