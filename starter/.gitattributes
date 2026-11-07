@@ -1,0 +1,2 @@
+/data/OneSided_v26_1.csv -text
+/expected/ANNUAL_BY_ACTOR_TYPE.csv -text whitespace=cr-at-eol
