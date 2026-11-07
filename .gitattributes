@@ -1,6 +1,8 @@
 * text=auto eol=lf
 # Frozen source bytes must survive Windows Git checkouts unchanged.
 data/ucdp-conflict-year.csv -text -diff
+data/ucdp-v26.1/NonState_v26_1.csv -text
+research/results/osv-annual-totals.csv -text whitespace=cr-at-eol
 data/geography/*.geojson -text
 public/geo/*.geojson -text
 reference/battle-preview/** -text -whitespace

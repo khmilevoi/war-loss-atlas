@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -25,6 +25,10 @@ const starterFiles = new Set([
   'starter/.gitattributes', 'starter/.gitignore', 'starter/README.md', 'starter/annual_by_actor_type.sql',
   'starter/data/OneSided_v26_1.csv', 'starter/expected/ANNUAL_BY_ACTOR_TYPE.csv',
   'starter/osv.py', 'starter/sources.csv', 'starter/test_osv.py',
+]);
+const researchFiles = new Set([
+  'data/ucdp-v26.1/NonState_v26_1.csv', 'research/README.md', 'research/sources.csv',
+  'research/results/osv-annual-totals.csv', 'docs/repository-layout.md',
 ]);
 const localOnly = new Set(['.git', 'node_modules', '.superpowers', 'coverage', 'playwright-report', 'test-results']);
 const starterLocalDirectories = new Set(['starter/work', 'starter/__pycache__']);
@@ -90,7 +94,7 @@ function allowedPath(path: string, built = true): boolean {
   // Old release commits kept the application in a nested package.
   const sourcePath = !built && path.startsWith('pixel/') ? path.slice('pixel/'.length) : path;
   if (rootFiles.has(sourcePath) || publicFiles.has(path) || sourceFiles.has(path) || dataToolFiles.has(path) || docsFiles.has(path)) return true;
-  if (starterFiles.has(path)) return true;
+  if (starterFiles.has(path) || researchFiles.has(path)) return true;
   if (appFiles.has(sourcePath) || battleReferenceFiles.has(sourcePath) || generatedReferenceFiles.has(sourcePath)) return true;
   if (!built) return legacyGitFiles.has(path)
     || /^(?:src|server)\/(?:[\w-]+\/)*[\w-]+\.(?:ts|tsx|css)$/.test(path)
@@ -109,15 +113,26 @@ function inspect(path: string, body: string, built = true): string[] {
   return errors;
 }
 
-/** Audit a source/package tree and optional dist; ignored local evidence is never a release input. */
+/** Audit a packaged tree or the Git checkout's shared files, including any built output. */
 export async function checkPublicFiles(target: string): Promise<string[]> {
+  let worktree: ReturnType<typeof gitWorktreePaths>;
+  try { worktree = gitWorktreePaths(target); }
+  catch { return ['Git worktree audit failed (not the repository root or unreadable paths)']; }
+
   const errors: string[] = [];
   function visit(directory = '') {
     for (const entry of readdirSync(resolve(target, directory), { withFileTypes: true })) {
       const path = directory ? `${directory}/${entry.name}` : entry.name;
-      if (!directory && localOnly.has(entry.name)) continue;
-      if (entry.isDirectory() && starterLocalDirectories.has(path)) continue;
+      const worktreeKey = gitWorktreePathKey(path);
+      if (worktree) {
+        const builtOutput = worktreeKey === 'dist' || worktreeKey.startsWith('dist/');
+        if (!builtOutput && !worktree.files.has(worktreeKey) && !worktree.directories.has(worktreeKey)) continue;
+      } else {
+        if (!directory && localOnly.has(entry.name)) continue;
+        if (entry.isDirectory() && starterLocalDirectories.has(path)) continue;
+      }
       if (entry.isSymbolicLink()) errors.push(`Symlink in release tree: ${path}`);
+      else if (entry.isDirectory() && worktree?.files.has(worktreeKey)) errors.push(`Non-file release entry: ${path}`);
       else if (entry.isDirectory()) visit(path);
       else errors.push(...inspect(path, readFileSync(resolve(target, path), 'utf8')));
     }
@@ -127,6 +142,27 @@ export async function checkPublicFiles(target: string): Promise<string[]> {
 }
 
 const git = (target: string, args: string[]) => execFileSync('git', ['-C', target, ...args], { maxBuffer: 32 * 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] });
+const gitWorktreePathKey = (path: string) => process.platform === 'win32' ? path.toLowerCase() : path;
+
+function gitWorktreePaths(target: string) {
+  if (!existsSync(resolve(target, '.git'))) return undefined;
+  const top = git(target, ['rev-parse', '--show-toplevel']).toString('utf8').trim();
+  if (resolve(top).toLowerCase() !== resolve(target).toLowerCase()) throw new Error('Expected the Git root');
+
+  const entries = git(target, ['ls-files', '--cached', '--others', '--exclude-standard', '-z']).toString('utf8').split('\0');
+  const files = new Set(entries.filter(Boolean).map(path => gitWorktreePathKey(path.replace(/\/$/, ''))));
+  const directories = new Set<string>();
+  for (const file of files) {
+    let slash = file.lastIndexOf('/');
+    while (slash !== -1) {
+      const directory = file.slice(0, slash);
+      if (directories.has(directory)) break;
+      directories.add(directory);
+      slash = directory.lastIndexOf('/');
+    }
+  }
+  return { files, directories };
+}
 
 function inspectGitEntries(target: string, entries: string[], label: string): string[] {
   const errors: string[] = [];

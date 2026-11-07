@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, rename, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { checkPublicFiles, checkGitHistory } from '../scripts/check-public';
+import { checkPublicFiles, checkGitHistory, checkGitIndex } from '../scripts/check-public';
 
 const roots: string[] = [];
 async function fixture(files: Record<string, string>) {
@@ -80,6 +80,45 @@ describe('release boundary', () => {
     const errors = (await checkPublicFiles(root)).join('\n');
     expect(errors).toContain('Restricted payload: dist/assets/index-abc123.js');
     expect(errors).toContain('Secret material: src/app/main.tsx');
+  });
+
+  it('skips ignored research in a checkout while auditing tracked files, unignored files and builds', async () => {
+    const archiveDir = 'full_' + 'research';
+    const archive = `${archiveDir}/archive.csv`;
+    const secret = '-----BEGIN ' + 'PRIVATE KEY-----';
+    const root = await fixture({
+      '.gitignore': `/${archiveDir}\n/dist/\n`,
+      'package.json': secret,
+      'src/app/main.tsx': secret,
+      'dist/assets/extra-abc123.png': 'unexpected build output',
+      [archive]: 'local archive',
+    });
+    const git = (...args: string[]) => execFileSync('git', ['-C', root, ...args], { stdio: 'pipe' });
+    git('init', '-q');
+    git('add', '.gitignore', 'package.json');
+
+    expect((await checkPublicFiles(root)).sort()).toEqual([
+      'Secret material: package.json',
+      'Secret material: src/app/main.tsx',
+      'Unapproved release file: dist/assets/extra-abc123.png',
+    ]);
+
+    git('add', '--force', archive);
+    expect(await checkPublicFiles(root)).toContain(`Unapproved release file: ${archive}`);
+    expect(await checkGitIndex(root)).toContain(`Git index: Unapproved release file: ${archive}`);
+  });
+
+  it.skipIf(process.platform !== 'win32')('audits tracked contents after a case-only rename', async () => {
+    const root = await fixture({ 'package.json': '{}' });
+    const git = (...args: string[]) => execFileSync('git', ['-C', root, ...args], { stdio: 'pipe' });
+    git('init', '-q');
+    git('config', 'core.ignorecase', 'true');
+    git('add', 'package.json');
+    await rename(join(root, 'package.json'), join(root, 'intermediate'));
+    await rename(join(root, 'intermediate'), join(root, 'PACKAGE.json'));
+    await writeFile(join(root, 'PACKAGE.json'), '-----BEGIN ' + 'PRIVATE KEY-----');
+
+    expect(await checkPublicFiles(root)).toContain('Secret material: PACKAGE.json');
   });
 
   it('audits removed files in the release history and excludes unrelated branches', async () => {

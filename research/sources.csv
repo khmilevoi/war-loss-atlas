@@ -1,0 +1,5 @@
+source_id,version,access,path,bytes,sha256,source_url,archive_member,license
+ucdp-brd-conflict,26.1,bundled,data/ucdp-conflict-year.csv,314095,b34ecb57f1fc0e73d4bfd7b080212da429af3135a8d360b1c902e45506f81147,https://ucdp.uu.se/downloads/brd/ucdp-brd-conf-261-csv.zip,BattleDeaths_v26_1_conf.csv,CC BY 4.0
+ucdp-nonstate,26.1,bundled,data/ucdp-v26.1/NonState_v26_1.csv,439464,14077bbef099f19da95f60b7c57f2aaa5cff3a16731b5d71012c6b1ac10954b3,https://ucdp.uu.se/downloads/nsos/ucdp-nonstate-261-csv.zip,NonState_v26_1.csv,CC BY 4.0
+ucdp-osv,26.1,bundled,starter/data/OneSided_v26_1.csv,188066,603a9f8eb084b025b3097cc797012e0a533abe8b2089c7169e16688cd40a1d5c,https://ucdp.uu.se/downloads/nsos/ucdp-onesided-261-csv.zip,OneSided_v26_1.csv,CC BY 4.0
+ucdp-prio-acd,26.1,publisher-download,data/ucdp-v26.1/UcdpPrioConflict_v26_1.csv,519114,2aea044f1bcae7b050bb6c79fb796743e787edeed3b90e74e146cfc4e5b05447,https://ucdp.uu.se/downloads/ucdpprio/ucdp-prio-acd-261-csv.zip,UcdpPrioConflict_v26_1.csv,CC BY 4.0
