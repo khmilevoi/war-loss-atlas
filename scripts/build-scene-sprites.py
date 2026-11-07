@@ -1,7 +1,7 @@
 """Rebuild the exact, lossless sprite sheets used by the static atlas.
 
 Run with Pillow 12.3.0 and libwebp 1.6.0 from the project checkout:
-    python web-atlas/pixel/scripts/build-scene-sprites.py
+    python web-atlas/scripts/build-scene-sprites.py
 """
 
 from hashlib import sha256

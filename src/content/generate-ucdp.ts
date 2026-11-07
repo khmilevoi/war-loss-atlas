@@ -1,7 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { loadAtlasData } from '../../../src/data';
-import type { AtlasData, NativeRow } from '../../../src/data';
+import { loadAtlasData } from '../data';
+import type { AtlasData, NativeRow } from '../data';
 import { briefSections } from './parse';
 import type { BriefLocale } from './parse';
 import { actorLabelsByConflict, additionalCountriesRu, territoriesRu } from './ucdp-names-ru';

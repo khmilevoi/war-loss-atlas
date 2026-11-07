@@ -1,11 +1,11 @@
-import { loadAtlasData } from '../../../src/data';
+import { loadAtlasData } from '../data';
 import type {
   AtlasData,
   ConflictSummary,
   HistoricalHighlight,
   Placement,
   SourceRecord,
-} from '../../../src/data';
+} from '../data';
 
 export type WarId = `ucdp:${string}` | `history:${string}`;
 export type Names = Readonly<Record<'ru' | 'en', string>>;

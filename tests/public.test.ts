@@ -19,9 +19,9 @@ afterEach(async () => { await Promise.all(roots.splice(0).map(root => rm(root, {
 
 describe('release boundary', () => {
   it('accepts only the declared application and production artifact tree', async () => {
-    const root = await fixture({ 'package.json': '{}', 'pixel/src/app/main.tsx': 'export {}',
+    const root = await fixture({ 'package.json': '{}', 'src/app/main.tsx': 'export {}',
       'public/licenses/ATTRIBUTION.md': 'Public source attribution; restricted COW data is excluded.',
-      'dist/pixel/assets/index-abc123.js': 'console.log("atlas")', 'dist/pixel/ru/index.html': '<html lang="ru"></html>' });
+      'dist/assets/index-abc123.js': 'console.log("atlas")', 'dist/ru/index.html': '<html lang="ru"></html>' });
     expect(await checkPublicFiles(root)).toEqual([]);
   });
 
@@ -32,41 +32,41 @@ describe('release boundary', () => {
 
   it('allows the declared pixel shell and still checks pixel source and build output', async () => {
     const root = await fixture({
-      'pixel/ru/index.html': '<html lang="ru"></html>',
-      'pixel/src/app/main.tsx': '-----BEGIN ' + 'PRIVATE KEY-----',
-      'pixel/.env': 'fixture',
-      'pixel/node_modules/dependency/package.json': '{}',
-      'dist/pixel/en/index.html': '<html lang="en"></html>',
-      'dist/pixel/assets/main-abc123.js': 'export {}',
-      'dist/pixel/assets/main-abc123.js.map': '{}',
+      'ru/index.html': '<html lang="ru"></html>',
+      'src/app/main.tsx': '-----BEGIN ' + 'PRIVATE KEY-----',
+      '.env': 'fixture',
+      'node_modules/dependency/package.json': '{}',
+      'dist/en/index.html': '<html lang="en"></html>',
+      'dist/assets/main-abc123.js': 'export {}',
+      'dist/assets/main-abc123.js.map': '{}',
     });
     expect((await checkPublicFiles(root)).sort()).toEqual([
-      'Secret material: pixel/src/app/main.tsx',
-      'Unapproved release file: dist/pixel/assets/main-abc123.js.map',
-      'Unapproved release file: pixel/.env',
+      'Secret material: src/app/main.tsx',
+      'Unapproved release file: .env',
+      'Unapproved release file: dist/assets/main-abc123.js.map',
     ]);
   });
 
   it('accepts declared hashed sprite outputs and keeps raw references outside dist', async () => {
     const root = await fixture({
-      'pixel/reference/battle-preview/manifest.json': '{}',
-      'pixel/src/map/map-flag.ts': 'export {}',
-      'pixel/src/resources/assets/battle-topdown-japan-terrain.webp': 'fixture',
-      'dist/pixel/assets/battle-topdown-infantry-abc123.png': 'fixture',
-      'dist/pixel/assets/battle-topdown-japan-terrain-abc123.webp': 'fixture',
-      'dist/pixel/assets/battle-topdown-japan-terrain-abc123.png': 'fixture',
-      'dist/pixel/assets/extra-abc123.png': 'fixture',
-      'dist/pixel/reference/battle-preview/manifest.json': '{}',
+      'reference/battle-preview/manifest.json': '{}',
+      'src/map/map-flag.ts': 'export {}',
+      'src/resources/assets/battle-topdown-japan-terrain.webp': 'fixture',
+      'dist/assets/battle-topdown-infantry-abc123.png': 'fixture',
+      'dist/assets/battle-topdown-japan-terrain-abc123.webp': 'fixture',
+      'dist/assets/battle-topdown-japan-terrain-abc123.png': 'fixture',
+      'dist/assets/extra-abc123.png': 'fixture',
+      'dist/reference/battle-preview/manifest.json': '{}',
     });
     expect((await checkPublicFiles(root)).sort()).toEqual([
-      'Unapproved release file: dist/pixel/assets/battle-topdown-japan-terrain-abc123.png',
-      'Unapproved release file: dist/pixel/assets/extra-abc123.png',
-      'Unapproved release file: dist/pixel/reference/battle-preview/manifest.json',
+      'Unapproved release file: dist/assets/battle-topdown-japan-terrain-abc123.png',
+      'Unapproved release file: dist/assets/extra-abc123.png',
+      'Unapproved release file: dist/reference/battle-preview/manifest.json',
     ]);
   });
 
   it.each(['.env', 'src/.env.local', 'data/' + ['cow', 'source', 'war', 'ledger.csv'].join('_'), 'full_' + 'research/source.csv',
-    'src/data/extra.json', 'src/entry-client.tsx', 'dist/client/index.html', 'dist/server/index.js'])
+    'src/data/extra.json', 'src/entry-client.tsx', 'pixel/src/app/main.tsx', 'dist/client/index.html', 'dist/server/index.js'])
   ('rejects unexpected or sensitive packaged path %s', async path => {
     const root = await fixture({ [path]: 'fixture' });
     expect((await checkPublicFiles(root)).join('\n')).toContain(path);
@@ -74,22 +74,26 @@ describe('release boundary', () => {
 
   it('rejects private keys and restricted table payloads hidden in approved assets', async () => {
     const root = await fixture({
-      'dist/pixel/assets/index-abc123.js': ['War', 'Num'].join('') + ',WarName,StartYear\n1,example,1900',
-      'pixel/src/app/main.tsx': '-----BEGIN ' + 'PRIVATE KEY-----\nfixture\n-----END PRIVATE KEY-----',
+      'dist/assets/index-abc123.js': ['War', 'Num'].join('') + ',WarName,StartYear\n1,example,1900',
+      'src/app/main.tsx': '-----BEGIN ' + 'PRIVATE KEY-----\nfixture\n-----END PRIVATE KEY-----',
     });
     const errors = (await checkPublicFiles(root)).join('\n');
-    expect(errors).toContain('Restricted payload: dist/pixel/assets/index-abc123.js');
-    expect(errors).toContain('Secret material: pixel/src/app/main.tsx');
+    expect(errors).toContain('Restricted payload: dist/assets/index-abc123.js');
+    expect(errors).toContain('Secret material: src/app/main.tsx');
   });
 
-  it('audits removed files in every reachable Git commit, not just the current checkout', async () => {
+  it('audits removed files in the release history and excludes unrelated branches', async () => {
     const root = await fixture({ 'package.json': '{}' });
     const git = (...args: string[]) => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: 'pipe' });
     git('init', '-q'); git('config', 'user.name', 'Atlas fixture'); git('config', 'user.email', 'fixture@example.invalid');
     git('add', 'package.json'); git('commit', '-qm', 'safe');
     expect(await checkGitHistory(root)).toEqual([]);
+    git('switch', '-qc', 'research');
     await writeFile(join(root, '.env'), 'FIXTURE=not-a-secret');
     git('add', '.env'); git('commit', '-qm', 'forbidden fixture');
+    git('switch', '-q', '-');
+    expect(await checkGitHistory(root)).toEqual([]);
+    git('merge', '--ff-only', 'research');
     git('rm', '-q', '.env'); git('commit', '-qm', 'remove fixture');
     expect((await checkGitHistory(root)).join('\n')).toContain('.env');
   });

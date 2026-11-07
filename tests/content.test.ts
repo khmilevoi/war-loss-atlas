@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createHash } from 'node:crypto';
 import { parseBriefCollection, readBriefCollections, readCardContent, validateContentCoverage } from '../src/content';
 import { readCatalog } from '../src/catalog';
-import { loadAtlasData } from '../../src/data';
+import { loadAtlasData } from '../src/data';
 import { generateUcdpBriefs } from '../src/content/generate-ucdp';
 import ucdpRu from '../src/content/ucdp-ru.md?raw';
 import ucdpEn from '../src/content/ucdp-en.md?raw';

@@ -1,6 +1,6 @@
 # Сгенерированные спрайты пиксельного атласа
 
-В `originals/` лежат исходники встроенного ImageGen. Сборка использует версии `*-overhead.png` и исходник `generic-terrain.png`. Файлы `battle-topdown-*.png` собраны в ячейки 64 × 64 px. Порядок кадров слева направо, затем сверху вниз. [Стиль спрайтов](../../../../docs/superpowers/specs/pixel-war-sprite-style.md) · [Таблица назначений](../../../../docs/superpowers/specs/pixel-war-sprite-assignments.md).
+В `originals/` лежат исходники встроенного ImageGen. Сборка использует версии `*-overhead.png` и исходник `generic-terrain.png`. Файлы `battle-topdown-*.png` собраны в ячейки 64 × 64 px. Порядок кадров слева направо, затем сверху вниз. [Стиль спрайтов](../../../docs/superpowers/specs/pixel-war-sprite-style.md) · [Таблица назначений](../../../docs/superpowers/specs/pixel-war-sprite-assignments.md).
 
 | Файл | Сетка | Порядок кадров |
 | --- | --- | --- |
@@ -21,8 +21,8 @@
 ## Сборка из сохранённых исходников
 
 ```powershell
-python web-atlas/pixel/scripts/prepare-generated-sprites.py
-python web-atlas/pixel/scripts/build-scene-sprites.py
+python web-atlas/scripts/prepare-generated-sprites.py
+python web-atlas/scripts/build-scene-sprites.py
 ```
 
 Контрольные суммы SHA-256 исходников и листов с кадрами.

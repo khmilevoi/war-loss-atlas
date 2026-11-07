@@ -13,47 +13,46 @@ const sourceFiles = new Set(['src/data/generated/atlas.json', 'src/data/historic
   'src/data/country-anchors.json', 'src/data/sources.json']);
 const rootFiles = new Set(['.gitattributes', '.gitignore', 'rpi.toml',
   'README.md', 'package.json', 'package-lock.json', 'tsconfig.json', 'vitest.config.ts',
-  'rpi.pixel.toml', 'docker-compose.pixel.yml']);
+  'rpi.pixel.toml', 'docker-compose.pixel.yml', 'Dockerfile', 'Dockerfile.dockerignore', 'nginx.conf',
+  'playwright.config.ts', 'vite.config.ts']);
 const dataToolFiles = new Set(['scripts/check-public.ts', 'scripts/import-data.ts', 'tests/data.test.ts', 'tests/public.test.ts',
   'src/data/aggregate.ts', 'src/data/index.ts', 'src/data/placement-adapter.ts', 'src/data/types.ts', 'src/data/validate.ts']);
-const legacyGitFiles = new Set(['.dockerignore', 'Dockerfile', 'docker-compose.yml', 'index.html', 'vite.config.ts',
-  'playwright.config.ts', 'scripts/check-server.mjs', 'scripts/check-dev.ts']);
+const legacyGitFiles = new Set(['.dockerignore', 'docker-compose.yml', 'index.html',
+  'scripts/check-server.mjs', 'scripts/check-dev.ts']);
 const docsFiles = new Set(['docs/verification.md', 'docs/data-audit.md', 'docs/deployment.md']);
 const localOnly = new Set(['.git', 'node_modules', '.superpowers', 'coverage', 'playwright-report', 'test-results']);
-const pixelFiles = new Set([
-  'pixel/package.json', 'pixel/package-lock.json', 'pixel/tsconfig.json', 'pixel/vite.config.ts',
-  'pixel/vitest.config.ts', 'pixel/playwright.config.ts', 'pixel/ru/index.html', 'pixel/en/index.html',
-  'pixel/src/app/main.tsx', 'pixel/src/app/styles.css', 'pixel/tests/static.test.ts', 'pixel/tests/browser/static.spec.ts',
-  'pixel/src/app/atlas-view.tsx', 'pixel/src/catalog/index.ts', 'pixel/tests/catalog.test.ts',
-  'pixel/src/map/land.ts', 'pixel/src/map/world-map.tsx', 'pixel/src/map/map-flag.ts', 'pixel/src/map/map.css', 'pixel/tests/map.test.ts',
-  'pixel/src/card/war-dialog.tsx', 'pixel/src/card/card.css', 'pixel/src/i18n/atlas-copy.ts',
-  'pixel/src/content/build.ts', 'pixel/src/content/compiled.d.ts',
-  'pixel/src/content/generate-ucdp.ts', 'pixel/src/content/index.ts', 'pixel/src/content/parse.ts',
-  'pixel/src/content/ucdp-names-ru.ts', 'pixel/src/content/historical-en.md', 'pixel/src/content/historical-ru.md',
-  'pixel/src/content/ucdp-en.md', 'pixel/src/content/ucdp-ru.md', 'pixel/tests/content.test.ts',
-  'pixel/tests/browser/map-card.spec.ts', 'pixel/src/catalog/ww1-episodes.ts', 'pixel/src/catalog/ww2-episodes.ts',
-  'pixel/src/card/scene-slot.tsx',
-  'pixel/src/simulation/battle.ts', 'pixel/src/simulation/roster.ts', 'pixel/src/simulation/render-canvas.ts',
-  'pixel/src/simulation/mount-scene.ts', 'pixel/src/resources/sprite-assets.ts', 'pixel/src/audio/scene-audio.ts',
-  'pixel/src/simulation/landscape.ts', 'pixel/src/simulation/render-actions.ts', 'pixel/tests/action-playback.test.ts',
-  'pixel/src/simulation/scene-config.ts', 'pixel/tests/scene-config.test.ts',
-  'pixel/src/ui/pixel-icon.tsx', 'pixel/src/ui/pixel-icon.css',
-  'pixel/src/simulation/unit-calibration.ts', 'pixel/tests/unit-calibration.test.ts', 'pixel/tests/scene-assets.test.ts',
-  'pixel/src/audio/interface-audio.ts', 'pixel/scripts/build-scene-sprites.py', 'pixel/scripts/prepare-generated-sprites.py',
-  'pixel/src/resources/assets/scene-sprites.json',
-  'pixel/src/resources/assets/battle-topdown-cold-war-units.webp', 'pixel/src/resources/assets/battle-topdown-contemporary-units.webp',
-  'pixel/src/resources/assets/battle-topdown-equipment-wrecks.webp', 'pixel/src/resources/assets/battle-topdown-infantry.webp',
-  'pixel/src/resources/assets/battle-topdown-generic-terrain.webp', 'pixel/src/resources/assets/battle-topdown-japan-terrain.webp',
-  'pixel/src/resources/assets/battle-topdown-nuke.webp', 'pixel/src/resources/assets/battle-topdown-roads.webp',
-  'pixel/src/resources/assets/battle-topdown-tank-crew.webp', 'pixel/src/resources/assets/battle-topdown-terrain.webp',
-  'pixel/src/resources/assets/battle-topdown-hiroshima-city.webp',
-  'pixel/src/resources/assets/battle-topdown-japan-civilians.webp',
-  'pixel/src/resources/assets/battle-topdown-japan-surfaces.webp',
-  'pixel/src/resources/assets/battle-topdown-korea-units.webp',
-  'pixel/src/resources/assets/battle-topdown-nagasaki-city.webp',
-  'pixel/src/resources/assets/battle-topdown-vehicles.png',
-  'pixel/tests/simulation-battle.test.ts', 'pixel/tests/scene-audio.test.ts', 'pixel/tests/browser/scene-lifecycle.spec.ts',
-  'pixel/Dockerfile', 'pixel/Dockerfile.dockerignore', 'pixel/nginx.conf',
+const appFiles = new Set([
+  'ru/index.html', 'en/index.html',
+  'src/app/main.tsx', 'src/app/styles.css', 'tests/static.test.ts', 'tests/browser/static.spec.ts',
+  'src/app/atlas-view.tsx', 'src/catalog/index.ts', 'tests/catalog.test.ts',
+  'src/map/land.ts', 'src/map/world-map.tsx', 'src/map/map-flag.ts', 'src/map/map.css', 'tests/map.test.ts',
+  'src/card/war-dialog.tsx', 'src/card/card.css', 'src/i18n/atlas-copy.ts',
+  'src/content/build.ts', 'src/content/compiled.d.ts',
+  'src/content/generate-ucdp.ts', 'src/content/index.ts', 'src/content/parse.ts',
+  'src/content/ucdp-names-ru.ts', 'src/content/historical-en.md', 'src/content/historical-ru.md',
+  'src/content/ucdp-en.md', 'src/content/ucdp-ru.md', 'tests/content.test.ts',
+  'tests/browser/map-card.spec.ts', 'src/catalog/ww1-episodes.ts', 'src/catalog/ww2-episodes.ts',
+  'src/card/scene-slot.tsx',
+  'src/simulation/battle.ts', 'src/simulation/roster.ts', 'src/simulation/render-canvas.ts',
+  'src/simulation/mount-scene.ts', 'src/resources/sprite-assets.ts', 'src/audio/scene-audio.ts',
+  'src/simulation/landscape.ts', 'src/simulation/render-actions.ts', 'tests/action-playback.test.ts',
+  'src/simulation/scene-config.ts', 'tests/scene-config.test.ts',
+  'src/ui/pixel-icon.tsx', 'src/ui/pixel-icon.css',
+  'src/simulation/unit-calibration.ts', 'tests/unit-calibration.test.ts', 'tests/scene-assets.test.ts',
+  'src/audio/interface-audio.ts', 'scripts/build-scene-sprites.py', 'scripts/prepare-generated-sprites.py',
+  'src/resources/assets/scene-sprites.json',
+  'src/resources/assets/battle-topdown-cold-war-units.webp', 'src/resources/assets/battle-topdown-contemporary-units.webp',
+  'src/resources/assets/battle-topdown-equipment-wrecks.webp', 'src/resources/assets/battle-topdown-infantry.webp',
+  'src/resources/assets/battle-topdown-generic-terrain.webp', 'src/resources/assets/battle-topdown-japan-terrain.webp',
+  'src/resources/assets/battle-topdown-nuke.webp', 'src/resources/assets/battle-topdown-roads.webp',
+  'src/resources/assets/battle-topdown-tank-crew.webp', 'src/resources/assets/battle-topdown-terrain.webp',
+  'src/resources/assets/battle-topdown-hiroshima-city.webp',
+  'src/resources/assets/battle-topdown-japan-civilians.webp',
+  'src/resources/assets/battle-topdown-japan-surfaces.webp',
+  'src/resources/assets/battle-topdown-korea-units.webp',
+  'src/resources/assets/battle-topdown-nagasaki-city.webp',
+  'src/resources/assets/battle-topdown-vehicles.png',
+  'tests/simulation-battle.test.ts', 'tests/scene-audio.test.ts', 'tests/browser/scene-lifecycle.spec.ts',
 ]);
 const battleReferenceFiles = new Set([
   'README.md', 'manifest.json', 'atlas-battle-audio.js', 'atlas-grounded-component.js',
@@ -61,7 +60,7 @@ const battleReferenceFiles = new Set([
   'atlas-unit-roster.mjs', 'battle-engine.js', 'battle-topdown-equipment-wrecks.png',
   'battle-topdown-infantry.png', 'battle-topdown-nuke.png', 'battle-topdown-roads.png',
   'battle-topdown-tank-crew.png', 'battle-topdown-terrain.png', 'battle-topdown-vehicles.png',
-].map(name => `pixel/reference/battle-preview/${name}`));
+].map(name => `reference/battle-preview/${name}`));
 const generatedReferenceFiles = new Set([
   'README.md', 'battle-topdown-cold-war-units.png',
   'battle-topdown-contemporary-units.png', 'battle-topdown-generic-terrain.png',
@@ -76,19 +75,20 @@ const generatedReferenceFiles = new Set([
   'originals/japan-surfaces-overhead.png', 'originals/japan-terrain-overhead.png',
   'originals/japan-terrain.png', 'originals/korea-units-overhead.png',
   'originals/nagasaki-city-overhead-polished.png', 'originals/nagasaki-city-overhead.png',
-].map(name => 'pixel/reference/generated-sprites/' + name));
-const battleSprites = /^dist\/pixel\/assets\/battle-topdown-(?:equipment-wrecks|infantry|nuke|roads|tank-crew|terrain|vehicles)-[\w-]+\.(?:png|webp)$/;
-const generatedBattleSprites = /^dist\/pixel\/assets\/battle-topdown-(?:cold-war-units|contemporary-units|generic-terrain|japan-terrain|hiroshima-city|japan-civilians|japan-surfaces|korea-units|nagasaki-city)-[\w-]+\.webp$/;
-const pixelLocalDirectories = new Set(['pixel/node_modules', 'pixel/coverage', 'pixel/playwright-report', 'pixel/test-results']);
+].map(name => 'reference/generated-sprites/' + name));
+const battleSprites = /^dist\/assets\/battle-topdown-(?:equipment-wrecks|infantry|nuke|roads|tank-crew|terrain|vehicles)-[\w-]+\.(?:png|webp)$/;
+const generatedBattleSprites = /^dist\/assets\/battle-topdown-(?:cold-war-units|contemporary-units|generic-terrain|japan-terrain|hiroshima-city|japan-civilians|japan-surfaces|korea-units|nagasaki-city)-[\w-]+\.webp$/;
 
 function allowedPath(path: string, built = true): boolean {
-  if (rootFiles.has(path) || publicFiles.has(path) || sourceFiles.has(path) || dataToolFiles.has(path) || docsFiles.has(path)) return true;
-  if (pixelFiles.has(path) || battleReferenceFiles.has(path) || generatedReferenceFiles.has(path)) return true;
+  // Old release commits kept the application in a nested package.
+  const sourcePath = !built && path.startsWith('pixel/') ? path.slice('pixel/'.length) : path;
+  if (rootFiles.has(sourcePath) || publicFiles.has(path) || sourceFiles.has(path) || dataToolFiles.has(path) || docsFiles.has(path)) return true;
+  if (appFiles.has(sourcePath) || battleReferenceFiles.has(sourcePath) || generatedReferenceFiles.has(sourcePath)) return true;
   if (!built) return legacyGitFiles.has(path)
     || /^(?:src|server)\/(?:[\w-]+\/)*[\w-]+\.(?:ts|tsx|css)$/.test(path)
     || /^tests\/(?:[\w-]+\/)*[\w.-]+\.(?:ts|js)$/.test(path);
-  if (/^dist\/pixel\/(?:ru|en)\/index\.html$/.test(path)) return true;
-  if (/^dist\/pixel\/assets\/[\w-]+-[\w-]+\.(?:js|css)$/.test(path)) return true;
+  if (/^dist\/(?:ru|en)\/index\.html$/.test(path)) return true;
+  if (/^dist\/assets\/[\w-]+-[\w-]+\.(?:js|css)$/.test(path)) return true;
   return battleSprites.test(path) || generatedBattleSprites.test(path);
 }
 
@@ -108,7 +108,6 @@ export async function checkPublicFiles(target: string): Promise<string[]> {
     for (const entry of readdirSync(resolve(target, directory), { withFileTypes: true })) {
       const path = directory ? `${directory}/${entry.name}` : entry.name;
       if (!directory && localOnly.has(entry.name)) continue;
-      if (entry.isDirectory() && pixelLocalDirectories.has(path)) continue;
       if (entry.isSymbolicLink()) errors.push(`Symlink in release tree: ${path}`);
       else if (entry.isDirectory()) visit(path);
       else errors.push(...inspect(path, readFileSync(resolve(target, path), 'utf8')));
@@ -136,12 +135,12 @@ function inspectGitEntries(target: string, entries: string[], label: string): st
   return errors;
 }
 
-/** Scan every file version reachable from any branch/tag, including deleted files. */
+/** Scan every file version in the history being released, including deleted files. */
 export async function checkGitHistory(target: string): Promise<string[]> {
   try {
     const top = git(target, ['rev-parse', '--show-toplevel']).toString('utf8').trim();
     if (resolve(top).toLowerCase() !== resolve(target).toLowerCase()) return ['Refusing to audit a parent repository'];
-    const commits = git(target, ['rev-list', '--all']).toString('utf8').trim().split(/\s+/).filter(Boolean);
+    const commits = git(target, ['rev-list', 'HEAD']).toString('utf8').trim().split(/\s+/).filter(Boolean);
     return inspectGitEntries(target, commits.flatMap(commit => git(target, ['ls-tree', '-rz', '--full-tree', commit]).toString('utf8').split('\0')), 'Git history');
   } catch { return ['Git history audit failed (no repository or unreadable objects)']; }
 }

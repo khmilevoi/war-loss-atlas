@@ -1,4 +1,4 @@
-import landText from '../../../public/geo/ne_110m_land.geojson?raw';
+import landText from '../../public/geo/ne_110m_land.geojson?raw';
 import { compareEstimates, type Estimate, type MapPlacement } from '../catalog';
 
 export const mapWidth = 186;

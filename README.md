@@ -8,8 +8,7 @@
 
 ```sh
 npm ci
-npm --prefix pixel ci
-npm --prefix pixel run dev
+npm run dev
 ```
 
 Откройте `/ru/` или `/en/` по адресу, который выведет Vite.
@@ -17,19 +16,18 @@ npm --prefix pixel run dev
 ```sh
 npm test
 npm run typecheck
-npm --prefix pixel test
-npm --prefix pixel run build
+npm run build
 npm run public:check
-npm --prefix pixel run test:browser
+npm run test:browser
 ```
 
-Статическая сборка находится в `dist/pixel/`. Браузерные тесты используют Google Chrome и проверяют эту сборку.
+Исходники находятся в `src/`, статическая сборка — в `dist/`. Браузерные тесты используют Google Chrome и проверяют эту сборку.
 
 ## Данные
 
 Общий каталог содержит 1650 строк «конфликт–год» UCDP 26.1 за 1989–2025 годы, 202 конфликта и четыре исторические оценки с отдельными определениями. Доступные оценки относятся к периодам и типам потерь, указанным в карточках. Пропуск отличается от нулевой оценки.
 
-`npm run data:import` воспроизводит каталог из включённых CSV и геоданных. `npm run data:check` сверяет данные и файлы поставки. `npm run public:check` также проверяет Git-индекс и всю достижимую историю. [Манифест и контрольные суммы](data/manifest.json) · [Атрибуция UCDP](public/licenses/ATTRIBUTION.md) · [Условия Natural Earth](public/licenses/NATURAL-EARTH.txt) · [Источники исторических оценок](public/licenses/HISTORICAL-FACTS.md).
+`npm run data:import` воспроизводит каталог из включённых CSV и геоданных. `npm run data:check` сверяет данные и файлы поставки. `npm run public:check` также проверяет Git-индекс и всю историю текущей ветки. [Манифест и контрольные суммы](data/manifest.json) · [Атрибуция UCDP](public/licenses/ATTRIBUTION.md) · [Условия Natural Earth](public/licenses/NATURAL-EARTH.txt) · [Источники исторических оценок](public/licenses/HISTORICAL-FACTS.md).
 
 ## Развёртывание
 
