@@ -1,0 +1,28 @@
+.pixel-icon {
+  display: inline-block;
+  flex: none;
+  fill: currentColor;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.pixel-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+}
+
+.pixel-action:enabled:is(:hover, :focus-visible, [aria-pressed='true']) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pixel-action:enabled:active {
+  background: #4a2028;
+}
+
+.pixel-action:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

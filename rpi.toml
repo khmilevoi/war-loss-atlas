@@ -8,12 +8,11 @@ repo = "git@github.com:khmilevoi/war-loss-atlas.git"
 branch = "main"
 
 [build]
-compose = "docker-compose.yml"
+compose = "docker-compose.pixel.yml"
 
 [ingress]
-hostname = "war-atlas.iiskelo.com"
 service = "web"
-port = 3000
+port = 8080
 
 [healthcheck]
 path = "/health"

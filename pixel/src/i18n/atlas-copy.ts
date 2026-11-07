@@ -1,0 +1,229 @@
+export const startupCopy = {
+  ru: {
+    title: 'Пиксельный атлас войн',
+    startupStatus: 'Карта собирается',
+    startupNoScript: 'Для запуска атласа включите JavaScript и обновите страницу.',
+    startupError: 'Не удалось загрузить карту.',
+    startupRetry: 'Повторить загрузку',
+  },
+  en: {
+    title: 'Pixel War Atlas',
+    startupStatus: 'Assembling the map',
+    startupNoScript: 'Enable JavaScript and reload the page to open the atlas.',
+    startupError: 'The map could not be loaded.',
+    startupRetry: 'Try loading again',
+  },
+} as const;
+
+export const copy = {
+  ru: {
+    ...startupCopy.ru,
+    language: 'Язык',
+    interfaceSound: 'Звуки интерфейса',
+    worldMap: 'Карта мира',
+    mapDescription: 'Выберите отметку, чтобы открыть карточку. Клавиши со стрелками перемещают фокус между отметками.',
+    mapScale: 'Оценки UCDP',
+    scaleLow: 'Меньше погибших',
+    scaleHigh: 'Больше погибших',
+    scaleDetails: 'Как читать шкалу',
+    scaleScope: 'Оттенок показывает оценку UCDP за годы наблюдения. Если несколько флагов делят точку, оттенок соответствует наибольшей отдельной оценке.',
+    mapHistory: 'Исторические оценки',
+    mapUnknown: 'Нет данных',
+    mapAnchors: 'Точки обозначают регионы условно. Размер ореола не показывает территорию боёв.',
+    mapSource: 'Геометрия суши · Natural Earth',
+    zoomIn: 'Приблизить',
+    zoomOut: 'Отдалить',
+    zoomReset: 'Показать весь мир',
+    flagGroup: 'Флаги в этой точке',
+    close: 'Закрыть',
+    back: 'Вернуться к карте',
+    deaths: 'Погибшие',
+    estimatePeriod: 'Период оценки',
+    episodeDate: 'Дата события',
+    estimateScope: 'Что учитывает оценка',
+    sources: 'Источники',
+    geography: 'География',
+    context: 'Краткая история',
+    unknown: 'Нет данных',
+    approximate: 'Около',
+    moreThan: 'Более',
+    atLeast: 'Не менее',
+    illustrativeAnchor: 'Условная метка для навигации.',
+    anchorSource: 'Основание размещения на карте',
+    anchorCoordinates: 'Координаты ориентира',
+    reportedRange: 'Диапазон источника',
+    episodes: 'Знаковые сражения',
+    ucdpScope: 'Смерти, связанные с боями. Число суммирует наблюдения UCDP за указанный период.',
+    ucdpLimit: 'Период наблюдения может охватывать лишь часть конфликта.',
+    historicScope: 'Отдельная историческая оценка. Её нельзя сравнивать с боевыми потерями UCDP.',
+    ww1EstimateScope: 'Общая оценка погибших. Публикация не раскрывает её состав.',
+    ww2EstimateScope: 'Общая оценка погибших, включая мирных жителей, умерших от голода, геноцида и бомбардировок.',
+    usCivilEstimateScope: 'Смерти непосредственно в результате войны по определению источника. Оценка включает смерти за пределами поля боя.',
+    koreaEstimateScope: 'Только погибшие мирные жители Северной и Южной Кореи.',
+    noScene: 'Сцена пока недоступна.',
+    overview: 'Обзор войны',
+    sceneLoading: 'Сцена загружается',
+    sceneError: 'Не удалось загрузить сцену.',
+    sceneRetry: 'Повторить',
+    sceneRestart: 'Перезапустить',
+    sceneSound: 'Звук',
+    sceneSoundUnavailable: 'Не удалось включить звук.',
+    sceneNote: 'Число юнитов задаёт условный масштаб сцены. Оценка погибших приведена отдельно.',
+    sceneWave: 'Волна {current} из {total} · юнитов по плану {units}',
+    sceneWaveBaseline: 'Число юнитов задано сценарием.',
+    sceneEra: 'Эпоха сцены',
+    illustrativeSceneNote: 'Условный бой на вымышленной местности. Форма, вооружение и техника собирательные. Историческая справка и оценка погибших приведены отдельно.',
+    actionSceneNote: 'Условная схема боевых действий. Положение и траектории объектов выбраны для иллюстрации.',
+    episodeScope: 'Смерти от атомной бомбардировки в городе за указанный период.',
+    battleEpisodeScope: 'Погибшие в сражении.',
+    continents: ['Северная Америка', 'Южная Америка', 'Европа', 'Африка', 'Азия', 'Австралия'],
+  },
+  en: {
+    ...startupCopy.en,
+    language: 'Language',
+    interfaceSound: 'Interface sounds',
+    worldMap: 'World map',
+    mapDescription: 'Select a marker to open a war card. Use the arrow keys to move between markers.',
+    mapScale: 'UCDP estimates',
+    scaleLow: 'Fewer deaths',
+    scaleHigh: 'More deaths',
+    scaleDetails: 'How to read the scale',
+    scaleScope: 'Shades show UCDP estimates for the years observed. If several flags share a point, its shade represents the largest individual estimate.',
+    mapHistory: 'Historical estimates',
+    mapUnknown: 'No data',
+    mapAnchors: 'Markers represent regions approximately. Halo size does not show the area of fighting.',
+    mapSource: 'Land geometry · Natural Earth',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    zoomReset: 'Show the whole world',
+    flagGroup: 'Flags at this point',
+    close: 'Close',
+    back: 'Back to the map',
+    deaths: 'Deaths',
+    estimatePeriod: 'Estimate period',
+    episodeDate: 'Event date',
+    estimateScope: 'What the estimate covers',
+    sources: 'Sources',
+    geography: 'Geography',
+    context: 'Brief history',
+    unknown: 'No data',
+    approximate: 'About',
+    moreThan: 'More than',
+    atLeast: 'At least',
+    illustrativeAnchor: 'Illustrative marker for navigation.',
+    anchorSource: 'Basis for map placement',
+    anchorCoordinates: 'Landmark coordinates',
+    reportedRange: 'Source range',
+    episodes: 'Landmark episodes',
+    ucdpScope: 'Battle-related deaths. The figure totals UCDP observations for the period shown.',
+    ucdpLimit: 'The observation period may cover only part of the conflict.',
+    historicScope: 'A separate historical estimate, outside the UCDP battle-death scale.',
+    ww1EstimateScope: 'Estimated total deaths. The source leaves the breakdown unspecified.',
+    ww2EstimateScope: 'Estimated total deaths, including civilians killed by famine, genocide and bombing.',
+    usCivilEstimateScope: 'Deaths directly attributable to the war as defined by the source, including deaths outside the battlefield.',
+    koreaEstimateScope: 'Deaths among North and South Korean civilians only.',
+    noScene: 'The scene is not available yet.',
+    overview: 'War overview',
+    sceneLoading: 'Loading the scene',
+    sceneError: 'The scene could not be loaded.',
+    sceneRetry: 'Try again',
+    sceneRestart: 'Restart',
+    sceneSound: 'Sound',
+    sceneSoundUnavailable: 'Sound could not be enabled.',
+    sceneNote: 'Unit counts set the scale of the illustrative scene. The death estimate is shown separately.',
+    sceneWave: 'Wave {current} of {total} · {units} units planned',
+    sceneWaveBaseline: 'The scenario sets the unit count.',
+    sceneEra: 'Scene era',
+    illustrativeSceneNote: 'An illustrative battle in a fictional location with generic uniforms, weapons and vehicles. The historical account and death estimate appear separately.',
+    actionSceneNote: 'A schematic illustration of the fighting. Positions and movement paths are illustrative.',
+    episodeScope: 'Deaths caused by the atomic bombing in the city during the period shown.',
+    battleEpisodeScope: 'Deaths during the battle.',
+    continents: ['North America', 'South America', 'Europe', 'Africa', 'Asia', 'Australia'],
+  },
+} as const;
+
+export type Locale = keyof typeof copy;
+
+export const sceneEraCopy = {
+  ru: {
+    'cold-war-neutral': { title: 'Условный бой · до 1992 года', button: 'До 1992 года' },
+    'contemporary-neutral': { title: 'Условный бой · с 1992 года', button: 'С 1992 года' },
+  },
+  en: {
+    'cold-war-neutral': { title: 'Illustrative battle · before 1992', button: 'Before 1992' },
+    'contemporary-neutral': { title: 'Illustrative battle · from 1992', button: 'From 1992' },
+  },
+} as const;
+
+export const sceneTerrainCopy = {
+  ru: {
+    'ww1-western-front': { title: 'Западный фронт · 1918', note: 'Условная сцена по мотивам боёв на Западном фронте в последний год войны.', source: 'Национальный музей армии Великобритании' },
+    'ww1-palestine': { title: 'Палестинская кампания · 1917–1918', note: 'Условная сцена по мотивам Палестинской кампании. Справка о сражении у Беэр-Шевы приведена отдельно.', source: 'Австралийский военный мемориал' },
+    'us-civil-south-carolina': { title: 'Южная Каролина · 1863', note: 'Условная сцена по мотивам боёв в Южной Каролине. В июле 1863 года 54-й Массачусетский полк возглавил штурм форта Вагнер.', source: 'Служба национальных парков США' },
+    'korea-osan': { title: 'Бой у Осана · июль 1950', note: 'Условная сцена по мотивам боя 5 июля 1950 года. Американский отряд под командованием Чарльза Смита пытался задержать продвижение северокорейских войск.', source: 'Армия США' },
+    'gulf-war-ground-campaign': { title: 'Война в Персидском заливе · февраль 1991', note: 'С 24 по 28 февраля коалиция вела наземное наступление, вытеснив иракские войска из Кувейта. Сцена использует собирательные образы пехоты и техники эпохи.', source: 'Управление историка Госдепартамента США' },
+    'iraq-invasion': { title: 'Вторжение в Ирак · март 2003', note: '20 марта 2003 года коалиция во главе с США начала военные действия против Ирака. Сцена использует собирательные образы пехоты и техники эпохи.', source: 'Библиотека Конгресса США' },
+    'galwan-contact': { title: 'Столкновение в долине Галван · июнь 2020', note: 'Индийские и китайские военные сошлись в рукопашном столкновении в долине Галван.', source: 'Комиссия Конгресса США по вопросам отношений с Китаем' },
+    'iran-israel-strikes': { title: 'Удары Израиля и Ирана · июнь 2025', note: 'Израиль наносил авиаудары по Ирану, Иран ответил ударами по Израилю.', source: 'Стенограмма заседания Совета Безопасности ООН' },
+    'red-sea-operations': { title: 'Операции в Красном море · 2024–2025', note: 'Хуситы атаковали торговые и военные суда. США и Великобритания наносили удары по позициям хуситов в Йемене.', source: 'Библиотека Палаты общин Великобритании' },
+    'israel-yemen-strikes': { title: 'Израиль и Йемен · удары в 2025 году', note: 'Хуситы применяли ракеты и беспилотники против Израиля. Израиль наносил удары по объектам в Йемене.', source: 'Брифинг ООН' },
+    'ww2-overview': { note: 'Условный городской бой на Восточном фронте 1943 года. Число юнитов зависит от общей оценки погибших. Доли советских и немецких сил, пехоты и техники выбраны для симуляции.', source: 'Мемориальный музей Холокоста США' },
+    hiroshima: {
+      note: 'Экипаж целился в Т-образный мост Айои. Бомба взорвалась примерно в 600 м над больницей Сима. У выставочного павильона на берегу уцелел металлический каркас купола. До вспышки на улицах видны жители. План кварталов, число тел и их расположение показаны условно.',
+      source: 'Архивные фотографии Хиросимы',
+    },
+    nagasaki: {
+      note: 'Бомба взорвалась примерно в 500 м над кварталом Мацуяма-мати в долине Ураками. Собор Ураками стоял примерно в 500 м к северо-востоку от точки под взрывом. До вспышки на улицах видны жители. План кварталов, число тел и их расположение показаны условно.',
+      source: 'Фотографии Музея атомной бомбардировки Нагасаки',
+    },
+  },
+  en: {
+    'ww1-western-front': { title: 'Western Front · 1918', note: 'An illustrative scene inspired by fighting on the Western Front in the last year of the war.', source: 'UK National Army Museum' },
+    'ww1-palestine': { title: 'Palestine campaign · 1917–1918', note: 'An illustrative scene inspired by the Palestine campaign. The account of the Battle of Beersheba appears separately.', source: 'Australian War Memorial' },
+    'us-civil-south-carolina': { title: 'South Carolina · 1863', note: 'An illustrative scene inspired by fighting in South Carolina. In July 1863, the 54th Massachusetts led the assault on Fort Wagner.', source: 'US National Park Service' },
+    'korea-osan': { title: 'Battle of Osan · July 1950', note: 'An illustrative scene inspired by the battle on 5 July 1950. A US task force under Charles Smith tried to slow the advance of North Korean troops.', source: 'US Army' },
+    'gulf-war-ground-campaign': { title: 'Gulf War · February 1991', note: 'From 24 to 28 February, the coalition drove Iraqi troops out of Kuwait in a ground offensive. The scene uses generic infantry and vehicle silhouettes from the period.', source: 'US Department of State, Office of the Historian' },
+    'iraq-invasion': { title: 'Invasion of Iraq · March 2003', note: 'The US-led coalition began military operations against Iraq on 20 March 2003. The scene uses generic infantry and vehicle silhouettes from the period.', source: 'US Library of Congress' },
+    'galwan-contact': { title: 'Galwan Valley clash · June 2020', note: 'Indian and Chinese troops fought hand to hand in the Galwan Valley.', source: 'US–China Economic and Security Review Commission' },
+    'iran-israel-strikes': { title: 'Israeli and Iranian strikes · June 2025', note: 'Israel launched airstrikes against Iran, and Iran retaliated with strikes against Israel.', source: 'UN Security Council meeting record' },
+    'red-sea-operations': { title: 'Red Sea operations · 2024–2025', note: 'The Houthis attacked commercial and military vessels. The United States and the United Kingdom struck Houthi positions in Yemen.', source: 'UK House of Commons Library' },
+    'israel-yemen-strikes': { title: 'Israel and Yemen · strikes in 2025', note: 'The Houthis launched missiles and drones at Israel. Israel struck sites in Yemen.', source: 'United Nations briefing' },
+    'ww2-overview': { note: 'An illustrative urban battle on the Eastern Front in 1943. The overall death estimate sets the unit count. The shares of Soviet and German forces, infantry, and armor are simulation settings.', source: 'US Holocaust Memorial Museum' },
+    hiroshima: {
+      note: 'The crew aimed at the T-shaped Aioi Bridge. The bomb exploded about 600 m above Shima Hospital. The metal dome frame of the riverside exhibition hall survived. Civilians appear in the streets before the flash. The street layout and the number and positions of the bodies are illustrative.',
+      source: 'Archival photographs of Hiroshima',
+    },
+    nagasaki: {
+      note: 'The bomb exploded about 500 m above Matsuyama-machi in the Urakami Valley. Urakami Cathedral stood about 500 m northeast of the point directly below the explosion. Civilians appear in the streets before the flash. The street layout and the number and positions of the bodies are illustrative.',
+      source: 'Photographs from the Nagasaki Atomic Bomb Museum',
+    },
+  },
+} as const satisfies Record<Locale, Record<string, { title?: string; note: string; source: string }>>;
+
+const scopeKeys: Readonly<Partial<Record<string, Exclude<keyof typeof copy.en, 'continents'>>>> = {
+  'history:ww1': 'ww1EstimateScope',
+  'history:ww2': 'ww2EstimateScope',
+  'history:us-civil': 'usCivilEstimateScope',
+  'history:korea': 'koreaEstimateScope',
+};
+
+export function historicEstimateScope(id: string, locale: Locale): string {
+  return copy[locale][scopeKeys[id] ?? 'historicScope'];
+}
+
+export function formatPeriod(period: { from: number; to: number }): string {
+  return period.from === period.to ? String(period.from) : `${period.from}–${period.to}`;
+}
+
+export function formatNumber(value: number, locale: Locale): string {
+  return new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : 'en-US').format(value);
+}
+
+export function formatDate(iso: string, locale: Locale): string {
+  return new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
+    timeZone: 'UTC',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(iso));
+}

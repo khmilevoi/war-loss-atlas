@@ -1,0 +1,12 @@
+[build]
+compose = "docker-compose.pixel.yml"
+
+[ingress]
+hostname = "wars.iiskelo.com"
+service = "web"
+port = 8080
+
+[healthcheck]
+path = "/health"
+expect = "200"
+timeout = "60s"
