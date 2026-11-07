@@ -2,13 +2,23 @@ import { createSceneAudio } from '../audio/scene-audio';
 import type { Estimate } from '../catalog';
 import { loadSceneSprites } from '../resources/sprite-assets';
 import { createBattle } from './battle';
+import { createActionPlayback } from './render-actions';
 import { createCanvasRenderer } from './render-canvas';
-import { createSceneDeployment, type SceneDefinition } from './scene-config';
+import { createSceneDeployment, type BattleSceneDefinition, type SceneDefinition } from './scene-config';
 
 export interface SceneHandle {
   restart(): void;
   setSound(enabled: boolean): Promise<boolean>;
   dispose(): void;
+}
+
+interface ScenePlayback {
+  render(reduced: boolean, interpolate?: boolean): void;
+  step(milliseconds: number): void;
+  finished(): boolean;
+  reset(): void;
+  setPaused?(value: boolean): void;
+  dispose?(): void;
 }
 
 export async function mountScene(
@@ -20,7 +30,7 @@ export async function mountScene(
   if (!view) throw new Error('Scene has no browser window');
 
   const motion = view.matchMedia('(prefers-reduced-motion: reduce)');
-  const assets = await loadSceneSprites(scene.assets, signal, { reducedMotion: motion.matches });
+  const assets = scene.action ? {} : await loadSceneSprites(scene.assets, signal, { reducedMotion: motion.matches });
   signal.throwIfAborted();
   const canvas = document.createElement('canvas');
   const effects = document.createElement('canvas');
@@ -43,32 +53,49 @@ export async function mountScene(
   effects.style.imageRendering = 'pixelated';
   Object.assign(flash.style, { background: '#fff', opacity: '0' });
 
-  const renderer = createCanvasRenderer(canvas, effects, flash, assets);
   const audio = createSceneAudio();
-  const battle = createBattle({
-    scenario: scene.scenario,
-    seed: scene.seed,
-    aftermathAt: scene.aftermathAt,
-    aftermathDuration: scene.aftermathDuration,
-    biome: scene.biome,
-    landscape: scene.landscape,
-    deployment: createSceneDeployment(scene, estimate),
-    reducedMotion: () => motion.matches,
-    onCue: audio.cue,
-    onVehicles: audio.setVehicles,
-    onFieldReset: renderer.clearField,
-    onSettledBlood: renderer.settleBlood,
-  });
+  const playback: ScenePlayback = scene.action
+    ? createActionPlayback(canvas, scene.action, audio.cue)
+    : createBattlePlayback(scene);
   let disposed = false;
   let frameId: number | undefined;
   let lastFrame: number | undefined;
 
-  function draw(alpha = 1) {
-    renderer.render(battle.frame(), alpha);
+  function createBattlePlayback(config: BattleSceneDefinition): ScenePlayback {
+    const renderer = createCanvasRenderer(canvas, effects, flash, assets);
+    const battle = createBattle({
+      scenario: config.scenario,
+      seed: config.seed,
+      aftermathAt: config.aftermathAt,
+      aftermathDuration: config.aftermathDuration,
+      biome: config.biome,
+      landscape: config.landscape,
+      deployment: createSceneDeployment(config, estimate),
+      reducedMotion: () => motion.matches,
+      onCue: audio.cue,
+      onVehicles: audio.setVehicles,
+      onFieldReset: renderer.clearField,
+      onSettledBlood: renderer.settleBlood,
+    });
+    return {
+      render(reduced, interpolate) {
+        if (reduced && !battle.frame().finished && config.aftermathDuration !== undefined) {
+          battle.triggerNuke('aftermath');
+          battle.step(config.aftermathDuration + 40);
+        }
+        const frame = battle.frame();
+        renderer.render(frame, interpolate && !frame.finished ? frame.interpolation : 1);
+      },
+      step: battle.step,
+      finished: () => battle.frame().finished,
+      reset: battle.reset,
+      setPaused: battle.setPaused,
+      dispose: battle.dispose,
+    };
   }
 
   function playable() {
-    return !disposed && !document.hidden && !motion.matches && !battle.frame().finished;
+    return !disposed && !document.hidden && !motion.matches && !playback.finished();
   }
 
   function stopFrame() {
@@ -80,33 +107,28 @@ export async function mountScene(
   function loop(timestamp: number) {
     frameId = undefined;
     if (!playable()) return;
-    if (lastFrame !== undefined) battle.step(Math.min(100, timestamp - lastFrame));
+    if (lastFrame !== undefined) playback.step(Math.min(100, timestamp - lastFrame));
     lastFrame = timestamp;
-    const frame = battle.frame();
-    renderer.render(frame, frame.finished ? 1 : frame.interpolation);
-    if (frame.finished) audio.setActive(false);
+    playback.render(false, true);
+    if (playback.finished()) audio.setActive(false);
     else frameId = view!.requestAnimationFrame(loop);
   }
 
   function sync() {
     const active = playable();
-    battle.setPaused(!active);
+    playback.setPaused?.(!active);
     audio.setActive(active);
     if (!active) stopFrame();
     else if (frameId === undefined) frameId = view!.requestAnimationFrame(loop);
   }
 
   function applyReducedMotion() {
-    if (motion.matches && !battle.frame().finished) {
+    if (motion.matches) {
       stopFrame();
       audio.setActive(false);
-      battle.setPaused(true);
-      if (scene.aftermathDuration !== undefined) {
-        battle.triggerNuke('aftermath');
-        battle.step(scene.aftermathDuration + 40);
-      }
+      playback.setPaused?.(true);
     }
-    draw();
+    playback.render(motion.matches);
     sync();
   }
 
@@ -114,7 +136,7 @@ export async function mountScene(
     if (disposed) return;
     stopFrame();
     audio.setActive(false);
-    battle.reset();
+    playback.reset();
     applyReducedMotion();
   }
 
@@ -131,7 +153,7 @@ export async function mountScene(
     document.removeEventListener('visibilitychange', sync);
     motion.removeEventListener('change', applyReducedMotion);
     stopFrame();
-    battle.dispose();
+    playback.dispose?.();
     void audio.dispose().catch(() => {});
     canvas.remove();
     effects.remove();
@@ -139,7 +161,8 @@ export async function mountScene(
   }
 
   try {
-    host.append(canvas, effects, flash);
+    host.append(canvas);
+    if (!scene.action) host.append(effects, flash);
     signal.addEventListener('abort', dispose, { once: true });
     document.addEventListener('visibilitychange', sync);
     motion.addEventListener('change', applyReducedMotion);

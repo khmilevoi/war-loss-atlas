@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": "battle-v1-1b062336b3b0",
+  "version": "battle-v1-6792879f464d",
   "encoder": {
     "pillow": "12.3.0",
     "libwebp": "1.6.0"
@@ -231,6 +231,27 @@
       },
       "excludedByBrowserParity": [],
       "originalPath": "generated-sprites/battle-topdown-japan-terrain.png"
+    },
+    "koreaUnits": {
+      "path": "battle-topdown-korea-units.webp",
+      "format": "losslessWebp",
+      "bytes": 8282,
+      "sha256": "70c0d4a1e8c137fb1475c5eeece357ac1764388cedda1752e43fd4b7c25d9547",
+      "rgbaSha256": "a52fc418cf5907ec606ffdfd5a03f3f82fb43396c5eabba3c73c00079a3b1c18",
+      "originalSha256": "0dfc17f744e075821e90f5e55af97c56fec3d68ad5bcde0e49fc6881c43f5f4c",
+      "frameGrid": {
+        "width": 192,
+        "height": 128,
+        "columns": 3,
+        "rows": 2
+      },
+      "candidateBytes": {
+        "originalPng": 11661,
+        "optimizedPng": 11661,
+        "losslessWebp": 8282
+      },
+      "excludedByBrowserParity": [],
+      "originalPath": "generated-sprites/battle-topdown-korea-units.png"
     }
   },
   "scenes": {
@@ -281,6 +302,14 @@
     "contemporary-neutral": {
       "required": [
         "contemporaryUnits",
+        "genericTerrain"
+      ],
+      "optional": [],
+      "animated": []
+    },
+    "korea-osan": {
+      "required": [
+        "koreaUnits",
         "genericTerrain"
       ],
       "optional": [],

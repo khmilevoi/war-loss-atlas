@@ -31,6 +31,7 @@ const pixelFiles = new Set([
   'pixel/tests/browser/map-card.spec.ts', 'pixel/src/catalog/ww1-episodes.ts', 'pixel/src/catalog/ww2-episodes.ts',
   'pixel/src/card/scene-slot.tsx',
   'pixel/src/simulation/battle.ts', 'pixel/src/simulation/roster.ts', 'pixel/src/simulation/render-canvas.ts',
+  'pixel/src/simulation/render-actions.ts', 'pixel/tests/action-playback.test.ts',
   'pixel/src/simulation/mount-scene.ts', 'pixel/src/resources/sprite-assets.ts', 'pixel/src/audio/scene-audio.ts',
   'pixel/src/simulation/landscape.ts',
   'pixel/src/simulation/scene-config.ts', 'pixel/tests/scene-config.test.ts',
@@ -41,6 +42,7 @@ const pixelFiles = new Set([
   'pixel/src/resources/assets/battle-topdown-cold-war-units.webp', 'pixel/src/resources/assets/battle-topdown-contemporary-units.webp',
   'pixel/src/resources/assets/battle-topdown-equipment-wrecks.webp', 'pixel/src/resources/assets/battle-topdown-infantry.webp',
   'pixel/src/resources/assets/battle-topdown-generic-terrain.webp', 'pixel/src/resources/assets/battle-topdown-japan-terrain.webp',
+  'pixel/src/resources/assets/battle-topdown-korea-units.webp',
   'pixel/src/resources/assets/battle-topdown-nuke.webp', 'pixel/src/resources/assets/battle-topdown-roads.webp',
   'pixel/src/resources/assets/battle-topdown-tank-crew.webp', 'pixel/src/resources/assets/battle-topdown-terrain.webp',
   'pixel/src/resources/assets/battle-topdown-vehicles.png',
@@ -59,9 +61,10 @@ const generatedReferenceFiles = new Set([
   'pixel/reference/generated-sprites/battle-topdown-contemporary-units.png',
   'pixel/reference/generated-sprites/battle-topdown-generic-terrain.png',
   'pixel/reference/generated-sprites/battle-topdown-japan-terrain.png',
+  'pixel/reference/generated-sprites/battle-topdown-korea-units.png',
 ]);
 const battleSprites = /^dist\/pixel\/assets\/battle-topdown-(?:equipment-wrecks|infantry|nuke|roads|tank-crew|terrain|vehicles)-[\w-]+\.(?:png|webp)$/;
-const generatedBattleSprites = /^dist\/pixel\/assets\/battle-topdown-(?:cold-war-units|contemporary-units|generic-terrain|japan-terrain)-[\w-]+\.webp$/;
+const generatedBattleSprites = /^dist\/pixel\/assets\/battle-topdown-(?:cold-war-units|contemporary-units|generic-terrain|japan-terrain|korea-units)-[\w-]+\.webp$/;
 const pixelLocalDirectories = new Set(['pixel/node_modules', 'pixel/coverage', 'pixel/playwright-report', 'pixel/test-results']);
 
 function allowedPath(path: string, built = true): boolean {

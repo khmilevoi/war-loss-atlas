@@ -67,6 +67,7 @@
 !pixel/src/ui/pixel-icon.tsx
 !pixel/src/ui/pixel-icon.css
 !pixel/src/simulation/mount-scene.ts
+!pixel/src/simulation/render-actions.ts
 !pixel/src/simulation/render-canvas.ts
 !pixel/src/simulation/roster.ts
 !pixel/src/resources/sprite-assets.ts
@@ -78,11 +79,13 @@
 !pixel/src/resources/assets/battle-topdown-generic-terrain.webp
 !pixel/src/resources/assets/battle-topdown-infantry.webp
 !pixel/src/resources/assets/battle-topdown-japan-terrain.webp
+!pixel/src/resources/assets/battle-topdown-korea-units.webp
 !pixel/src/resources/assets/battle-topdown-nuke.webp
 !pixel/src/resources/assets/battle-topdown-roads.webp
 !pixel/src/resources/assets/battle-topdown-tank-crew.webp
 !pixel/src/resources/assets/battle-topdown-terrain.webp
 !pixel/src/resources/assets/battle-topdown-vehicles.png
+!pixel/tests/action-playback.test.ts
 !pixel/tests/catalog.test.ts
 !pixel/tests/content.test.ts
 !pixel/tests/map.test.ts

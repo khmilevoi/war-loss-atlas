@@ -19,16 +19,17 @@ test('switches the First World War card between its separate historical settings
 });
 
 for (const [warId, heading, asset] of [
-  ['371', 'Gulf War · February 1991', 'cold-war-units'],
-  ['420', 'Invasion of Iraq · March 2003', 'contemporary-units'],
+  ['ucdp:371', 'Gulf War · February 1991', 'cold-war-units'],
+  ['ucdp:420', 'Invasion of Iraq · March 2003', 'contemporary-units'],
+  ['history:korea', 'Battle of Osan · July 1950', 'korea-units'],
 ] as const) {
-  test(`loads the era-appropriate neutral sprites for UCDP ${warId}`, async ({ page }) => {
+  test(`loads the appropriate sprite pack for ${warId}`, async ({ page }) => {
     const sprites: string[] = [];
     page.on('request', request => {
       const url = request.url();
       if (url.includes('battle-topdown-')) sprites.push(url);
     });
-    await page.goto(`/en/?war=ucdp%3A${warId}`);
+    await page.goto(`/en/?war=${encodeURIComponent(warId)}`);
     const scene = page.getByRole('dialog').getByRole('region', { name: heading });
     await expect(scene.locator('canvas[data-scene-canvas]')).toBeVisible();
     expect(sprites).toHaveLength(2);
@@ -276,13 +277,28 @@ test('switches separate illustrative eras on a catalog entry without coordinates
   await expect(page.getByRole('heading', { name: 'Карта мира', exact: true })).toBeFocused();
 });
 
-test('keeps an atypical conflict readable without substituting a ranged ground battle', async ({ page }) => {
-  await page.goto('/en/?war=ucdp%3A274');
-  const dialog = page.getByRole('dialog');
-  await expect(dialog.getByText('This conflict requires a scene suited to the type of fighting.')).toBeVisible();
-  await expect(dialog.locator('canvas[data-scene-canvas]')).toHaveCount(0);
-  await expect(dialog.getByRole('heading', { name: 'Deaths' })).toBeVisible();
-});
+for (const [warId, sceneId] of [
+  ['274', 'galwan-contact'], ['14609', 'iran-israel-strikes'],
+  ['16099', 'red-sea-operations'], ['16470', 'israel-yemen-strikes'],
+] as const) {
+  test(`shows the dedicated schematic scene for UCDP ${warId}`, async ({ page }) => {
+    const sprites: string[] = [];
+    page.on('request', request => {
+      if (request.url().includes('battle-topdown-')) sprites.push(request.url());
+    });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`/en/?war=ucdp%3A${warId}`);
+    const dialog = page.getByRole('dialog');
+    const canvas = dialog.locator(`canvas[data-scene-canvas="${sceneId}"]`);
+    await expect(canvas).toBeVisible();
+    const still = await canvas.evaluate(node => (node as HTMLCanvasElement).toDataURL());
+    await dialog.getByRole('button', { name: 'Restart', exact: true }).click();
+    expect(await canvas.evaluate(node => (node as HTMLCanvasElement).toDataURL())).toBe(still);
+    expect(sprites).toEqual([]);
+    await expect(dialog.getByText(/A schematic illustration of the fighting/)).toBeVisible();
+    await expect(dialog.getByRole('heading', { name: 'Deaths' })).toBeVisible();
+  });
+}
 
 test('persists interface sound separately and unlocks audio only after a user action', async ({ page }) => {
   await page.addInitScript(() => {

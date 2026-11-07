@@ -1055,6 +1055,10 @@ export function createBattle(options: BattleOptions) {
 
     if (target && d < unit.range) {
       unit.angle = Math.atan2(target.y - unit.y, target.x - unit.x);
+      if (unit.definition.kind === 'carrier') {
+        unit.state = 'patrol';
+        return;
+      }
       if (unit.focus !== target.id) {
         unit.focus = target.id;
         unit.cooldown = Math.max(.2, unit.cooldown);
@@ -1155,7 +1159,7 @@ export function createBattle(options: BattleOptions) {
     if (unit.definition?.mount || kind === 'mount') return 'horse';
     if (unit.airborne) return 'helicopter';
     if (kind === 'wheeled') return 'artillery';
-    if (unit.sprite === 'm113') return 'carrier';
+    if (kind === 'carrier' || unit.sprite === 'm113') return 'carrier';
     if (kind === 'tracked') return 'tank';
     return null;
   }
@@ -1268,7 +1272,7 @@ export function createBattle(options: BattleOptions) {
     });
     const activeByTeam = [0, 0], armorByTeam = [0, 0];
     for (const unit of units) {
-      if (unit.support || unit.hp <= 0) continue;
+      if (unit.support || unit.hp <= 0 || unit.definition.kind === 'carrier') continue;
       activeByTeam[unit.team]++;
       if (unit.vehicle) armorByTeam[unit.team]++;
     }

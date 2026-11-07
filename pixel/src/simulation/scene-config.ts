@@ -13,10 +13,18 @@ interface ForceMix {
 
 export type IllustrativeEra = 'cold-war-neutral' | 'contemporary-neutral';
 
-export interface SceneDefinition {
+interface SceneIdentity {
   readonly id: string;
   readonly warId: WarId;
   readonly episodeId?: string;
+  readonly terrain?: {
+    readonly copyKey: keyof typeof sceneTerrainCopy.en;
+    readonly source: Readonly<Record<Locale, string>>;
+  };
+}
+
+export interface BattleSceneDefinition extends SceneIdentity {
+  readonly action?: undefined;
   readonly assets: SceneAssetId;
   readonly scenario: BattleScenarioId;
   readonly seed: number;
@@ -30,11 +38,16 @@ export interface SceneDefinition {
     readonly sides: readonly [ForceMix, ForceMix];
   };
   readonly landscape?: LandscapeKind;
-  readonly terrain?: {
-    readonly copyKey: keyof typeof sceneTerrainCopy.en;
-    readonly source: Readonly<Record<Locale, string>>;
-  };
 }
+
+export interface ActionSceneDefinition extends SceneIdentity {
+  readonly action: 'air-strikes' | 'maritime' | 'patrol-contact';
+  readonly scenario?: undefined;
+  readonly assets?: undefined;
+  readonly illustrativeEra?: undefined;
+}
+
+export type SceneDefinition = BattleSceneDefinition | ActionSceneDefinition;
 
 export const atlasScenes = [
   {
@@ -71,6 +84,17 @@ export const atlasScenes = [
     },
   },
   {
+    id: 'korea-osan', warId: 'history:korea', assets: 'korea-osan',
+    scenario: 'korea-osan', seed: 19500705,
+    terrain: {
+      copyKey: 'korea-osan',
+      source: {
+        ru: 'https://www.army.mil/article/83003/',
+        en: 'https://www.army.mil/article/83003/',
+      },
+    },
+  },
+  {
     id: 'gulf-war-ground-campaign', warId: 'ucdp:371', assets: 'cold-war-neutral',
     scenario: 'cold-war-neutral', seed: 1991,
     terrain: {
@@ -89,6 +113,46 @@ export const atlasScenes = [
       source: {
         ru: 'https://www.loc.gov/collections/iraq-war-2003-web-archive/about-this-collection/',
         en: 'https://www.loc.gov/collections/iraq-war-2003-web-archive/about-this-collection/',
+      },
+    },
+  },
+  {
+    id: 'galwan-contact', warId: 'ucdp:274', action: 'patrol-contact',
+    terrain: {
+      copyKey: 'galwan-contact',
+      source: {
+        ru: 'https://www.uscc.gov/research/conflict-sino-indian-border-background-congress',
+        en: 'https://www.uscc.gov/research/conflict-sino-indian-border-background-congress',
+      },
+    },
+  },
+  {
+    id: 'iran-israel-strikes', warId: 'ucdp:14609', action: 'air-strikes',
+    terrain: {
+      copyKey: 'iran-israel-strikes',
+      source: {
+        ru: 'https://digitallibrary.un.org/record/4084933/files/S_PV.9939-EN.pdf',
+        en: 'https://digitallibrary.un.org/record/4084933/files/S_PV.9939-EN.pdf',
+      },
+    },
+  },
+  {
+    id: 'red-sea-operations', warId: 'ucdp:16099', action: 'maritime',
+    terrain: {
+      copyKey: 'red-sea-operations',
+      source: {
+        ru: 'https://commonslibrary.parliament.uk/research-briefings/cbp-9930/',
+        en: 'https://commonslibrary.parliament.uk/research-briefings/cbp-9930/',
+      },
+    },
+  },
+  {
+    id: 'israel-yemen-strikes', warId: 'ucdp:16470', action: 'air-strikes',
+    terrain: {
+      copyKey: 'israel-yemen-strikes',
+      source: {
+        ru: 'https://www.un.org/sg/en/content/highlight/2025-07-21.html',
+        en: 'https://www.un.org/sg/en/content/highlight/2025-07-21.html',
       },
     },
   },
@@ -136,18 +200,12 @@ export const atlasScenes = [
   },
 ] as const satisfies readonly SceneDefinition[];
 
-// The ranged infantry scene is unsuitable for the documented hand-to-hand,
-// air, missile or naval actions in these cards.
-export const groundSceneExceptions: ReadonlySet<WarId> = new Set([
-  'ucdp:274', 'ucdp:14609', 'ucdp:16099', 'ucdp:16470',
-]);
-
-interface IllustrativeScene extends SceneDefinition {
+interface IllustrativeScene extends BattleSceneDefinition {
   readonly illustrativeEra: IllustrativeEra;
 }
 
 export function resolveIllustrativeScenes(war: Pick<War, 'id' | 'period'>): readonly IllustrativeScene[] {
-  if (!war.id.startsWith('ucdp:') || groundSceneExceptions.has(war.id)) return [];
+  if (!war.id.startsWith('ucdp:') || resolveCardScene(atlasScenes, war.id)) return [];
 
   // The assignment matrix uses these eras to organize artwork. A mixed
   // observation period gets two independent fields, with the later one first.
@@ -161,7 +219,7 @@ export function resolveIllustrativeScenes(war: Pick<War, 'id' | 'period'>): read
 }
 
 export function createSceneDeployment(
-  scene: SceneDefinition, estimate: Pick<Estimate, 'value' | 'low' | 'qualifier'>,
+  scene: BattleSceneDefinition, estimate: Pick<Estimate, 'value' | 'low' | 'qualifier'>,
 ): BattleDeployment | undefined {
   const { forces } = scene;
   if (!forces) return undefined;

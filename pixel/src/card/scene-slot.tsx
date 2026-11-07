@@ -96,14 +96,17 @@ export function SceneSlot({ scene, estimate, label, locale, load }: {
         ) : null}
       </div>
       <div class="scene-slot__controls">
-        <button type="button" class="pixel-action" aria-pressed={sound} disabled={() => status() !== 'ready' || soundPending()}
-          on:click={toggleSound}>{() => <PixelIcon name={sound() ? 'sound' : 'mute'} />}{text.sceneSound}</button>
+        {scene.action !== 'patrol-contact' ? (
+          <button type="button" class="pixel-action" aria-pressed={sound} disabled={() => status() !== 'ready' || soundPending()}
+            on:click={toggleSound}>{() => <PixelIcon name={sound() ? 'sound' : 'mute'} />}{text.sceneSound}</button>
+        ) : null}
         <button type="button" class="pixel-action" disabled={() => status() !== 'ready'} on:click={() => session?.restart()}>
           <PixelIcon name="restart" />{text.sceneRestart}
         </button>
         {() => soundFailed() ? <p role="status">{text.sceneSoundUnavailable}</p> : null}
       </div>
-      <p class="scene-slot__note">{scene.illustrativeEra ? text.illustrativeSceneNote : text.sceneNote}</p>
+      <p class="scene-slot__note">{scene.action ? text.actionSceneNote
+        : scene.illustrativeEra ? text.illustrativeSceneNote : text.sceneNote}</p>
       {terrain ? <p class="scene-slot__note">
         {sceneTerrainCopy[locale][terrain.copyKey].note}{' '}
         <a href={terrain.source[locale]}>{sceneTerrainCopy[locale][terrain.copyKey].source}</a>

@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { readCatalog } from '../src/catalog';
 import { createBattle, type BattleCue, type BattleScenarioId } from '../src/simulation/battle';
-import { atlasScenes, createSceneDeployment, resolveCardScene } from '../src/simulation/scene-config';
+import { atlasScenes, createSceneDeployment, resolveCardScene, resolveIllustrativeScenes } from '../src/simulation/scene-config';
 
 const originalSnapshots: Partial<Record<BattleScenarioId, readonly string[]>> = {
   'south-carolina': ['effe256c58fa', '99ecfee80b10', '51edb1a5a0d8', '17ca1d62760c'],
@@ -17,6 +17,29 @@ const hash = (snapshot: unknown) =>
   createHash('sha256').update(JSON.stringify(snapshot)).digest('hex').slice(0, 12);
 
 describe('deterministic battle core', () => {
+  it.each([
+    ['ucdp:220', 'coldWarUnits'],
+    ['ucdp:251', 'contemporaryUnits'],
+    ['ucdp:371', 'coldWarUnits'],
+    ['ucdp:420', 'contemporaryUnits'],
+  ] as const)('deploys the generated neutral vehicles and produces a carrier wreck in %s', (id, sheet) => {
+    const war = readCatalog().wars.find(war => war.id === id)!;
+    const scene = resolveCardScene(atlasScenes, id) ?? resolveIllustrativeScenes(war)[0];
+    if (!scene || scene.action) throw new Error('Expected a neutral ground battle');
+    const battle = createBattle(scene);
+    const frame = battle.frame();
+    expect(new Set(frame.units.map(unit => unit.definition.sprite?.sheet))).toEqual(new Set([sheet]));
+    expect(new Set(frame.units.map(unit => unit.definition.sprite?.frame))).toEqual(new Set([0, 1, 2, 3, 5]));
+    expect(frame.wrecks).toHaveLength(0);
+    const carrier = frame.units.find(unit => unit.definition.sprite?.frame === 3)!;
+    const findWreck = () => battle.frame().wrecks.find(wreck => wreck.sprite === carrier.sprite);
+    for (let elapsed = 0; elapsed < 60_000 && !findWreck(); elapsed += 40) battle.step(40);
+    expect(findWreck()?.kind).toBe('carrier');
+    expect(carrier.definition.sprite?.wreckFrame).toBe(4);
+    expect(carrier.hp).toBeLessThanOrEqual(0);
+    expect(carrier.firing).toBe(Infinity);
+  });
+
   it.each(Object.entries(originalSnapshots))('matches frozen %s snapshots', (scenario, expected) => {
     const cues: BattleCue[] = [];
     const battle = createBattle({ scenario: scenario as BattleScenarioId, seed: 1846, onCue: cue => cues.push(cue) });
@@ -82,7 +105,7 @@ describe('deterministic battle core', () => {
 
 
   it('deploys the calibrated urban overview and settles only after combat decides it', () => {
-    const scene = resolveCardScene(atlasScenes, 'history:ww2')!;
+    const scene = atlasScenes.find(scene => scene.id === 'ww2-overview')!;
     const estimate = readCatalog().wars.find(war => war.id === scene.warId)!.estimate;
     const deployment = createSceneDeployment(scene, estimate);
     expect(deployment?.map(side => side.length)).toEqual([10, 6]);

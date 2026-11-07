@@ -3,6 +3,7 @@ import { scenarios, units as roster } from './roster';
 import type { SceneSprites } from '../resources/sprite-assets';
 
 const TILE_SIZE = 32;
+const GROUND_VEHICLE_SIZE = 31;
 const CITY_ROAD = [[15, '#82776b'], [14, '#635b55'], [12, '#36383b']] as const;
 const VILLAGE_ROAD = [[14, '#66583b'], [12, '#96784d']] as const;
 const BIOMES: readonly BattleFrame['biome'][] = ['desert', 'snow', 'ruins', 'village'];
@@ -62,6 +63,7 @@ export function createCanvasRenderer(
   const neutralUnits = {
     coldWarUnits: prepareSheet(assets.coldWarUnits, 3, 2),
     contemporaryUnits: prepareSheet(assets.contemporaryUnits, 3, 2),
+    koreaUnits: prepareSheet(assets.koreaUnits, 3, 2),
   };
   const terrainAtlas = prepareSheet(assets.terrain, 4, 4);
   const genericTerrain = prepareSheet(assets.genericTerrain, 3, 2);
@@ -259,7 +261,7 @@ export function createCanvasRenderer(
     const motion = ease(pose.priorMotion, pose.motion, alpha);
     const gait = Math.round(Math.sin(phase * 1.57) * motion);
     const mounted = unit.definition?.mount;
-    const size = unit.airborne ? 36 : unit.vehicle ? 31 : mounted ? 26 : 18;
+    const size = unit.airborne ? 36 : unit.vehicle ? GROUND_VEHICLE_SIZE : mounted ? 26 : 18;
     const recoil = ease(pose.priorRecoil, pose.recoil, alpha) * (unit.vehicle ? 8 : 5);
     ctx.save();
     ctx.globalAlpha = unit.hp <= 0 ? limit(((unit.removedAt ?? frame.time) - frame.time) / .42, .05, 1) : 1;
@@ -342,13 +344,20 @@ export function createCanvasRenderer(
     ctx.translate(x, y);
     ctx.rotate(wreck.angle);
     const { column, size } = wreck.profile;
+    const sprite = unitSprites.get(wreck.sprite);
+    const wreckFrame = roster[wreck.sprite]?.sprite?.wreckFrame;
+    if (sprite && wreckFrame !== undefined) {
+      const hullSize = GROUND_VEHICLE_SIZE;
+      drawFrame(sprite.atlas, wreckFrame, -hullSize / 2, -hullSize / 2, hullSize, hullSize);
+      ctx.restore();
+      return;
+    }
     if (equipmentWreckAtlas && column !== undefined) {
       const row = age >= (horse ? .85 : 1.52) ? 1 : 0;
       drawFrame(equipmentWreckAtlas, row * 4 + column, -size / 2, -size / 2, size, size);
       ctx.restore();
       return;
     }
-    const sprite = unitSprites.get(wreck.sprite);
     if (sprite) {
       if (!horse) ctx.filter = 'brightness(.63) saturate(.42) sepia(.25)';
       drawFrame(sprite.atlas, sprite.index, -Math.floor(size / 2), -Math.floor(size / 2), size, size);

@@ -13,6 +13,7 @@ from PIL import Image, features
 
 PIXEL = Path(__file__).resolve().parent.parent
 REFERENCE = PIXEL / "reference" / "battle-preview"
+GENERATED_REFERENCE = PIXEL / "reference" / "generated-sprites"
 OUTPUT = PIXEL / "src" / "resources" / "assets"
 ASSET_NAMES = {
     "infantry": "infantry",
@@ -23,7 +24,44 @@ ASSET_NAMES = {
     "tankCrew": "tank-crew",
     "equipmentWrecks": "equipment-wrecks",
 }
+GENERATED_ASSETS = {
+    "coldWarUnits": ("cold-war-units", 3, 2),
+    "contemporaryUnits": ("contemporary-units", 3, 2),
+    "genericTerrain": ("generic-terrain", 3, 2),
+    "japanTerrain": ("japan-terrain", 2, 2),
+    "koreaUnits": ("korea-units", 3, 2),
+}
 SCENES = {
+    "ww1-western-front": {
+        "required": ["infantry", "vehicles", "terrain"],
+        "optional": ["roads", "tankCrew", "equipmentWrecks"],
+        "animated": [],
+    },
+    "ww1-palestine": {
+        "required": ["infantry", "vehicles", "terrain"],
+        "optional": ["equipmentWrecks"],
+        "animated": [],
+    },
+    "us-civil-south-carolina": {
+        "required": ["infantry", "vehicles", "terrain"],
+        "optional": ["roads", "equipmentWrecks"],
+        "animated": [],
+    },
+    "cold-war-neutral": {
+        "required": ["coldWarUnits", "genericTerrain"],
+        "optional": [],
+        "animated": [],
+    },
+    "contemporary-neutral": {
+        "required": ["contemporaryUnits", "genericTerrain"],
+        "optional": [],
+        "animated": [],
+    },
+    "korea-osan": {
+        "required": ["koreaUnits", "genericTerrain"],
+        "optional": [],
+        "animated": [],
+    },
     "ww2-overview": {
         "required": ["infantry", "vehicles", "terrain"],
         "optional": ["roads", "tankCrew", "equipmentWrecks"],
@@ -31,12 +69,12 @@ SCENES = {
     },
     "hiroshima": {
         "required": ["terrain"],
-        "optional": ["roads"],
+        "optional": ["roads", "japanTerrain"],
         "animated": ["nuke"],
     },
     "nagasaki": {
         "required": ["terrain"],
-        "optional": ["roads"],
+        "optional": ["roads", "japanTerrain"],
         "animated": ["nuke"],
     },
 }
@@ -98,6 +136,14 @@ def main():
         if len(original) != entry["bytes"] or sha256(original).hexdigest() != entry["sha256"]:
             raise ValueError(f"Frozen source differs from manifest: {name}")
         prepared[key] = prepare(name, original, entry["frameGrid"])
+
+    for key, (stem, columns, rows) in GENERATED_ASSETS.items():
+        name = f"battle-topdown-{stem}"
+        source = GENERATED_REFERENCE / f"{name}.png"
+        grid = {"width": columns * 64, "height": rows * 64, "columns": columns, "rows": rows}
+        descriptor, content = prepare(name, source.read_bytes(), grid)
+        descriptor["originalPath"] = source.relative_to(PIXEL / "reference").as_posix()
+        prepared[key] = descriptor, content
 
     files = {key: descriptor for key, (descriptor, _) in prepared.items()}
     version_input = json.dumps({"files": files, "scenes": SCENES}, sort_keys=True).encode()

@@ -16,9 +16,9 @@ export interface UnitDefinition {
   range?: number;
   sheet?: string;
   row?: number;
-  sprite?: { sheet: 'coldWarUnits' | 'contemporaryUnits'; frame: number };
+  sprite?: { sheet: 'coldWarUnits' | 'contemporaryUnits' | 'koreaUnits'; frame: number; wreckFrame?: number };
   symbolic?: boolean;
-  kind?: 'wheeled' | 'mount' | 'tracked' | 'airborne';
+  kind?: 'wheeled' | 'mount' | 'tracked' | 'airborne' | 'carrier';
   stats?: VehicleStats;
 }
 
@@ -43,6 +43,7 @@ const person = (label: string, role: UnitDefinition['role'] = 'infantry', extra:
 const machine = (label: string, sheet: string, row: number, kind: UnitDefinition['kind'], stats?: VehicleStats): UnitDefinition => ({ label, sheet, row, kind, stats });
 const gun = { speed: 6, range: 103, health: 5, rate: 3.2, damage: 2 };
 const tank = { speed: 11, range: 95, health: 8, rate: 2.5, damage: 2 };
+const carrier = { speed: 14, range: 68, health: 5, rate: 0, damage: 0 };
 
 export const units: Record<string, UnitDefinition> = {
   union: person('Пехотинец 54-го Массачусетского полка'),
@@ -77,9 +78,30 @@ export const units: Record<string, UnitDefinition> = {
   'cold-war-olive': person('Стрелок Холодной войны', 'infantry', { sprite: { sheet: 'coldWarUnits', frame: 0 } }),
   'cold-war-slate': person('Стрелок Холодной войны', 'infantry', { sprite: { sheet: 'coldWarUnits', frame: 1 } }),
   'cold-war-medic': person('Санитар Холодной войны', 'medic', { sprite: { sheet: 'coldWarUnits', frame: 2 } }),
+  'cold-war-carrier': {
+    label: 'Условный гусеничный бронетранспортёр', kind: 'carrier', stats: carrier,
+    sprite: { sheet: 'coldWarUnits', frame: 3, wreckFrame: 4 },
+  },
+  'cold-war-tank': {
+    label: 'Условный танк Холодной войны', kind: 'tracked', stats: tank,
+    sprite: { sheet: 'coldWarUnits', frame: 5 },
+  },
   'contemporary-olive': person('Современный стрелок', 'infantry', { sprite: { sheet: 'contemporaryUnits', frame: 0 } }),
   'contemporary-slate': person('Современный стрелок', 'infantry', { sprite: { sheet: 'contemporaryUnits', frame: 1 } }),
   'contemporary-medic': person('Современный санитар', 'medic', { sprite: { sheet: 'contemporaryUnits', frame: 2 } }),
+  'contemporary-carrier': {
+    label: 'Условная колёсная машина', kind: 'carrier', stats: carrier,
+    sprite: { sheet: 'contemporaryUnits', frame: 3, wreckFrame: 4 },
+  },
+  'contemporary-support': {
+    label: 'Условная гусеничная машина поддержки', kind: 'tracked', stats: tank,
+    sprite: { sheet: 'contemporaryUnits', frame: 5 },
+  },
+  'osan-us-infantry': person('Пехотинец группы Смита', 'infantry', { sprite: { sheet: 'koreaUnits', frame: 0 } }),
+  'osan-kpa-infantry': person('Пехотинец Корейской народной армии', 'infantry', { sprite: { sheet: 'koreaUnits', frame: 1 } }),
+  'osan-medic': person('Санитар группы Смита', 'medic', { sprite: { sheet: 'koreaUnits', frame: 2 } }),
+  'osan-t34': { ...machine('Т‑34‑85', 'korea', 0, 'tracked', tank), sprite: { sheet: 'koreaUnits', frame: 3, wreckFrame: 4 } },
+  'osan-howitzer': { ...machine('105-мм гаубица', 'korea', 2, 'wheeled', gun), sprite: { sheet: 'koreaUnits', frame: 5 } },
 };
 
 const team = (fighters: string[], support: string[] = [], vehicles: string[] = []): TeamRoster => ({ fighters, support, vehicles });
@@ -119,11 +141,16 @@ export const scenarios = {
   },
   'cold-war-neutral': {
     label: 'Условная сцена Холодной войны', biome: 'generic', speed: 16, range: 70, fire: 1,
-    teams: [team(['cold-war-olive'], ['cold-war-medic']), team(['cold-war-slate'])],
+    teams: [team(['cold-war-olive'], ['cold-war-medic'], ['cold-war-carrier']), team(['cold-war-slate'], [], ['cold-war-tank'])],
   },
   'contemporary-neutral': {
     label: 'Условная сцена современного конфликта', biome: 'generic', speed: 16, range: 70, fire: 1,
-    teams: [team(['contemporary-olive'], ['contemporary-medic']), team(['contemporary-slate'])],
+    teams: [team(['contemporary-olive'], ['contemporary-medic'], ['contemporary-carrier']),
+      team(['contemporary-slate'], [], ['contemporary-support'])],
+  },
+  'korea-osan': {
+    label: 'Бои у Осана · июль 1950', biome: 'generic', speed: 16, range: 70, fire: 1.3,
+    teams: [team(['osan-us-infantry'], ['osan-medic'], ['osan-howitzer']), team(['osan-kpa-infantry'], [], ['osan-t34'])],
   },
 } satisfies Record<string, BattleScenario>;
 

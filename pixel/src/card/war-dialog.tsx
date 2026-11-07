@@ -4,7 +4,7 @@ import type { Episode, Estimate, Period, War } from '../catalog';
 import { readCardContent } from '../content';
 import { copy, formatDate, formatNumber, formatPeriod, historicEstimateScope, sceneEraCopy, sceneTerrainCopy, type Locale } from '../i18n/atlas-copy';
 import { PixelIcon } from '../ui/pixel-icon';
-import { atlasScenes, groundSceneExceptions, resolveCardScene, resolveIllustrativeScenes } from '../simulation/scene-config';
+import { atlasScenes, resolveCardScene, resolveIllustrativeScenes } from '../simulation/scene-config';
 import { SceneSlot, type SceneLoader } from './scene-slot';
 import './card.css';
 
@@ -92,8 +92,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEp
   const sources = new Map([war.estimate.source, ...(brief?.sources ?? [])].map(source => [source.url, source]));
   const initialEpisode = episodes.find(episode => episode.episodeId === initialEpisodeId);
   const expanded = atom<string | null>(initialEpisode?.episodeId ?? null, 'warDialog.expandedEpisode');
-  const authoredOverview = resolveCardScene(atlasScenes, war.id);
-  const illustrative = loadScene && !authoredOverview ? resolveIllustrativeScenes(war) : [];
+  const illustrative = loadScene ? resolveIllustrativeScenes(war) : [];
   const illustrativeIndex = atom(0, 'warDialog.illustrativeIndex');
   const scene = computed(() => loadScene
     ? resolveCardScene(atlasScenes, war.id, expanded()) ?? illustrative[illustrativeIndex()] ?? null
@@ -141,7 +140,6 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, initialEp
               {brief.paragraphs.map(paragraph => <p>{paragraph}</p>)}
             </section>
           ) : null}
-          {!authoredOverview && groundSceneExceptions.has(war.id) ? <p>{text.differentCombatScene}</p> : null}
           <section>
             <h3>{text.geography}</h3>
             {brief ? <p>{brief.region}</p> : null}

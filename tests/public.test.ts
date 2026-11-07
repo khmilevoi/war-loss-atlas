@@ -52,8 +52,12 @@ describe('release boundary', () => {
       'pixel/reference/battle-preview/manifest.json': '{}',
       'pixel/src/map/map-flag.ts': 'export {}',
       'pixel/src/resources/assets/battle-topdown-japan-terrain.webp': 'fixture',
+      'pixel/src/resources/assets/battle-topdown-korea-units.webp': 'fixture',
+      'pixel/reference/generated-sprites/battle-topdown-korea-units.png': 'fixture',
+      'pixel/reference/generated-sprites/originals/korea-units.png': 'fixture',
       'dist/pixel/assets/battle-topdown-infantry-abc123.png': 'fixture',
       'dist/pixel/assets/battle-topdown-japan-terrain-abc123.webp': 'fixture',
+      'dist/pixel/assets/battle-topdown-korea-units-abc123.webp': 'fixture',
       'dist/pixel/assets/battle-topdown-japan-terrain-abc123.png': 'fixture',
       'dist/pixel/assets/extra-abc123.png': 'fixture',
       'dist/pixel/reference/battle-preview/manifest.json': '{}',
@@ -62,6 +66,7 @@ describe('release boundary', () => {
       'Unapproved release file: dist/pixel/assets/battle-topdown-japan-terrain-abc123.png',
       'Unapproved release file: dist/pixel/assets/extra-abc123.png',
       'Unapproved release file: dist/pixel/reference/battle-preview/manifest.json',
+      'Unapproved release file: pixel/reference/generated-sprites/originals/korea-units.png',
     ]);
   });
 
