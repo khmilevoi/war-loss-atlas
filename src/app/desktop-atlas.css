@@ -273,6 +273,9 @@
   .atlas-shell .atlas-map-preview {
     display: block;
     min-inline-size: 0;
+    /* The map column sets the row height; longer cards scroll within it. */
+    contain: size;
+    overflow-y: auto;
     border-inline-start: 1px solid var(--border);
     padding: 1.3rem clamp(1rem, 1.65vw, 1.6rem);
     background: var(--panel) var(--atlas-coal);

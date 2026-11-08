@@ -65,6 +65,50 @@ test('drags both year handles and then moves their interval without shortening i
   await page.screenshot({ path: testInfo.outputPath('year-range-1059.png') });
 });
 
+test('keeps the map and period steady when a conflict preview needs to scroll', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 650 });
+  await page.goto('/ru/');
+  const preview = page.getByRole('complementary', { name: 'Карточка конфликта' });
+  const map = page.getByTestId('map-viewport');
+  const shortTitle = 'Корейская война';
+  const longTitle = 'Австралия, Ирак, Великобритания и США — государственная власть';
+  await expect(preview.getByRole('heading', { name: 'Карточка конфликта' })).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+
+  const geometry = () => page.evaluate(() => ({
+    pageHeight: document.documentElement.scrollHeight,
+    pageScroll: window.scrollY,
+    panels: ['.map-board', '.map-viewport', '#atlas-map-legend', '.atlas-period'].map(selector => {
+      const { top, height } = document.querySelector(selector)!.getBoundingClientRect();
+      return { top, height };
+    }),
+  }));
+  const empty = await geometry();
+  await map.getByRole('button', { name: shortTitle, exact: true }).focus();
+  await expect(preview.getByRole('heading', { name: shortTitle })).toBeVisible();
+  expect(await geometry()).toEqual(empty);
+
+  await map.getByRole('button', { name: longTitle, exact: true }).focus();
+  await expect(preview.getByRole('heading', { name: longTitle })).toBeVisible();
+  expect(await geometry()).toEqual(empty);
+  const source = preview.getByRole('link');
+  await source.focus();
+  await expect(source).toBeInViewport();
+  await source.press('Tab');
+  const open = preview.getByRole('button', { name: 'Открыть карточку' });
+  await expect(open).toBeFocused();
+  await expect(open).toBeInViewport({ ratio: 1 });
+  expect(await preview.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+  expect(await geometry()).toEqual(empty);
+
+  await page.setViewportSize({ width: 1080, height: 782 });
+  await expect(preview).toBeHidden();
+  const narrow = await geometry();
+  await map.getByRole('button', { name: shortTitle, exact: true }).focus();
+  await map.getByRole('button', { name: longTitle, exact: true }).focus();
+  expect(await geometry()).toEqual(narrow);
+});
+
 test('shows a sourced conflict preview beside the desktop map and sizes the scene to its panel', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
