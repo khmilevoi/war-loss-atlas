@@ -95,7 +95,7 @@ export function SceneSlot({ scene, estimate, calibratedUnits, label, locale, loa
         ) : status() === 'error' ? (
           <div class="scene-slot__status">
             <p role="alert">{text.sceneError}</p>
-            <button type="button" on:click={() => {
+            <button type="button" class="atlas-sprite-button" on:click={() => {
               if (requiresReload) window.location.reload();
               else start();
             }}>{text.sceneRetry}</button>
@@ -104,24 +104,25 @@ export function SceneSlot({ scene, estimate, calibratedUnits, label, locale, loa
       </div>
       <div class="scene-slot__controls">
         {scene.action !== 'patrol-contact' ? (
-          <button type="button" class="pixel-action" aria-pressed={sound} disabled={() => status() !== 'ready' || soundPending()}
+          <button type="button" class="atlas-sprite-button pixel-action" aria-pressed={sound} disabled={() => status() !== 'ready' || soundPending()}
             on:click={toggleSound}>{() => <PixelIcon name={sound() ? 'sound' : 'mute'} />}{text.sceneSound}</button>
         ) : null}
-        <button type="button" class="pixel-action" disabled={() => status() !== 'ready'} on:click={() => session?.restart()}>
+        <button type="button" class="atlas-sprite-button pixel-action" disabled={() => status() !== 'ready'} on:click={() => session?.restart()}>
           <PixelIcon name="restart" />{text.sceneRestart}
         </button>
         {() => soundFailed() ? <p role="status">{text.sceneSoundUnavailable}</p> : null}
       </div>
       {() => {
         const current = wave();
-        return current ? <p class="scene-slot__note" role="status">
+        return current ? <p class="scene-slot__wave" hidden>
           {text.sceneWave.replace('{current}', String(current.current))
             .replace('{total}', String(current.total)).replace('{units}', String(current.plannedUnits))}
           {baseline ? ' ' + text.sceneWaveBaseline : ''}
         </p> : null;
       }}
-      <p class="scene-slot__note">{scene.action ? text.actionSceneNote
-        : scene.illustrativeEra ? text.illustrativeSceneNote : text.sceneNote}</p>
+      <p class={scene.illustrativeEra ? 'scene-slot__note scene-slot__illustrative' : 'scene-slot__note'}>
+        {scene.action ? text.actionSceneNote : scene.illustrativeEra ? text.illustrativeSceneNote : text.sceneNote}
+      </p>
       {terrain ? <p class="scene-slot__note">
         {sceneTerrainCopy[locale][terrain.copyKey].note}{' '}
         <a href={terrain.source[locale]}>{sceneTerrainCopy[locale][terrain.copyKey].source}</a>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareEstimates, readCatalog, selectMapPlacements } from '../src/catalog';
+import { compareEstimates, mapPlacementsByYear, readCatalog, selectMapPlacements } from '../src/catalog';
 import type { Anchor, Episode, Estimate } from '../src/catalog';
 import { ww2Episodes } from '../src/catalog/ww2-episodes';
 
@@ -34,6 +34,16 @@ const exampleEpisode: Episode = {
 };
 
 describe('published catalog adapter', () => {
+  it('keeps gaps between observed UCDP years and includes historical endpoints', () => {
+    const catalog = readCatalog(ww2Episodes);
+    const byYear = mapPlacementsByYear(catalog, selectMapPlacements(catalog));
+    const hasFlag = (year: number, id: string) => byYear.get(year)?.some(({ flagId }) => flagId === id) ?? false;
+    expect([1995, 1996, 1997].map(year => hasFlag(year, 'war:ucdp:209'))).toEqual([true, false, true]);
+    expect([1861, 1865, 1866].map(year => hasFlag(year, 'war:history:us-civil'))).toEqual([true, true, false]);
+    expect([1944, 1945, 1946].map(year => hasFlag(year, 'episode:history:ww2/hiroshima')))
+      .toEqual([false, true, false]);
+  });
+
   it('preserves all verified identities and conflict-year observations', () => {
     const catalog = readCatalog();
     const ucdp = catalog.wars.filter(({ sourceKind }) => sourceKind === 'ucdp');

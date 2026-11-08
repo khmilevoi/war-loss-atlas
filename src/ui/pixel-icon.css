@@ -13,6 +13,21 @@
   gap: 0.45em;
 }
 
+.pixel-icon__sprite {
+  display: none;
+}
+
+@media (min-width: 64rem), (min-width: 27rem) and (hover: hover) and (pointer: fine) {
+  .pixel-icon:has(.pixel-icon__sprite) > path {
+    display: none;
+  }
+
+  .pixel-icon__sprite {
+    display: block;
+    image-rendering: pixelated;
+  }
+}
+
 .pixel-action:enabled:is(:hover, :focus-visible, [aria-pressed='true']) {
   border-color: var(--accent);
   color: var(--accent);

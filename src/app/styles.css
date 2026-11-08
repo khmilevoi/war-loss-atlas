@@ -15,6 +15,15 @@ body {
   margin: 0;
 }
 
+.atlas-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .startup {
   display: grid;
   place-content: center;
@@ -77,6 +86,11 @@ body {
   min-block-size: 100vh;
   display: grid;
   grid-template-rows: auto 1fr;
+}
+
+.atlas-map-preview,
+.atlas-language-short {
+  display: none;
 }
 
 .atlas-header {

@@ -1,5 +1,132 @@
 import { expect, test } from '@playwright/test';
 
+test('filters real map flags inclusively and resets the range with the keyboard', async ({ page }) => {
+  await page.setViewportSize({ width: 650, height: 800 });
+  await page.goto('/ru/');
+  const start = page.getByRole('slider', { name: 'Начальный год' });
+  const end = page.getByRole('slider', { name: 'Конечный год' });
+  const value = page.locator('#atlas-period-value');
+  await expect(page.locator('#atlas-period-help')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Сдвинуть период' }))
+    .toHaveAccessibleDescription(/Клавиши со стрелками/);
+  const markers = page.locator('.map-marker');
+  await expect(value).toHaveText('Все годы');
+  const count = await markers.count();
+  expect(count).toBeGreaterThan(1);
+  await start.press('ArrowRight');
+  await end.press('Home');
+  await expect(start).toHaveValue('1862');
+  await expect(end).toHaveValue('1862');
+  await expect(value).toHaveText('1862');
+  await expect(markers).toHaveCount(1);
+  await expect(page.getByRole('button', { name: 'Гражданская война в США' })).toBeVisible();
+  await page.getByRole('button', { name: 'Сдвинуть период' }).press('End');
+  await expect(value).toHaveText('2025');
+  await expect(start).toHaveValue('2025');
+  await expect(end).toHaveValue('2025');
+  await start.press('Home');
+  await expect(value).toHaveText('Все годы');
+  await expect(markers).toHaveCount(count);
+  await expect(start).toBeFocused();
+});
+
+test('drags both year handles and then moves their interval without shortening it', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1059, height: 782 });
+  await page.goto('/ru/');
+  const start = page.getByRole('slider', { name: 'Начальный год' });
+  const end = page.getByRole('slider', { name: 'Конечный год' });
+  const window = page.getByRole('button', { name: 'Сдвинуть период' });
+  await expect(start).toHaveValue('1861');
+  await expect(end).toHaveValue('2025');
+  const rail = await page.locator('.atlas-year-range__rail').boundingBox();
+  if (!rail) throw new Error('The year range has no visible track.');
+  const atYear = (year: number) => rail.x + (year - 1861) * rail.width / (2025 - 1861);
+  async function drag(x: number, y: number, to: number) {
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(to, y, { steps: 6 });
+    await page.mouse.up();
+  }
+  await drag(atYear(1861), rail.y + rail.height / 2, atYear(1930));
+  await drag(atYear(2025), rail.y + rail.height / 2, atYear(1960));
+  const lower = Number(await start.inputValue());
+  const upper = Number(await end.inputValue());
+  // Pixel-to-year rounding belongs to the browser's native handles.
+  expect(Math.abs(lower - 1930)).toBeLessThanOrEqual(1);
+  expect(Math.abs(upper - 1960)).toBeLessThanOrEqual(1);
+  const length = upper - lower;
+  const center = await window.boundingBox();
+  if (!center) throw new Error('The selected year window is not visible.');
+  const x = center.x + center.width / 2;
+  await drag(x, center.y + center.height / 2, rail.x + rail.width + 20);
+  await expect(start).toHaveValue(String(2025 - length));
+  await expect(end).toHaveValue('2025');
+  await expect(page.locator('#atlas-period-value')).toHaveText(`${2025 - length}–2025`);
+  await page.screenshot({ path: testInfo.outputPath('year-range-1059.png') });
+});
+
+test('shows a sourced conflict preview beside the desktop map and sizes the scene to its panel', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/ru/');
+  const flag = page.getByTestId('map-viewport').getByRole('button', { name: 'Атомная бомбардировка Хиросимы', exact: true });
+  await flag.focus();
+  const preview = page.getByRole('complementary', { name: 'Карточка конфликта' });
+  const title = preview.getByRole('heading', { name: 'Атомная бомбардировка Хиросимы' });
+  await expect(title).toBeVisible();
+  await expect(preview.getByText('Около 140 000', { exact: true })).toBeVisible();
+  await expect(preview.getByRole('link')).toHaveAttribute('href', /city\.hiroshima\.lg\.jp/);
+  await expect(flag).toHaveAttribute('data-selected', 'true');
+  await expect(flag.locator('.flag-icon')).toBeVisible();
+  await expect(page.locator('.map-marker:not([data-selected]) .map-flag-pennant').first()).toBeVisible();
+  await expect(page.getByText('Оценки UCDP', { exact: true })).toBeVisible();
+  // Multiplicative shading varies with terrain; it must not equal a flat swatch.
+  const rendered = await page.getByTestId('map-land').evaluate(element => {
+    const canvas = element as HTMLCanvasElement;
+    const pixels = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data;
+    const shades = new Set<string>();
+    for (const marker of document.querySelectorAll<HTMLElement>('.map-marker--estimate:not(.map-marker--displaced)')) {
+      const x = Math.floor(parseFloat(marker.style.getPropertyValue('--map-x')) * canvas.width / 100);
+      const y = Math.floor(parseFloat(marker.style.getPropertyValue('--map-y')) * canvas.height / 100);
+      const offset = (y * canvas.width + x) * 4;
+      if (pixels[offset] > pixels[offset + 1] * 1.5) shades.add([...pixels.subarray(offset, offset + 3)].join(','));
+    }
+    return { shades: shades.size, interpolation: getComputedStyle(canvas).imageRendering };
+  });
+  expect(rendered.shades).toBeGreaterThan(3);
+  expect(rendered.interpolation).toBe('pixelated');
+  await page.evaluate(() => document.fonts.ready);
+  await page.screenshot({ path: testInfo.outputPath('atlas-desktop-pilot.png') });
+
+  const sources = page.locator('.map-sources');
+  await sources.locator('summary').click();
+  await expect(sources.getByRole('link')).toHaveAttribute('href', 'https://www.naturalearthdata.com/about/terms-of-use/');
+  await sources.locator('summary').click();
+  await preview.getByRole('button', { name: 'Открыть карточку' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Вторая мировая война' });
+  const canvas = dialog.locator('canvas[data-scene-canvas="ww2-overview"]');
+  await expect(canvas).toBeVisible();
+  await expect(dialog.locator('.scene-slot__wave')).toBeHidden();
+  for (const [width, height] of [[1440, 900], [1024, 700], [1280, 720]]) {
+    await page.setViewportSize({ width, height });
+    await expect.poll(() => canvas.evaluate(element => {
+      const view = element.closest('.scene-slot__view')!;
+      const scene = element.closest('.scene-slot')!;
+      const padding = getComputedStyle(scene);
+      const available = scene.clientWidth - parseFloat(padding.paddingLeft) - parseFloat(padding.paddingRight);
+      return Math.abs(view.getBoundingClientRect().width - available);
+    })).toBeLessThan(2);
+    await expect.poll(() => canvas.evaluate(element => {
+      const { width, height } = element.getBoundingClientRect();
+      return width / height;
+    })).toBeCloseTo(5 / 3, 2);
+    await expect(dialog.getByRole('button', { name: 'Перезапустить' })).toBeInViewport({ ratio: 1 });
+  }
+  await page.screenshot({ path: testInfo.outputPath('atlas-desktop-scene.png') });
+  await page.keyboard.press('Escape');
+  await expect(flag).toBeFocused();
+});
+
 test('switches the First World War card between its separate historical settings', async ({ page }) => {
   await page.goto('/en/?war=history%3Aww1');
   const dialog = page.getByRole('dialog', { name: 'First World War' });
@@ -153,11 +280,79 @@ test('offers a reload after the map chunk fails to load', async ({ page }) => {
 });
 
 test('exposes every estimate band and explains shared map points', async ({ page }) => {
+  await page.setViewportSize({ width: 1059, height: 782 });
   await page.goto('/en/');
-  const method = page.locator('.map-legend__method');
-  await method.getByText('How to read the scale', { exact: true }).click();
-  await expect(method.getByRole('listitem')).toHaveText(['0–999', '1,000–9,999', '10,000–49,999', '50,000+']);
+  const legend = page.locator('#atlas-map-legend');
+  await expect(legend).toHaveCSS('position', 'absolute');
+  await expect.poll(async () => (await page.getByTestId('map-land').boundingBox())?.width ?? 0).toBeGreaterThan(1000);
+  await expect.poll(async () => (await legend.boundingBox())?.x ?? 0).toBeLessThan(24);
+  await expect(legend.locator('.map-legend__swatches').getByRole('listitem'))
+    .toHaveText(['0–999', '1,000–9,999', '10,000–49,999', '50,000+']);
+  await expect(legend.locator('.map-legend__keys').getByRole('listitem'))
+    .toHaveText(['Historical estimates', 'No data']);
+  const method = legend.locator('.map-legend__method');
+  await method.getByText('How to read the scale', { exact: true }).press('Enter');
   await expect(method.getByText(/largest individual estimate/)).toBeVisible();
+  await expect(method.getByText(/regardless of the selected years/)).toBeVisible();
+  await expect(method.getByText(/Halo size/)).toBeVisible();
+  const toggle = page.getByRole('button', { name: 'Legend', exact: true });
+  await toggle.press('Enter');
+  await expect(legend).toBeHidden();
+  await toggle.press('Enter');
+  await expect(legend).toBeVisible();
+  await method.getByText('How to read the scale', { exact: true }).press('Enter');
+  const initialPosition = await legend.boundingBox();
+  const viewport = page.getByTestId('map-viewport');
+  const initialWidth = (await viewport.boundingBox())?.width;
+  const zoomIn = page.getByRole('button', { name: 'Zoom in', exact: true });
+  for (let level = 0; level < 3; level++) await zoomIn.click();
+  await expect(page.getByTestId('map-zoom')).toHaveText('300%');
+  await viewport.evaluate(node => node.scrollTo(120, 150));
+  await expect.poll(() => viewport.evaluate(node => [node.scrollLeft, node.scrollTop])).toEqual([120, 150]);
+  expect(await legend.boundingBox()).toEqual(initialPosition);
+  expect((await viewport.boundingBox())?.width).toBe(initialWidth);
+});
+
+test('pans the zoomed map by dragging its background and keeps flags clickable', async ({ page }) => {
+  await page.setViewportSize({ width: 1080, height: 782 });
+  await page.goto('/ru/');
+  const viewport = page.getByTestId('map-viewport');
+  const plane = viewport.locator('.map-plane');
+  await expect(plane).toHaveCSS('cursor', 'auto');
+  const zoomIn = page.getByRole('button', { name: 'Приблизить', exact: true });
+  for (let level = 0; level < 3; level++) await zoomIn.click();
+  await expect(page.getByTestId('map-zoom')).toHaveText('300%');
+  await expect(plane).toHaveCSS('cursor', 'grab');
+  const position = () => viewport.evaluate(node => [node.scrollLeft, node.scrollTop]);
+  const point = await viewport.evaluate(node => {
+    const rect = node.getBoundingClientRect();
+    for (const fraction of [0.4, 0.45, 0.5, 0.55, 0.6]) {
+      const x = Math.round(rect.left + rect.width * fraction);
+      const y = Math.round(rect.top + rect.height / 2);
+      const target = document.elementFromPoint(x, y);
+      if (target?.closest('.map-plane') && !target.closest('button, a')) return { x, y, top: rect.top };
+    }
+    throw new Error('No free drag point on the map.');
+  });
+  const [left, top] = await position();
+  await page.mouse.move(point.x, point.y);
+  await page.mouse.down();
+  await page.mouse.move(point.x + 2, point.y);
+  expect(await position()).toEqual([left, top]);
+  await page.mouse.move(point.x - 90, point.y - 65);
+  await expect(plane).toHaveCSS('cursor', 'grabbing');
+  expect(await position()).toEqual([left + 90, top + 65]);
+  await page.mouse.move(point.x + 30, point.y + 25);
+  expect(await position()).toEqual([left - 30, top - 25]);
+  await page.mouse.move(point.x, point.top - 10);
+  await page.mouse.up();
+  await expect(plane).toHaveCSS('cursor', 'grab');
+  const afterRelease = await position();
+  await page.mouse.move(point.x, point.y);
+  expect(await position()).toEqual(afterRelease);
+  const flag = viewport.getByRole('button', { name: 'Атомная бомбардировка Хиросимы', exact: true });
+  await flag.click();
+  await expect(page.getByRole('dialog', { name: 'Вторая мировая война' })).toBeVisible();
 });
 
 test('opens the WWII overview from each episode flag and keeps separate episode estimates', async ({ page }) => {
@@ -295,7 +490,7 @@ for (const [warId, sceneId] of [
     await dialog.getByRole('button', { name: 'Restart', exact: true }).click();
     expect(await canvas.evaluate(node => (node as HTMLCanvasElement).toDataURL())).toBe(still);
     expect(sprites).toEqual([]);
-    await expect(dialog.getByText(/A schematic illustration of the fighting/)).toBeVisible();
+    await expect(dialog.getByText('Positions and movement paths are illustrative.', { exact: true })).toBeVisible();
     await expect(dialog.getByRole('heading', { name: 'Deaths' })).toBeVisible();
   });
 }
@@ -339,4 +534,69 @@ test('persists interface sound separately and unlocks audio only after a user ac
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
   await expect(root).toHaveAttribute('data-closed-audio-contexts', '1');
+});
+
+
+test('multiplies a stable land material through discrete dither levels without painting the sea', async ({ page }) => {
+  await page.setViewportSize({ width: 1080, height: 782 });
+  await page.goto('/ru/');
+  const canvas = page.getByTestId('map-land');
+  const before = await canvas.evaluate(element => {
+    const map = element as HTMLCanvasElement;
+    return {
+      width: map.width,
+      pixels: Array.from(map.getContext('2d')!.getImageData(0, 0, map.width, map.height).data),
+      markers: Array.from(document.querySelectorAll<HTMLElement>('.map-marker--estimate:not(.map-marker--displaced)')).map(marker => ({
+        x: Math.round(parseFloat(marker.style.getPropertyValue('--map-x')) * map.width / 100),
+        y: Math.round(parseFloat(marker.style.getPropertyValue('--map-y')) * map.height / 100),
+        ink: marker.style.getPropertyValue('--marker-ink'),
+      })),
+    };
+  });
+  await page.getByRole('slider', { name: 'Начальный год' }).press('ArrowRight');
+  await page.getByRole('slider', { name: 'Конечный год' }).press('Home');
+  await expect(page.locator('#atlas-period-value')).toHaveText('1862');
+  // This real historical-only selection supplies the identical untinted material.
+  await expect(page.locator('.map-marker--estimate')).toHaveCount(0);
+  const base = await canvas.evaluate(element => {
+    const map = element as HTMLCanvasElement;
+    return Array.from(map.getContext('2d')!.getImageData(0, 0, map.width, map.height).data);
+  });
+  const tints = [[1, .52, .55], [.88, .38, .46], [.74, .27, .37], [.56, .16, .28]];
+  const swatches = tints.map(tint => '#' + [102, 85, 77].map((channel, index) =>
+    Math.round(channel * tint[index]).toString(16).padStart(2, '0')).join(''));
+  const bands = new Set<number>();
+  for (const marker of before.markers) {
+    const offset = (marker.y * before.width + marker.x) * 4;
+    // Ocean material has wine-coloured channels, unlike neutral ash boundary ink.
+    if (base[offset] > base[offset + 1] * 1.6) continue;
+    const rank = swatches.indexOf(marker.ink);
+    expect(rank).toBeGreaterThanOrEqual(0);
+    expect(before.pixels.slice(offset, offset + 3)).toEqual(
+      base.slice(offset, offset + 3).map((channel, index) => Math.round(channel * tints[rank][index])),
+    );
+    bands.add(rank);
+  }
+  let changed = 0, sea = 0, changedSea = 0, invalidTints = 0;
+  const colours = new Set<string>();
+  for (let offset = 0; offset < base.length; offset += 4) {
+    const same = base.slice(offset, offset + 4).every((channel, index) => before.pixels[offset + index] === channel);
+    if (base[offset] > base[offset + 1] * 1.6) {
+      sea++;
+      if (!same) changedSea++;
+    }
+    if (same) continue;
+    changed++;
+    colours.add(before.pixels.slice(offset, offset + 3).join(','));
+    const allowed = tints.some(tint => [1 / 3, 2 / 3, 1].some(level => [0, 1, 2].every(channel =>
+      before.pixels[offset + channel] === Math.round(base[offset + channel] * (1 - level + level * tint[channel])),
+    )));
+    if (!allowed) invalidTints++;
+  }
+  expect(changedSea).toBe(0);
+  expect(invalidTints).toBe(0);
+  expect(bands.size).toBeGreaterThan(1);
+  expect(changed).toBeGreaterThan(1000);
+  expect(sea).toBeGreaterThan(1000);
+  expect(colours.size).toBeGreaterThan(100);
 });

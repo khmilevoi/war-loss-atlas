@@ -18,6 +18,46 @@ function formatEstimate(estimate: Estimate, locale: Locale): string {
   return [prefix, formatNumber(value, locale)].filter(Boolean).join(' ');
 }
 
+export function WarPreview({ war, episode, locale, onOpen, onDismiss }: {
+  war: War; episode?: Episode; locale: Locale; onOpen: () => void; onDismiss: () => void;
+}) {
+  const text = copy[locale];
+  const record = episode ?? war;
+  const brief = readCardContent(episode ?? war.id, locale);
+  const estimatePeriod = episode?.estimatePeriod;
+  const period = estimatePeriod
+    ? `${formatDate(estimatePeriod.from, locale)} – ${formatDate(estimatePeriod.through, locale)}`
+    : formatPeriod(record.period);
+  const scope = episode
+    ? (episode.estimate.metric === 'atomic_bombing_deaths' ? text.episodeScope : text.battleEpisodeScope)
+    : (war.sourceKind === 'ucdp' ? text.ucdpScope : historicEstimateScope(war.id, locale));
+  return (
+    <div class="war-preview">
+      <button type="button" class="war-preview__dismiss atlas-sprite-button" aria-label={text.close}
+        on:click={onDismiss}><PixelIcon name="close" /></button>
+      <h2>{brief?.title ?? record.names[locale]}</h2>
+      <p class="war-preview__period">{brief?.period ?? formatPeriod(record.period)}</p>
+      <section class="war-preview__estimate">
+        <h3>{text.deaths}</h3>
+        <p class="war-preview__value">{formatEstimate(record.estimate, locale)}</p>
+        <p>{text.estimatePeriod} · {period}</p>
+        <p>{scope}</p>
+      </section>
+      {brief ? (
+        <section>
+          <h3><PixelIcon name="geography" />{text.geography}</h3>
+          <p>{brief.region}</p>
+        </section>
+      ) : null}
+      <section>
+        <h3><PixelIcon name="sources" />{text.sources}</h3>
+        <a href={record.estimate.source.url}>{record.estimate.source.title}</a>
+      </section>
+      <button type="button" class="atlas-sprite-button atlas-sprite-button--accent" aria-haspopup="dialog" on:click={onOpen}>{text.openCard}</button>
+    </div>
+  );
+}
+
 function EstimateSummary({ estimate, period, scope, uncertainty, locale }: {
   estimate: Estimate; period: Period | string; scope: string; uncertainty?: string; locale: Locale;
 }) {
@@ -117,7 +157,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, calibrate
         <PixelIcon name="flag" size={32} />
         <h2 id="war-dialog-title">{brief?.title ?? war.names[locale]}</h2>
         <span class="war-dialog__period">{formatPeriod(war.period)}</span>
-        <button type="button" class="war-dialog__close pixel-action" aria-label={text.close} autofocus
+        <button type="button" class="war-dialog__close atlas-sprite-button pixel-action" aria-label={text.close} autofocus
           on:click={onClose}><PixelIcon name="close" size={24} /></button>
       </header>
       <div class={() => `war-dialog__body${scene() ? ' war-dialog__body--scene' : ''}`}>
@@ -125,7 +165,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, calibrate
           <div>
             <div class="scene-era" role="group" aria-label={text.sceneEra}>
               {illustrative.map(({ illustrativeEra }, index) => (
-                <button type="button" class="pixel-action" aria-pressed={() => illustrativeIndex() === index}
+                <button type="button" class="atlas-sprite-button pixel-action" aria-pressed={() => illustrativeIndex() === index}
                   on:click={() => illustrativeIndex.set(index)}>{sceneEraCopy[locale][illustrativeEra].button}</button>
               ))}
             </div>
@@ -137,12 +177,12 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, calibrate
           <div class="war-dialog__brief">
           {brief ? (
             <section class="war-dialog__context">
-              <h3>{text.context}</h3>
+              <h3><PixelIcon name="chronicle" />{text.context}</h3>
               {brief.paragraphs.map(paragraph => <p>{paragraph}</p>)}
             </section>
           ) : null}
           <section>
-            <h3>{text.geography}</h3>
+            <h3><PixelIcon name="geography" />{text.geography}</h3>
             {brief ? <p>{brief.region}</p> : null}
             {war.anchor ? (
               <p>
@@ -152,7 +192,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, calibrate
             ) : <p>{text.unknown}</p>}
           </section>
           <section>
-            <h3>{text.sources}</h3>
+            <h3><PixelIcon name="sources" />{text.sources}</h3>
             <ul class="war-dialog__sources">
               {Array.from(sources.values(), source => <li><a href={source.url}>{source.title}</a></li>)}
             </ul>
@@ -166,7 +206,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, calibrate
                 const panel = `war-episode-panel-${index}`;
                 return (
                   <div class="war-episode">
-                    <button type="button" id={heading} aria-controls={panel}
+                    <button type="button" class="atlas-sprite-button" id={heading} aria-controls={panel}
                       aria-expanded={() => expanded() === episode.episodeId}
                       on:click={() => {
                         const next = expanded.set(expanded() === episode.episodeId ? null : episode.episodeId);
@@ -187,7 +227,7 @@ export function WarDialog({ war, episodes, locale, onClose, loadScene, calibrate
         </aside>
       </div>
       <footer class="war-dialog__footer">
-        <button type="button" on:click={onClose}>{text.back}</button>
+        <button type="button" class="atlas-sprite-button" on:click={onClose}>{text.back}</button>
       </footer>
     </div>
   );

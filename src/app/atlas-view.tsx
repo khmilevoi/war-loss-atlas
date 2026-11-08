@@ -1,16 +1,20 @@
 import { action, atom, bind, computed, reatomRoute, urlAtom, withLocalStorage } from '@reatom/core';
 import { h, mount } from '@reatom/jsx';
 import { createInterfaceAudio, type InterfaceCue } from '../audio/interface-audio';
-import { readCatalog, selectMapPlacements, type MapPlacement, type War } from '../catalog';
+import { mapPlacementsByYear, readCatalog, selectMapPlacements, type MapPlacement, type War } from '../catalog';
 import { ww1Episodes } from '../catalog/ww1-episodes';
 import { ww2Episodes } from '../catalog/ww2-episodes';
-import { WarDialog } from '../card/war-dialog';
+import { WarDialog, WarPreview } from '../card/war-dialog';
 import { SceneModuleLoadError, type SceneLoader } from '../card/scene-slot';
 import { readCardContent } from '../content';
 import { copy, type Locale } from '../i18n/atlas-copy';
-import { WorldMap, type MapViewState } from '../map/world-map';
+import { MapSources, WorldMap, type MapViewState } from '../map/world-map';
 import { createUnitCalibration } from '../simulation/unit-calibration';
 import { PixelIcon } from '../ui/pixel-icon';
+import { worldEmblem } from '@/shared/assets/atlas-design';
+import { PeriodSlider } from './period-slider';
+import '@/shared/ui/atlas-material.css';
+import './desktop-atlas.css';
 
 const loadWarScene: SceneLoader = async (host, options) => {
   const { mountScene } = await import('../simulation/mount-scene').catch(error => {
@@ -44,6 +48,11 @@ interface OpenWar {
   war: War;
   origin: MapViewState | null;
   hasMapEntry: boolean;
+}
+
+interface PreviewedFlag {
+  placement: MapPlacement;
+  open: () => void;
 }
 
 export function createAtlasRoot(initialLocale: Locale) {
@@ -102,9 +111,33 @@ function createAtlasView(
     return brief ? { ...placement, names: { ...placement.names, [locale]: brief.title } } : placement;
   });
   const byFlagId = new Map(placements.map(placement => [placement.flagId, placement]));
+  const byYear = mapPlacementsByYear(catalog, placements);
+  const datedRecords = [...catalog.wars, ...catalog.episodes];
+  const periodLimits = {
+    from: Math.min(...datedRecords.map(record => record.period.from)),
+    to: Math.max(...datedRecords.map(record => record.period.to)),
+  };
+  const period = atom(periodLimits, 'app.mapPeriod');
   const byWarId = new Map<string, War>(catalog.wars.map(war => [war.id, war]));
   const viewSnapshots = new Map<string, MapViewState>();
   const selection = atom<OpenWar | null>(null, 'app.warSelection');
+  const preview = atom<PreviewedFlag | null>(null, 'app.mapPreview');
+  const visiblePlacements = computed(() => {
+    const { from, to } = period();
+    if (from === periodLimits.from && to === periodLimits.to) return placements;
+    const visible = new Set<MapPlacement>();
+    for (const [year, entries] of byYear) {
+      if (from <= year && year <= to) for (const placement of entries) visible.add(placement);
+    }
+    return placements.filter(placement => visible.has(placement));
+  }, 'app.visiblePlacements');
+  const selectPeriod = action((next: typeof periodLimits) => {
+    const prior = period();
+    if (next.from === prior.from && next.to === prior.to) return;
+    period.set(next);
+    const active = preview();
+    if (active && !visiblePlacements().includes(active.placement)) preview.set(null);
+  }, 'app.selectMapPeriod');
   let dialog: HTMLDialogElement;
   let restoreMap: (state: MapViewState) => void;
   let unmountCard: (() => void) | undefined;
@@ -187,25 +220,55 @@ function createAtlasView(
       };
     }}>
       <header class="atlas-header">
-        <h1>{text.title}</h1>
+        <div class="atlas-brand">
+          <img class="atlas-brand__emblem" src={worldEmblem} alt="" />
+          <h1 aria-label={text.title}>{text.atlasBrand}</h1>
+        </div>
         <div class="atlas-header__actions">
-          <button class="atlas-interface-sound pixel-action" type="button" aria-pressed={interfaceSound}
+          <MapSources locale={locale} />
+          <button class="atlas-interface-sound atlas-sprite-button pixel-action" type="button" aria-pressed={interfaceSound}
             on:click={event => toggleSound(event.isTrusted)}>
-            {() => <PixelIcon name={interfaceSound() ? 'sound' : 'mute'} />}{text.interfaceSound}
+            {() => <PixelIcon name={interfaceSound() ? 'sound' : 'mute'} />}
+            <span class="atlas-desktop-visually-hidden">{text.interfaceSound}</span>
           </button>
           <nav class="atlas-languages" aria-label={text.language}>
-            <a href="/ru/" lang="ru" hreflang="ru" aria-current={locale === 'ru' ? 'page' : undefined}>
-              Русский
+            <a class="atlas-sprite-button" href="/ru/" lang="ru" hreflang="ru" aria-label="Русский" aria-current={locale === 'ru' ? 'page' : undefined}>
+              <span class="atlas-language-name">Русский</span><span class="atlas-language-short">RU</span>
             </a>
-            <a href="/en/" lang="en" hreflang="en" aria-current={locale === 'en' ? 'page' : undefined}>
-              English
+            <a class="atlas-sprite-button" href="/en/" lang="en" hreflang="en" aria-label="English" aria-current={locale === 'en' ? 'page' : undefined}>
+              <span class="atlas-language-name">English</span><span class="atlas-language-short">EN</span>
             </a>
           </nav>
         </div>
       </header>
-      <main>
-        <WorldMap placements={placements} locale={locale} onFlagOpen={openFlag} playCue={playCue}
-          registerRestore={restore => { restoreMap = restore; }} />
+      <main class="atlas-map-layout">
+        <div class="atlas-map-layout__main">
+          <WorldMap placements={visiblePlacements} locale={locale} onFlagOpen={openFlag} playCue={playCue}
+            selectedFlag={() => selection()?.origin?.flagId ?? preview()?.placement.flagId}
+            onFlagPreview={(placement, open) => preview.set({ placement, open })}
+            registerRestore={restore => { restoreMap = restore; }} />
+          <PeriodSlider limits={periodLimits} selected={period} onSelect={selectPeriod} locale={locale} />
+        </div>
+        <aside class="atlas-map-preview" aria-label={text.mapPreview}
+          aria-describedby={() => preview() ? undefined : 'atlas-preview-help'}>
+          {() => {
+            const active = preview();
+            const war = active ? byWarId.get(active.placement.warId) : undefined;
+            if (!active || !war) {
+              return <div class="war-preview">
+                <h2>{text.mapPreview}</h2>
+                <p id="atlas-preview-help" class="atlas-visually-hidden">{text.mapPreviewHelp}</p>
+              </div>;
+            }
+            const episode = active.placement.episodeId === null ? undefined
+              : catalog.episodes.find(candidate => candidate.warId === war.id && candidate.episodeId === active.placement.episodeId);
+            return <WarPreview war={war} episode={episode} locale={locale} onOpen={active.open}
+              onDismiss={() => {
+                preview.set(null);
+                document.getElementById('map-title')?.focus();
+              }} />;
+          }}
+        </aside>
       </main>
       <dialog class="war-dialog" aria-labelledby="war-dialog-title" ref={element => { dialog = element; }}
         on:cancel={event => { event.preventDefault(); closeDialog(); }} />

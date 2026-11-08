@@ -11,6 +11,9 @@
     "allowImportingTsExtensions": true,
     "jsx": "preserve",
     "jsxImportSource": "@reatom/jsx",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,

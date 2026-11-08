@@ -8,7 +8,8 @@ import { parseNativeCsv, sha256, SOURCE_SHA } from './import-data';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const publicFiles = new Set(['data/manifest.json', 'data/ucdp-conflict-year.csv', 'data/geography/ne_110m_admin_0_countries.geojson',
   'public/geo/ne_110m_land.geojson', 'public/licenses/ATTRIBUTION.md', 'public/licenses/CC-BY-4.0.txt',
-  'public/licenses/NATURAL-EARTH.txt', 'public/licenses/HISTORICAL-FACTS.md']);
+  'public/licenses/NATURAL-EARTH.txt', 'public/licenses/HISTORICAL-FACTS.md',
+  'public/licenses/ALEGREYA-OFL.txt']);
 const sourceFiles = new Set(['src/data/generated/atlas.json', 'src/data/historical.json', 'src/data/placements.json',
   'src/data/country-anchors.json', 'src/data/sources.json']);
 const rootFiles = new Set(['.gitattributes', '.gitignore', 'rpi.toml',
@@ -32,9 +33,16 @@ const researchFiles = new Set([
 ]);
 const localOnly = new Set(['.git', 'node_modules', '.superpowers', 'coverage', 'playwright-report', 'test-results']);
 const starterLocalDirectories = new Set(['starter/work', 'starter/__pycache__']);
+const atlasDesignAssets = new Set([
+  'alegreya-cyrillic.woff2', 'alegreya-latin.woff2',
+  'coal.svg', 'frame-hot.svg', 'frame.svg', 'iron.svg',
+  'layers.png', 'minus.png', 'oxblood.svg', 'plus.png', 'range-thumb.svg',
+  'range-track.svg', 'sound.png', 'world-emblem.png',
+]);
 const appFiles = new Set([
-  'ru/index.html', 'en/index.html',
-  'src/app/main.tsx', 'src/app/styles.css', 'tests/static.test.ts', 'tests/browser/static.spec.ts',
+  'ru/index.html', 'en/index.html', 'components/index.html',
+  'src/app/main.tsx', 'src/app/styles.css', 'src/app/desktop-atlas.css', 'src/app/period-slider.tsx', 'src/app/atlas-showcase.tsx',
+  'tests/static.test.ts', 'tests/browser/static.spec.ts',
   'src/app/atlas-view.tsx', 'src/catalog/index.ts', 'tests/catalog.test.ts',
   'src/map/land.ts', 'src/map/world-map.tsx', 'src/map/map-flag.ts', 'src/map/map.css', 'tests/map.test.ts',
   'src/card/war-dialog.tsx', 'src/card/card.css', 'src/i18n/atlas-copy.ts',
@@ -49,6 +57,9 @@ const appFiles = new Set([
   'src/simulation/landscape.ts', 'src/simulation/render-actions.ts', 'tests/action-playback.test.ts',
   'src/simulation/scene-config.ts', 'tests/scene-config.test.ts',
   'src/ui/pixel-icon.tsx', 'src/ui/pixel-icon.css',
+  'src/shared/ui/atlas-material.css',
+  'src/shared/assets/atlas-design/index.ts',
+  ...Array.from(atlasDesignAssets, (name) => `src/shared/assets/atlas-design/${name}`),
   'src/simulation/unit-calibration.ts', 'tests/unit-calibration.test.ts', 'tests/scene-assets.test.ts',
   'src/audio/interface-audio.ts', 'scripts/build-scene-sprites.py', 'scripts/prepare-generated-sprites.py',
   'src/resources/assets/scene-sprites.json',
@@ -99,8 +110,10 @@ function allowedPath(path: string, built = true): boolean {
   if (!built) return legacyGitFiles.has(path)
     || /^(?:src|server)\/(?:[\w-]+\/)*[\w-]+\.(?:ts|tsx|css)$/.test(path)
     || /^tests\/(?:[\w-]+\/)*[\w.-]+\.(?:ts|js)$/.test(path);
-  if (/^dist\/(?:ru|en)\/index\.html$/.test(path)) return true;
+  if (/^dist\/(?:ru|en|components)\/index\.html$/.test(path)) return true;
   if (/^dist\/assets\/[\w-]+-[\w-]+\.(?:js|css)$/.test(path)) return true;
+  const atlasDesignBuild = /^dist\/assets\/([\w-]+)-[\w-]{8}\.(png|svg|woff2)$/.exec(path);
+  if (atlasDesignBuild && atlasDesignAssets.has(`${atlasDesignBuild[1]}.${atlasDesignBuild[2]}`)) return true;
   return battleSprites.test(path) || generatedBattleSprites.test(path);
 }
 

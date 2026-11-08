@@ -238,6 +238,33 @@ export function selectMapPlacements(catalog: Catalog): MapPlacement[] {
   });
 }
 
+/** Group flags by source years. Keep the estimates attached to their original source periods. */
+export function mapPlacementsByYear(catalog: Catalog, placements: readonly MapPlacement[]) {
+  const observedYears = new Map<string, Set<number>>();
+  for (const row of catalog.nativeRows) {
+    const id = `ucdp:${row.conflict_id}`;
+    const years = observedYears.get(id) ?? new Set<number>();
+    years.add(row.year);
+    observedYears.set(id, years);
+  }
+  const wars = new Map(catalog.wars.map(war => [war.id, war]));
+  const episodes = new Map(catalog.episodes.map(episode => [`${episode.warId}/${episode.episodeId}`, episode]));
+  const result = new Map<number, MapPlacement[]>();
+  for (const placement of placements) {
+    const episode = episodes.get(`${placement.warId}/${placement.episodeId}`);
+    const period = episode?.period ?? wars.get(placement.warId)?.period;
+    const years = episode || placement.sourceKind === 'history'
+      ? period && Array.from({ length: period.to - period.from + 1 }, (_, index) => period.from + index)
+      : observedYears.get(placement.warId);
+    for (const year of years ?? []) {
+      const entries = result.get(year) ?? [];
+      entries.push(placement);
+      result.set(year, entries);
+    }
+  }
+  return result;
+}
+
 export function compareEstimates(left: Estimate, right: Estimate): number | null {
   if (
     left.comparisonKey === null || left.comparisonKey !== right.comparisonKey

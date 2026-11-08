@@ -48,7 +48,7 @@ body:has(.war-dialog[open]) {
   font-variant-numeric: tabular-nums;
 }
 
-.war-dialog button {
+:where(.war-dialog) button {
   min-block-size: 2.75rem;
   min-inline-size: 2.75rem;
   border: 1px solid var(--border);
@@ -107,6 +107,10 @@ body:has(.war-dialog[open]) {
   margin: 0 0 0.5rem;
   color: var(--text);
   font: 600 1.25rem/1.15 Georgia, serif;
+}
+
+.war-dialog__brief h3 > .pixel-icon {
+  display: none;
 }
 
 .war-dialog p {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readCatalog, selectMapPlacements, type MapPlacement } from '../src/catalog';
 import { ww2Episodes } from '../src/catalog/ww2-episodes';
-import { groupMarkers, mapHeight, mapWidth, scale, scaleRank } from '../src/map/land';
+import { ditherStrength, fatalityField, groupMarkers, mapHeight, mapWidth, multiplyTint, referenceLand, scale, scaleRank, tintSteps } from '../src/map/land';
 
 const placements = selectMapPlacements(readCatalog(ww2Episodes));
 const ucdp = placements.find(placement => placement.sourceKind === 'ucdp')!;
@@ -61,5 +61,49 @@ describe('loss estimation on the world map', () => {
       expect(x).toBeLessThan(mapWidth);
       expect(y).toBeLessThan(mapHeight);
     }
+  });
+});
+
+
+describe('textured fatality field', () => {
+  it('multiplies material without flattening its grain or brightening any channel', () => {
+    const base = [112, 93, 84];
+    expect(multiplyTint(base, 3, 0)).toEqual(base);
+    for (let rank = 0; rank < scale.length; rank++) {
+      expect(multiplyTint(referenceLand, rank, 1)).toEqual(scale[rank].rgb);
+      const result = multiplyTint(base, rank, 1);
+      const dark = multiplyTint(base.map(channel => channel * 0.56), rank, 1);
+      result.forEach((channel, index) => {
+        expect(channel).toBeLessThanOrEqual(base[index]);
+        expect(dark[index]).toBeLessThan(channel);
+      });
+    }
+  });
+
+  it('uses discrete ordered levels with a stable map-grid phase', () => {
+    const values = Array.from({ length: 16 }, (_, index) => ditherStrength(0.5, index % 4, Math.floor(index / 4)));
+    expect(new Set(values)).toEqual(new Set([1 / 3, 2 / 3]));
+    expect(values.reduce((sum, value) => sum + value, 0) / 16).toBeCloseTo(0.5);
+    for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) {
+      expect(ditherStrength(0.5, x + 4, y + 4)).toBe(ditherStrength(0.5, x, y));
+      expect(ditherStrength(0, x, y)).toBe(0);
+      expect(ditherStrength(1, x, y)).toBe(1);
+    }
+  });
+
+  it('keeps unknown estimates blank, zero visible, and overlap deterministic without addition', () => {
+    const unknown = groupMarkers([atSamePoint('unknown', null)])[0];
+    expect(fatalityField([unknown]).levels.some(Boolean)).toBe(false);
+    const low = { ...groupMarkers([atSamePoint('zero', 0)])[0], x: 50.5, y: 40.5 };
+    const high = { ...groupMarkers([atSamePoint('high', 50000)])[0], x: 50.5, y: 40.5 };
+    const field = fatalityField([low, high]);
+    const centre = 81 * field.width + 101;
+    expect(field.levels[centre]).toBe(tintSteps);
+    expect(field.ranks[centre]).toBe(3);
+    expect(field).toEqual(fatalityField([high, low]));
+    expect(field).toEqual(fatalityField([high, high]));
+    expect(new Set(field.levels)).toEqual(new Set([0, 1, 2, 3]));
+    expect(field.levels[0]).toBe(0);
+    expect(fatalityField([low]).levels[centre]).toBe(tintSteps);
   });
 });

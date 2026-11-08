@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Компоненты атласа войн</title>
+    <link rel="stylesheet" href="/src/shared/ui/atlas-material.css">
+    <script type="module" src="/src/app/atlas-showcase.tsx"></script>
+    <style>
+      body { margin: 0; min-height: 100vh; font: 16px/1.55 system-ui, sans-serif; }
+      main { max-width: 65rem; margin: 0 auto; padding: clamp(1rem, 5vw, 3rem); }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+      h1, h2 { margin: 0; font: 700 2.2rem/1.12 var(--atlas-heading); }
+      h2 { font-size: 1.6rem; }
+      p { color: var(--muted); margin: 0.65rem 0 0; }
+      a { color: var(--accent); }
+      section { margin-top: 1.4rem; padding: 1.15rem; }
+      .examples { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 0.85rem; }
+      .material { min-width: 8rem; padding: 0.8rem; border: 1px solid var(--border); }
+      .material--iron { background-image: var(--atlas-iron); }
+      .material--coal { background-image: var(--atlas-coal); }
+      .material--oxblood { background-image: var(--atlas-oxblood); }
+      .examples img { width: 34px; height: 34px; image-rendering: pixelated; }
+      .examples img.emblem { width: 93px; height: 51px; }
+      #atlas-period-example { margin-top: 0.8rem; }
+    </style>
+  </head>
+  <body class="atlas-material">
+    <main>
+      <header><h1>Компоненты атласа</h1><a href="/ru/">К карте</a></header>
+      <p>Ржавый металл, матовый уголь и оксидный акцент. Основной текст остаётся светлым и читаемым.</p>
+      <section class="atlas-sprite-panel">
+        <h2>Материалы и рамка</h2>
+        <div class="examples">
+          <div class="material material--iron">Железо</div>
+          <div class="material material--coal">Уголь</div>
+          <div class="material material--oxblood">Оксидный красный</div>
+        </div>
+      </section>
+      <section class="atlas-sprite-panel">
+        <h2>Управление</h2>
+        <div class="examples">
+          <button type="button" class="atlas-sprite-button">Обычная кнопка</button>
+          <button type="button" class="atlas-sprite-button atlas-sprite-button--accent">Основное действие</button>
+          <button type="button" class="atlas-sprite-button" aria-pressed="true">Выбрано</button>
+          <button type="button" class="atlas-sprite-button" disabled>Недоступно</button>
+        </div>
+        <div id="atlas-period-example"></div>
+      </section>
+      <section class="atlas-sprite-panel">
+        <h2>Спрайты</h2>
+        <div class="examples">
+          <img class="emblem" src="/src/shared/assets/atlas-design/world-emblem.png" alt="Знак атласа">
+          <img src="/src/shared/assets/atlas-design/plus.png" alt="Приблизить">
+          <img src="/src/shared/assets/atlas-design/minus.png" alt="Отдалить">
+          <img src="/src/shared/assets/atlas-design/layers.png" alt="Легенда">
+          <img src="/src/shared/assets/atlas-design/sound.png" alt="Звук">
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -17,6 +17,14 @@ const pole = [
   ['#f0dfc9', 'M2 1h1v48H2z'],
 ] as const;
 
+// Resting pennants remain distinct from the expanded flag at the map's overview zoom.
+const pennant = [
+  ['#260a10', 'M1 1h11v1h2v2h2v3h-2v2h-3v1H5v6H1z'],
+  ['#e5c395', 'M2 2h1v13H2z'],
+  ['var(--pennant-cloth, #d89c66)', 'M4 2h8v1h2v2h1v1h-2v2h-3v1H4z'],
+  ['#f4cd9a', 'M4 2h7v1H5v5H4z'],
+] as const;
+
 const cloth = [
   ['#2a0711', 'M4 2h12v2h10v3h8v3h5v3h3v7h-5v3h-8v3H18v-2H4z'],
   ['#dfc8ad', 'M5 3h11v2h10v3h8v3h5v3h2v5h-5v3h-8v3H19v-2H5z'],
@@ -29,6 +37,11 @@ const emblems = {
   unknown: ['#614c61', 'M5 4h4v2H5z'],
 } as const;
 
+const pennantEmblems = {
+  history: ['#552923', 'M8 3h1v1h1v1h1v1h-1v1H9v1H8V7H7V6H6V5h1V4h1z'],
+  unknown: ['#552923', 'M7 3h4v3H9v1H8V5h2V4H7zM8 8h1v1H8z'],
+} as const;
+
 function addPaths(parent: SVGElement, paths: readonly (readonly [string, string])[]) {
   for (const [fill, data] of paths) {
     const path = document.createElementNS(svgNamespace, 'path');
@@ -38,9 +51,11 @@ function addPaths(parent: SVGElement, paths: readonly (readonly [string, string]
   }
 }
 
-export function MapFlag({ raised = false, kind = 'estimate' }: { raised?: boolean; kind?: MapFlagKind }) {
+export function MapFlag({ raised = false, desktop = false, kind = 'estimate' }: {
+  raised?: boolean; desktop?: boolean; kind?: MapFlagKind;
+}) {
   const icon = document.createElementNS(svgNamespace, 'svg');
-  icon.setAttribute('class', raised ? 'flag-icon' : 'map-flag-rolled');
+  icon.setAttribute('class', raised ? 'flag-icon' : desktop ? 'map-flag-pennant' : 'map-flag-rolled');
   icon.setAttribute('viewBox', raised ? '0 0 44 51' : '0 0 16 16');
   icon.setAttribute('width', raised ? '44' : '16');
   icon.setAttribute('height', raised ? '51' : '16');
@@ -55,8 +70,8 @@ export function MapFlag({ raised = false, kind = 'estimate' }: { raised?: boolea
       icon.append(part);
     }
   } else {
-    addPaths(icon, rolled);
-    if (kind !== 'estimate') addPaths(icon, [emblems[kind]]);
+    addPaths(icon, desktop ? pennant : rolled);
+    if (kind !== 'estimate') addPaths(icon, [desktop ? pennantEmblems[kind] : emblems[kind]]);
   }
   return icon;
 }

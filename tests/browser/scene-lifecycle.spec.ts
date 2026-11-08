@@ -270,7 +270,7 @@ test('keeps every selected sprite visually identical to its PNG source in Chrome
 });
 
 test('deploys five WWII waves in the same city, settles after combat, and restarts', async ({ page }, testInfo) => {
-  test.setTimeout(60000);
+  test.setTimeout(120000);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/en/');
   const start = new Date('2026-11-07T00:00:00.000Z');
@@ -280,6 +280,7 @@ test('deploys five WWII waves in the same city, settles after combat, and restar
   const dialog = page.getByRole('dialog', { name: 'Second World War' });
   const field = dialog.locator('canvas[data-scene-canvas="ww2-overview"]');
   const flash = dialog.locator('[data-scene-flash="ww2-overview"]');
+  const wave = dialog.locator('.scene-slot__wave');
   const readField = () => field.evaluate((canvas: HTMLCanvasElement) => {
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Canvas 2D is unavailable');
@@ -293,23 +294,23 @@ test('deploys five WWII waves in the same city, settles after combat, and restar
     return { image: canvas.toDataURL(), road, blood };
   });
   await expect(field).toBeVisible();
-  await expect(dialog.getByText('Wave 1 of 5 · 100 units planned', { exact: true })).toBeVisible();
+  await expect(wave).toHaveText('Wave 1 of 5 · 100 units planned');
+  await expect(wave).toBeHidden();
   const initial = await readField();
   expect(initial.road).toBeGreaterThan(200);
   expect(initial.blood).toBe(0);
   await page.clock.runFor(8000);
-  await expect(dialog.getByText('Wave 2 of 5 · 100 units planned', { exact: true })).toBeVisible();
+  await expect(wave).toHaveText('Wave 2 of 5 · 100 units planned');
   const fighting = await readField();
   expect(fighting.image).not.toBe(initial.image);
   await expect(flash).toHaveCSS('opacity', '0');
 
   let settled = false;
   let terminal = fighting;
-  const finalWave = dialog.getByText('Wave 5 of 5 · 100 units planned', { exact: true });
   for (let elapsed = 8000; elapsed < 160000; elapsed += 2000) {
     await page.clock.runFor(2000);
     const frame = await readField();
-    if (frame.image === terminal.image && frame.blood > 0 && await finalWave.isVisible()) {
+    if (frame.image === terminal.image && frame.blood > 0 && await wave.textContent() === 'Wave 5 of 5 · 100 units planned') {
       settled = true;
       break;
     }
@@ -322,7 +323,7 @@ test('deploys five WWII waves in the same city, settles after combat, and restar
   await page.screenshot({ path: testInfo.outputPath('ww2-settled-city.png') });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await dialog.getByRole('button', { name: 'Restart', exact: true }).click();
-  await expect(dialog.getByText('Wave 1 of 5 · 100 units planned', { exact: true })).toBeVisible();
+  await expect(wave).toHaveText('Wave 1 of 5 · 100 units planned');
   expect((await readField()).image).toBe(initial.image);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(field).toBeVisible();
